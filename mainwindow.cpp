@@ -6,6 +6,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "exchange/exchange.h"
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -13,7 +16,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setGeometry(400, 250, 542, 390);
     setupPlot(ui->customPlot);
+    setupExchange();
+
 }
+
+void MainWindow::setupExchange()
+{
+    Exchange* exchange = new Exchange();
+
+    exchange->NoOperation();
+}
+
 
 void MainWindow::setupPlot(QCustomPlot *customPlot)
 {

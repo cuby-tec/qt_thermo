@@ -18,6 +18,8 @@ public:
 
     void setupPlot(QCustomPlot *customPlot);
 
+    void setupExchange();
+
 private:
     Ui::MainWindow *ui;
     QString plotName;
