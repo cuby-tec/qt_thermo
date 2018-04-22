@@ -13,10 +13,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp\
-        qcustomplot.cpp
+        mainwindow.cpp \
+    ../../../../qtcustomplot/qcustomplot/qcustomplot.cpp \
+    links/exchange.cpp
 
 HEADERS  += mainwindow.h \
-            qcustomplot.h
+    ../../../../qtcustomplot/qcustomplot/qcustomplot.h \
+   links/ exchange.h \
+    ../../../../workspace_v7/freertos_demo/exchange/status.h \
+    ../../../../workspace_v7/freertos_demo/exchange/Status_t.h \
+    links/ComDataReq_t.h \
+    links/link_ComDataReq_t.h
 
 FORMS    += mainwindow.ui
