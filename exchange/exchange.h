@@ -11,6 +11,12 @@
 #include <QIODevice>
 #include <QTextStream>
 
+#ifndef EXIT_FAILURE
+#define EXIT_FAILURE    -1
+#endif
+
+#define EXIT_SUCCESS    0
+
 class Exchange
 {
 public:
@@ -35,6 +41,10 @@ private:
     FILE *fp;
 
     ComDataReq_t comdata;
+
+    Status_t* c_status;
+
+    void print_status(Status_t* c_status);
 
 };
 

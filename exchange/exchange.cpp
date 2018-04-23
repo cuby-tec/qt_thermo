@@ -19,10 +19,17 @@ static const struct sHead default_segment_head = {
    N_AXIS, (X_FLAG|Y_FLAG|Z_FLAG|E_FLAG), 0xFFFF, 1
 };
 
+static
+char buffer2[256];
+
+
+
 //--------- functions
 
 Exchange::Exchange()
 {
+
+    qint64 length, size;
 
     QTextStream print(stdout, QIODevice::WriteOnly); // stdin
     QString line;
@@ -31,7 +38,7 @@ Exchange::Exchange()
     QFile data(fname);
 //    fp = fopen(fname, "r+");
 
-//    if(fp!=NULL){
+    //    if(fp!=NULL){
     if( data.open(QIODevice::ReadWrite) )
     {
 
@@ -41,16 +48,71 @@ Exchange::Exchange()
 
         buildComData(&comdata);
 
-        sendBuffer((uint8_t*)&comdata,sizeof(comdata),&data);
+        if(sendBuffer((uint8_t*)&comdata,sizeof(comdata),&data) == EXIT_SUCCESS)
+        {
+            //------------------------------------- readStatus
+            size = sizeof(struct Status_t);
 
-//        fclose(fp);
+            length = data.read(buffer2,size);
+            if(length < 0){
+                line = QString("Can't read file %1 \n").arg(fname);
+            }else{
+                //printf("Recieved:%u\n",result);
+                line = QString("Recieved %1 \n").arg(length);
+
+                c_status = (struct Status_t*)buffer2;
+
+                print_status(c_status);
+
+
+            }
+        }
+        //        fclose(fp);
         data.close();
     }else{
-        printf("Can't open device. maybe module not loaded. Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n"
-               "or device dosn't connected.\n");
-//        return EXIT_FAILURE;
-    }
+//        printf("Can't open device. maybe module not loaded. Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n"
+//               "or device dosn't connected.\n");
+        line = QString("Can't open device. maybe module not loaded. Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n device dosn't connected.\n");
+        print << line; print.flush();
 
+
+        //        return EXIT_FAILURE;
+    }
+}
+
+
+void
+Exchange::print_status(Status_t * c_status)
+{
+
+    QString line;
+    QTextStream print(stdout, QIODevice::WriteOnly); // stdin
+
+//    printf("frameNumber: %u \n",c_status->frameNumber);
+//	printf("freeSegments: %u \n",c_status->freeSegments);
+//	printf("coordinatus X: %u \n",c_status->coordinatus[X_AXIS]);
+//	printf("coordinatus Y: %u \n",c_status->coordinatus[Y_AXIS]);
+//	printf("coordinatus Z: %u \n",c_status->coordinatus[Z_AXIS]);
+//	printf("coordinatus E: %u \n",c_status->coordinatus[E_AXIS]);
+//	printf("modelState: %u \n",c_status->modelState);
+//	printf("currentSegmentNumber: %u \n",c_status->currentSegmentNumber);
+//	printf("instrument2_parameter: %u \n",c_status->instrument2_parameter);
+//	printf("instrument3_parameter: %u \n",c_status->instrument3_parameter);
+//	printf("instrument4_parameter: %u \n",c_status->instrument4_parameter);
+//	printf(" ======================= \n");
+
+    line = QString("frameNumber: %1 \n").arg(c_status->frameNumber); print <<line; print.flush();
+    line = QString("freeSegments: %1 \n").arg(c_status->freeSegments);print <<line; print.flush();
+    line = QString("coordinatus X: %1 \n").arg(c_status->coordinatus[X_AXIS]);print <<line; print.flush();
+    line = QString("coordinatus Y: %1 \n").arg(c_status->coordinatus[Y_AXIS]);print <<line; print.flush();
+    line = QString("coordinatus Z: %1 \n").arg(c_status->coordinatus[Z_AXIS]);print <<line; print.flush();
+    line = QString("coordinatus E: %1 \n").arg(c_status->coordinatus[E_AXIS]);print <<line; print.flush();
+    line = QString("modelState: %1 \n").arg(c_status->modelState);print <<line; print.flush();
+    line = QString("currentSegmentNumber: %1 \n").arg(c_status->currentSegmentNumber);print <<line; print.flush();
+    line = QString("instrument2_parameter: %1 \n").arg(c_status->instrument2_parameter);print <<line; print.flush();
+    line = QString("instrument3_parameter: %1 \n").arg(c_status->instrument3_parameter);print <<line; print.flush();
+    line = QString("instrument4_parameter: %1 \n").arg(c_status->instrument4_parameter);print <<line; print.flush();
+    line = QString(" ======================= \n");print <<line; print.flush();
 
 }
 
@@ -113,21 +175,89 @@ int
 Exchange::sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp)
 {
     uint8_t* cursor = buffer;
-    uint32_t result = 0, length=0, packet_size, counter = 0;
+    uint32_t packet_size, counter = 0;
+    qint64 length=0;
 
     packet_size = MaxPacketSize;
+
+    QString line;
+
 
 //    length = fwrite(cursor,sizeof(uint8_t),packet_size,fp);
 
 //    printf("Write packet of size:%u\n", packet_size);
     QTextStream print(stdout, QIODevice::WriteOnly); // stdin
-    QString line =  QString("Write packet of size: %1 \n").arg(QString::number(packet_size));
+
+    line =  QString("Write packet of size: %1 \n").arg(QString::number(MaxPacketSize));
 //    line.arg(QString::number(packet_size));
     print << line;
-
     print.flush();
 
-    return result;
+    length = fp->write((const char*)cursor,MaxPacketSize);
+    if(length < 0){
+//        printf ("Error Writing to %s\n",fname);
+//		fclose(fp);
+//		return EXIT_FAILURE;
+        line = QString("Error Writing to %1 . \n").arg(fname);
+        print << line;
+        print.flush();
+        fp->close();
+        return (EXIT_FAILURE);
+    }
+
+    line = QString("Sended %1 \t to be send: %2 \n").arg(length).arg(sizeof(struct ComDataReq_t)-counter);
+    print << line;
+    print.flush();
+
+    counter += length;
+    cursor += length;
+
+    line =  QString("Write packet of size: %1 \n").arg(QString::number(packet_size));
+//    line.arg(QString::number(packet_size));
+    print << line;
+    print.flush();
+
+    length = fp->write((const char*)cursor,MaxPacketSize);
+    if(length < 0){
+        line = QString("Error Writing to %1 . \n").arg(fname);
+        print << line;
+        print.flush();
+        fp->close();
+        return (EXIT_FAILURE);
+    }
+
+    line = QString("Sended %1 \t to be send: %2 \n").arg(length).arg(sizeof(struct ComDataReq_t)-counter);
+    print << line;
+    print.flush();
+
+    counter += length;
+    cursor += length;
+
+    packet_size = sizeof(comdata) - counter;
+
+    line =  QString("Write packet of size: %1 \n").arg(QString::number(packet_size));
+//    line.arg(QString::number(packet_size));
+    print << line;
+    print.flush();
+
+    length = fp->write((const char*)cursor,packet_size);
+
+    if(length < 0){
+        line = QString("Error Writing to %1 . \n").arg(fname);
+        print << line;
+        print.flush();
+        fp->close();
+        return (EXIT_FAILURE);
+    }
+
+    line = QString("Sended %1 \t to be send: %2 \n").arg(length).arg(sizeof(struct ComDataReq_t)-counter);
+    print << line;
+    print.flush();
+
+
+
+    return EXIT_SUCCESS;
+//    return result;
 }
 
 void
