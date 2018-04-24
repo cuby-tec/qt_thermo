@@ -25,11 +25,28 @@ char buffer2[256];
 
 
 //--------- functions
+int
+Exchange::sendRequest(ComDataReq_t* request)
+{
+    quint8* data = (quint8*)request;
+
+
+
+    int result;
+    if(fp->isOpen()){
+         result = sendBuffer(data,sizeof(ComDataReq_t),fp);
+    }else{
+        result = EXIT_FAILURE;
+    }
+    return result;
+}
+
+
 
 Exchange::Exchange()
 {
 
-    qint64 length, size;
+    int length, size;
 
     QTextStream print(stdout, QIODevice::WriteOnly); // stdin
     QString line;

@@ -33,12 +33,16 @@ public:
 
     void load_defaults(struct sControl* pctl);
 
-    int sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp);
+    int sendRequest(ComDataReq_t* request);
 
     void NoOperation();
 
+    Status_t* getStatus() { return c_status; }
+
 private:
-    FILE *fp;
+    QFile *fp;
+
+    int sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp);
 
     ComDataReq_t comdata;
 

@@ -17,7 +17,9 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     ../../../../qtcustomplot/qcustomplot/qcustomplot.cpp \
-    exchange/exchange.cpp
+    exchange/exchange.cpp \
+    exchange/cnccommand.cpp \
+    profile.cpp \
 
 HEADERS  += mainwindow.h \
     ../../../../qtcustomplot/qcustomplot/qcustomplot.h \
@@ -26,6 +28,11 @@ HEADERS  += mainwindow.h \
     links/ComDataReq_t.h \
     links/status.h \
     links/Status_t.h \
-    exchange/exchange.h
+    exchange/exchange.h \
+    exchange/cnccommand.h \
+    profile.h \
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    resources.qrc

@@ -7,7 +7,7 @@
 #include "ui_mainwindow.h"
 
 #include "exchange/exchange.h"
-
+#include "profile.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,13 +18,22 @@ MainWindow::MainWindow(QWidget *parent) :
     setupPlot(ui->customPlot);
     setupExchange();
 
+
 }
 
 void MainWindow::setupExchange()
 {
     Exchange* exchange = new Exchange();
 
+    Profile* profile = new Profile();
+
+    profile->init_profile();
+
+
     exchange->NoOperation();
+
+
+
 }
 
 

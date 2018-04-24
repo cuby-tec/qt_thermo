@@ -1,0 +1,84 @@
+{
+    "profiles": [
+        {
+            "profile": {
+                "name": "Profile1",
+                "description": "Profile with 5 axes[X,Y,Z(2),E.]",
+                "file": "Profile1.json",
+                "default": "true"
+            }
+        },
+        {
+            "profile": {
+                "name": "Profile2",
+                "description": "Profile with 5 axes[X,Y,Z(2),E.]",
+                "file": "Profile2.json",
+                "default": "false"
+            }
+        },
+        {
+            "profile": {
+                "name": "Profile3",
+                "description": "Profile with 5 axes[X,Y,Z(2),E.]",
+                "file": "Profile3.json",
+                "default": "false"
+            }
+        },
+        {
+            "profile": {
+                "name": "Profile4",
+                "description": "Profile with 5 axes[X,Y,Z(2),E.]",
+                "file": "Profile4.json",
+                "default": "false"
+            }
+        },
+        {
+            "profile": {
+                "name": "Profile5",
+                "description": "Profile with 5 axes[X,Y,Z(2),E.]",
+                "file": "Profile5.json",
+                "default": "false"
+            }
+        },
+        {
+            "profile": {
+                "name": "Profile6",
+                "description": "Profile with 5 axes[X,Y,Z(2),E.]",
+                "file": "Profile6.json",
+                "default": "false"
+            }
+        },
+        {
+            "profile": {
+                "name": "Profile7",
+                "description": "Profile with 5 axes[X,Y,Z(2),E.]",
+                "file": "Profile7.json",
+                "default": "false"
+            }
+        },
+        {
+            "profile": {
+                "name": "Profile8",
+                "description": "Profile with 5 axes[X,Y,Z(2),E.]",
+                "file": "Profile8.json",
+                "default": "false"
+            }
+        },
+        {
+            "profile": {
+                "name": "Profile9",
+                "description": "Profile with 5 axes[X,Y,Z(2),E.]",
+                "file": "Profile9.json",
+                "default": "false"
+            }
+        },
+        {
+            "profile": {
+                "name": "Profile10",
+                "description": "Profile with 5 axes[X,Y,Z(2),E.]",
+                "file": "Profile10.json",
+                "default": "false"
+            }
+        }
+    ]
+}
