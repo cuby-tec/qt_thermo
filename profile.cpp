@@ -169,7 +169,6 @@ Profile::loadProfile()
   if (json1.isEmpty())
       qFatal("Could not read JSON file!");
 
-
 //  QJsonObject a = QtJson::parse(json, ok).toMap();
   QByteArray arr1 = json1.toUtf8();
 
@@ -178,37 +177,42 @@ Profile::loadProfile()
   QJsonDocument loadDoc = QJsonDocument::fromJson(arr1,&error);
 
    QJsonObject obj;
+   QJsonArray list;
+
   if(loadDoc.isObject())
       obj = loadDoc.object();
 
-int i = obj.count();
-
-  qDebug() << "Debug info: count" << obj.count();
-
-
-//  read(loadDoc.object());
+  qDebug() << "189 Debug info: count" << obj.count();
 
   if(loadDoc.isEmpty())
   {
       qDebug() << "Empty \n";
   }
 
+  list = obj["profiles"].toArray();
+
+  if(list.count()>0){
+      qDebug() << "211 List count:" << list.count();
+  }
+
 /*
-   QJsonArray dataObject = obj["profiles"].toArray();
-   QJsonArray::iterator it;
-   for (it = obj.begin(); it != obj.end(); it++) {
-       QString key = it->first;
-       QString value = it->second;
-       qDebug() << key;
-   }
-*/
-  for(QJsonObject::Iterator iter = obj.begin();iter!=obj.end();  ++iter)
+  for(QJsonObject::Iterator iter = obj.begin();iter!=obj.end();  iter++)
       {
 //          ui->plainTextEdit->appendPlainText(iter.key());
         QString key = iter.key();
-        QString value = iter.value().toString();
-          qDebug() << key;
+        qDebug() << key << "219";
+        QJsonObject value = iter.value().toObject();
+          qDebug() << value << "221";
       }
+*/
+  for(int i=0;i<list.count();i++)
+  {
+      QJsonObject prof = list[i].toObject()["profile"].toObject();
+
+      qDebug() << prof["name"].toString() << "212";
+
+  }
+
 
 
 }
