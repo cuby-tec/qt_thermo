@@ -16,18 +16,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setGeometry(400, 250, 542, 390);
     setupPlot(ui->customPlot);
-    setupExchange();
+    setupExchange((QTabWidget *)ui->tab_2);// profile page
 
 
 }
 
-void MainWindow::setupExchange()
+void MainWindow::setupExchange(QTabWidget* tab)
 {
+
     Exchange* exchange = new Exchange();
 
-    Profile* profile = new Profile();
+    profile = new Profile();
 
-    profile->init_profile();
+    connect(tab,SIGNAL(currentIndexChanged(int)), SLOT(on_profileComboBox_currentIndexChanged(int)));
+
+    profile->init_profile(tab);
 
 
     exchange->NoOperation();
@@ -69,4 +72,12 @@ void MainWindow::setupPlot(QCustomPlot *customPlot)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_profileComboBox_currentIndexChanged(int index)
+{
+    int i;
+    i = index + 1;
+    qDebug() << index << " MainWindow::on_profileComboBox_currentIndexChanged 81";
+    profile->Profiles_increment(index);
 }

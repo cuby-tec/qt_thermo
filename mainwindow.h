@@ -6,6 +6,8 @@
 #include <QMainWindow>
 #include "qcustomplot.h"
 
+#include "profile.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -20,11 +22,17 @@ public:
 
     void setupPlot(QCustomPlot *customPlot);
 
-    void setupExchange();
+    void setupExchange(QTabWidget *tab);
+
+private slots:
+    void on_profileComboBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
     QString plotName;
+
+     Profile* profile;
+
 };
 
 #endif // MAINWINDOW_H

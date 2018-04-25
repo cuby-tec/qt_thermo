@@ -7,8 +7,8 @@
 #include <QDebug>
 #include <QJsonObject>
 #include <QJsonArray>
-
-
+#include <QList>
+#include <QComboBox>
 
 #define PROFILE_BUFFER_SiZE	1024
 
@@ -141,29 +141,10 @@ QString readFile(const QString &filename) {
 bool
 Profile::loadProfile()
 {
-/*    root_value = json_parse_file_with_comments(pprofile_file_name);
-
-    root_object = json_value_get_object(root_value);
-
-    root_array = json_object_get_array(root_object,templ_root_path);
-
-//	_check_root_value();
-
-    //---------- load prfl_names
-    _fill_prfl_names(root_array);
-
-    return (root_value==NULL?0:1);
-*/
-//  QFile loadFile(QString("profile/profiles.json"));
-//  if(!loadFile.open(QIODevice::ReadOnly)){
-//      qWarning("Couldn't open save file.");
-//      return false;
-//  }
 
     QString json1 = readFile(":/profile/profiles.json");
 
 //  QTextStream in(&loadFile);
-
 //  QString json = in.readAll();//loadFile.readAll();
 
   if (json1.isEmpty())
@@ -195,25 +176,33 @@ Profile::loadProfile()
       qDebug() << "211 List count:" << list.count();
   }
 
-/*
-  for(QJsonObject::Iterator iter = obj.begin();iter!=obj.end();  iter++)
-      {
-//          ui->plainTextEdit->appendPlainText(iter.key());
-        QString key = iter.key();
-        qDebug() << key << "219";
-        QJsonObject value = iter.value().toObject();
-          qDebug() << value << "221";
-      }
-*/
+    QComboBox *profiles = profPage->findChild<QComboBox *>("profileComboBox",Qt::FindDirectChildrenOnly);
+//  QList<QComboBox *> profiles = profPage->findChildren<QComboBox *>();
+
+
   for(int i=0;i<list.count();i++)
   {
       QJsonObject prof = list[i].toObject()["profile"].toObject();
 
-      qDebug() << prof["name"].toString() << "212";
+      qDebug() << prof["name"].toString() << "212"; // QJsonValue(string, "Profile1")
 
+      QString str = prof["name"].toString();
+      profiles->addItem(str);
   }
 
 
+
+}
+
+void
+Profile::Profiles_increment(int idx)
+{
+    int id;
+
+    id = idx + 1;
+//    ReadTables(idx + 1);
+
+    qDebug() << idx << "Profile::on_profileComboBox_currentIndexChanged 205";
 
 }
 
@@ -224,8 +213,11 @@ Profile::loadProfile()
  * создать новый профиль профиль по-умолчанию.
  */
 void
-Profile::init_profile(void)
+Profile::init_profile(QTabWidget *tab)
 {
+
+    profPage = tab;
+
     quint8 i;
 
     if(loadProfile())
