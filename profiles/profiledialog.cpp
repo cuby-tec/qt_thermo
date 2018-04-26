@@ -68,6 +68,6 @@ void ProfileDialog::on_profileComboBox_currentIndexChanged(int index)
 {
     int i;
     i = index + 1;
-    qDebug() << index << " ProfileDialog::on_profileComboBox_currentIndexChanged 81";
+    qDebug() << index << " ProfileDialog::on_profileComboBox_currentIndexChanged 71";
 //    profile->Profiles_increment(index);
 }

@@ -22,15 +22,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-//    void setupPlot(QCustomPlot *customPlot);
 
-    void setupExchange(QTabWidget *tab);
-
-//    void editProfile();
 
 private slots:
     void editProfile();
-//    void on_profileComboBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
