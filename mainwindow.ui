@@ -50,28 +50,23 @@
      <height>27</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuMain">
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-    <property name="title">
-     <string extracomment="Temperature view">Options</string>
-    </property>
-    <property name="toolTipsVisible">
-     <bool>false</bool>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuStart">
     <property name="title">
      <string>start</string>
     </property>
+    <addaction name="actionAstart"/>
    </widget>
    <widget class="QMenu" name="menuStop">
     <property name="title">
      <string>Stop</string>
     </property>
    </widget>
-   <addaction name="menuMain"/>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+   </widget>
+   <addaction name="menuOptions"/>
    <addaction name="menuStart"/>
    <addaction name="menuStop"/>
   </widget>
@@ -84,6 +79,16 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionAstart">
+   <property name="text">
+    <string>astart</string>
+   </property>
+  </action>
+  <action name="action_Options">
+   <property name="text">
+    <string>&amp;Options</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

@@ -4,6 +4,8 @@
 
 
 #include <QMainWindow>
+#include <QAction>
+
 #include "qcustomplot.h"
 
 #include "profile.h"
@@ -24,15 +26,26 @@ public:
 
     void setupExchange(QTabWidget *tab);
 
-    void editProfile();
+//    void editProfile();
 
-//private slots:
+private slots:
+    void editProfile();
 //    void on_profileComboBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
 
-     Profile* profile;
+    void createActions(MainWindow *w);
+
+    Profile* profile;
+
+    QAction* newAct;
+
+    QMenu *fileMenu;
+
+    QMenu *optionsMenu;
+
+    QAction* optionEditAct;
 
 };
 
