@@ -33,10 +33,13 @@ private:
 
     Profile* profile;
 
-    void setupExchange(QWidget *tab);
+    void setupExchange();
 
     void setupPlot(QCustomPlot *customPlot);
 
+    void setupProfile(QWidget * tab);
+
+    void fillProfilePage();
 };
 
 #endif // PROFILEDIALOG_H

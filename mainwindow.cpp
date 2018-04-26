@@ -7,7 +7,7 @@
 #include "ui_mainwindow.h"
 
 #include "exchange/exchange.h"
-#include "profile.h"
+//#include "profile.h"
 
 #include "profiles/profiledialog.h"
 

@@ -8,7 +8,7 @@
 
 #include "qcustomplot.h"
 
-#include "profile.h"
+//#include "profiles/profile.h"
 
 namespace Ui {
 class MainWindow;
@@ -32,7 +32,7 @@ private:
 
     void createActions(MainWindow *w);
 
-    Profile* profile;
+//    Profile* profile;
 
     QAction* newAct;
 

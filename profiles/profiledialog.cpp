@@ -8,7 +8,8 @@ ProfileDialog::ProfileDialog(QWidget *parent) :
 {
     uia->setupUi(this);
     setupPlot(uia->customPlot);
-    setupExchange(uia->tab_2);
+    setupExchange();
+    setupProfile(uia->tab_3);
 }
 
 ProfileDialog::~ProfileDialog()
@@ -45,23 +46,50 @@ void ProfileDialog::setupPlot(QCustomPlot *customPlot)
 }
 
 
-void ProfileDialog::setupExchange(QWidget* tab)
+void ProfileDialog::setupExchange()
 {
 
     Exchange* exchange = new Exchange();
 
-    profile = new Profile();
-
-//    connect(tab,SIGNAL(currentIndexChanged(int)), SLOT(on_profileComboBox_currentIndexChanged(int)));
-
-    profile->init_profile(tab);
-
-
     exchange->NoOperation();
+}
 
+void ProfileDialog::fillProfilePage()
+{
+    int index;
+    QString str;
+//---------------------- Page 1
+    index = uia->profileComboBox->currentIndex();
+
+    uia->pfofileNameEdit->setText(profile->getProfileName(index));
+
+    uia->profileDescription_textEdit->setText(profile->getProfileDescription(index));
+
+    uia->profileFile_Edit->setText(profile->getProfileFileName(index));
+
+    if(profile->isDefaultProfile(index))
+        uia->profileDefault_checkBox->setCheckState(Qt::Checked);
+    else
+        uia->profileDefault_checkBox->setCheckState(Qt::Unchecked);
 
 }
 
+void  ProfileDialog::setupProfile(QWidget * tab)
+{
+    profile = new Profile();
+    if( profile->init_profile(tab))
+    {
+        for(int i=0;i<profile->getProfileNameCount();i++)
+        {
+            uia->profileComboBox->addItem(profile->getProfileName(i));
+        }
+
+        fillProfilePage();
+
+    }
+    //    connect(tab,SIGNAL(currentIndexChanged(int)), SLOT(on_profileComboBox_currentIndexChanged(int)));
+
+}
 
 
 void ProfileDialog::on_profileComboBox_currentIndexChanged(int index)

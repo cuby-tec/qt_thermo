@@ -19,8 +19,8 @@ SOURCES += main.cpp\
     ../../../../qtcustomplot/qcustomplot/qcustomplot.cpp \
     exchange/exchange.cpp \
     exchange/cnccommand.cpp \
-    profile.cpp \
-    profiles/profiledialog.cpp
+    profiles/profiledialog.cpp \
+    profiles/profile.cpp
 
 HEADERS  += mainwindow.h \
     ../../../../qtcustomplot/qcustomplot/qcustomplot.h \
@@ -32,7 +32,8 @@ HEADERS  += mainwindow.h \
     exchange/exchange.h \
     exchange/cnccommand.h \
     profile.h \
-    profiles/profiledialog.h
+    profiles/profiledialog.h \
+    profiles/profile.h
 
 FORMS    += mainwindow.ui \
     profiles/profiledialog.ui
