@@ -64,14 +64,14 @@ public:
      * Проверка наличия файла профиля и его правильность или
      * создать новый профиль профиль по-умолчанию.
      */
-    void init_profile(QTabWidget *tab);
+    void init_profile(QWidget *tab);
 
     void Profiles_increment(int idx);
 
 
 private:
 
-    QTabWidget *profPage;// pfofile page
+    QWidget *profPage;// pfofile page
 
     const char* pprofile_file_name;// = "profiles.json";	// Список профилей
 

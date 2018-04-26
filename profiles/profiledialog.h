@@ -6,6 +6,11 @@
 #include <QWidget>
 #include "qcustomplot.h"
 
+#include "exchange/exchange.h"
+#include "profile.h"
+
+#include "profiles/profiledialog.h"
+
 namespace Ui {
 class ProfileDialog;
 }
@@ -26,6 +31,9 @@ private:
 
     QString plotName;
 
+    Profile* profile;
+
+    void setupExchange(QWidget *tab);
 
     void setupPlot(QCustomPlot *customPlot);
 

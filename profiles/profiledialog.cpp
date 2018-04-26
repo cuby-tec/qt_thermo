@@ -8,6 +8,7 @@ ProfileDialog::ProfileDialog(QWidget *parent) :
 {
     uia->setupUi(this);
     setupPlot(uia->customPlot);
+    setupExchange(uia->tab_2);
 }
 
 ProfileDialog::~ProfileDialog()
@@ -42,6 +43,26 @@ void ProfileDialog::setupPlot(QCustomPlot *customPlot)
     customPlot->yAxis->setRange(0, 1);
 
 }
+
+
+void ProfileDialog::setupExchange(QWidget* tab)
+{
+
+    Exchange* exchange = new Exchange();
+
+    profile = new Profile();
+
+//    connect(tab,SIGNAL(currentIndexChanged(int)), SLOT(on_profileComboBox_currentIndexChanged(int)));
+
+    profile->init_profile(tab);
+
+
+    exchange->NoOperation();
+
+
+}
+
+
 
 void ProfileDialog::on_profileComboBox_currentIndexChanged(int index)
 {

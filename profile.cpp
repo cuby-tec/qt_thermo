@@ -213,7 +213,7 @@ Profile::Profiles_increment(int idx)
  * создать новый профиль профиль по-умолчанию.
  */
 void
-Profile::init_profile(QTabWidget *tab)
+Profile::init_profile(QWidget *tab)
 {
 
     profPage = tab;
