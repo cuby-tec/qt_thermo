@@ -20,16 +20,17 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void setupPlot(QCustomPlot *customPlot);
+//    void setupPlot(QCustomPlot *customPlot);
 
     void setupExchange(QTabWidget *tab);
 
-private slots:
-    void on_profileComboBox_currentIndexChanged(int index);
+    void editProfile();
+
+//private slots:
+//    void on_profileComboBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
-    QString plotName;
 
      Profile* profile;
 

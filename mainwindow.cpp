@@ -9,15 +9,19 @@
 #include "exchange/exchange.h"
 #include "profile.h"
 
+#include "profiles/profiledialog.h"
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setGeometry(400, 250, 542, 390);
-    setupPlot(ui->customPlot);
-    setupExchange((QTabWidget *)ui->tab_2);// profile page
+    setGeometry(400, 250, 742, 590);
+//    setupPlot(ui->customPlot);
+//    setupExchange((QTabWidget *)ui->tab_2);// profile page
 
+    editProfile();
 
 }
 
@@ -28,18 +32,28 @@ void MainWindow::setupExchange(QTabWidget* tab)
 
     profile = new Profile();
 
-    connect(tab,SIGNAL(currentIndexChanged(int)), SLOT(on_profileComboBox_currentIndexChanged(int)));
+//    connect(tab,SIGNAL(currentIndexChanged(int)), SLOT(on_profileComboBox_currentIndexChanged(int)));
 
     profile->init_profile(tab);
 
 
     exchange->NoOperation();
 
-
+    editProfile();
 
 }
 
 
+void MainWindow::editProfile()
+{
+    ProfileDialog* options = new ProfileDialog(this);
+    if(options->exec())
+    {
+        options->baseSize();
+    }
+}
+
+/*
 void MainWindow::setupPlot(QCustomPlot *customPlot)
 {
     plotName = "Hotend temperature";
@@ -67,13 +81,13 @@ void MainWindow::setupPlot(QCustomPlot *customPlot)
     customPlot->yAxis->setRange(0, 1);
 
 }
-
+*/
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
+/*
 void MainWindow::on_profileComboBox_currentIndexChanged(int index)
 {
     int i;
@@ -81,3 +95,4 @@ void MainWindow::on_profileComboBox_currentIndexChanged(int index)
     qDebug() << index << " MainWindow::on_profileComboBox_currentIndexChanged 81";
     profile->Profiles_increment(index);
 }
+*/

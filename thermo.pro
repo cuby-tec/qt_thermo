@@ -20,6 +20,7 @@ SOURCES += main.cpp\
     exchange/exchange.cpp \
     exchange/cnccommand.cpp \
     profile.cpp \
+    profiles/profiledialog.cpp
 
 HEADERS  += mainwindow.h \
     ../../../../qtcustomplot/qcustomplot/qcustomplot.h \
@@ -31,8 +32,10 @@ HEADERS  += mainwindow.h \
     exchange/exchange.h \
     exchange/cnccommand.h \
     profile.h \
+    profiles/profiledialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    profiles/profiledialog.ui
 
 RESOURCES += \
     resources.qrc

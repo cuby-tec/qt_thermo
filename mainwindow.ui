@@ -38,203 +38,7 @@
       <height>371</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="currentIndex">
-        <number>1</number>
-       </property>
-       <widget class="QWidget" name="tab1">
-        <attribute name="title">
-         <string>Chart</string>
-        </attribute>
-        <widget class="QCustomPlot" name="customPlot" native="true">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>489</width>
-           <height>301</height>
-          </rect>
-         </property>
-         <property name="cursor">
-          <cursorShape>CrossCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string extracomment="Temperature trace">Temperatur traker</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>307</y>
-           <width>489</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>1000</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </widget>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>Params</string>
-        </attribute>
-        <widget class="QWidget" name="formLayoutWidget">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>80</y>
-           <width>461</width>
-           <height>171</height>
-          </rect>
-         </property>
-         <layout class="QFormLayout" name="formLayout">
-          <property name="leftMargin">
-           <number>10</number>
-          </property>
-          <property name="topMargin">
-           <number>10</number>
-          </property>
-          <property name="rightMargin">
-           <number>10</number>
-          </property>
-          <property name="bottomMargin">
-           <number>10</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Temperature</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit">
-            <property name="inputMask">
-             <string>0000</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>Proportional term Kp</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_2">
-            <property name="inputMask">
-             <string>000.000</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Integral term Ki</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_3">
-            <property name="inputMask">
-             <string>000.000</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Derivative term Kd</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_4">
-            <property name="inputMask">
-             <string>000.0000</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QPushButton" name="pushButton">
-         <property name="geometry">
-          <rect>
-           <x>380</x>
-           <y>290</y>
-           <width>85</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Send</string>
-         </property>
-        </widget>
-        <widget class="QComboBox" name="profileComboBox">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>221</width>
-           <height>33</height>
-          </rect>
-         </property>
-         <property name="toolTip">
-          <string>toolTip</string>
-         </property>
-         <property name="currentText">
-          <string/>
-         </property>
-        </widget>
-       </widget>
-       <widget class="QWidget" name="tab">
-        <attribute name="title">
-         <string>Status</string>
-        </attribute>
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="geometry">
-          <rect>
-           <x>370</x>
-           <y>290</y>
-           <width>85</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Refresh</string>
-         </property>
-        </widget>
-        <widget class="QListView" name="listView">
-         <property name="geometry">
-          <rect>
-           <x>5</x>
-           <y>1</y>
-           <width>471</width>
-           <height>261</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
-      </widget>
-     </item>
-    </layout>
+    <layout class="QVBoxLayout" name="verticalLayout"/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -246,16 +50,12 @@
      <height>27</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuTemp">
+   <widget class="QMenu" name="menuMain">
     <property name="autoFillBackground">
      <bool>true</bool>
     </property>
     <property name="title">
-     <string extracomment="Temperature view">Temp</string>
-    </property>
-    <property name="icon">
-     <iconset resource="resources.qrc">
-      <normaloff>:/images/copy.png</normaloff>:/images/copy.png</iconset>
+     <string extracomment="Temperature view">Options</string>
     </property>
     <property name="toolTipsVisible">
      <bool>false</bool>
@@ -271,7 +71,7 @@
      <string>Stop</string>
     </property>
    </widget>
-   <addaction name="menuTemp"/>
+   <addaction name="menuMain"/>
    <addaction name="menuStart"/>
    <addaction name="menuStop"/>
   </widget>
@@ -286,16 +86,6 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>QCustomPlot</class>
-   <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
