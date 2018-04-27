@@ -98,11 +98,22 @@ void  ProfileDialog::setupProfile(QWidget * tab)
 
 }
 
-
+//-------- slot
 void ProfileDialog::on_profileComboBox_currentIndexChanged(int index)
 {
     int i;
     i = index + 1;
     qDebug() << index << " ProfileDialog::on_profileComboBox_currentIndexChanged 71";
 //    profile->Profiles_increment(index);
+}
+
+
+void ProfileDialog::on_profile_pushButton_Save_clicked()
+{
+    profile->saveProfileDocument(); // Save current Document
+}
+
+void ProfileDialog::on_temprature_lineEdit_editingFinished()
+{
+    profile->set_TEMPERATURE(uia->temprature_lineEdit->text());
 }

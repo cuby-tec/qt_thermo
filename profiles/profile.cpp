@@ -56,6 +56,8 @@ Profile::Profile()
     _pprfl_names.index = 0;
     _pprfl_names.length = 10;
     _pprfl_names.data[0].isDefault = false;
+
+    profileIndex = 0;
 }
 
 
@@ -127,6 +129,7 @@ QString
 Profile::readFile(const QString &filename)
 {
     QString str = PROFILE_PATH + filename;
+    QString result;
 
     QFile f(str);
 
@@ -135,11 +138,12 @@ Profile::readFile(const QString &filename)
             return QString();
         } else {
             QTextStream in(&f);
-            return in.readAll();
+            result = in.readAll();
+            f.close();
         }
     }
 
-    return QString();
+    return result;
 }
 
 
@@ -442,7 +446,89 @@ Profile::get_DERIVATIVE()
     return result;
 }
 
-//-----------------
+void
+Profile::writeObject(QJsonObject &json,QString key,QJsonObject newobj)
+{
+    QJsonObject object;
+//    {
+//        {"property1", "125"}
+//    };
+    object["property1"] = "125";
+
+
+    object = json[key].toObject();
+
+    QStringList lst = newobj.keys();
+    QString newKey = lst[0];
+
+    object.remove(newKey);
+    object.insert(newKey,newobj[newKey]);
+
+
+    json[key] = object;
+
+}
+
+
+
+//TEMPERATURE
+void
+Profile::set_TEMPERATURE(QString num)
+{
+    QJsonObject obj;
+
+    obj = profile_doc.object();
+
+    QJsonObject nob;
+
+    nob["TEMPERATURE"] = num;
+
+    writeObject(obj,"generic",nob);
+
+    profile_doc.setObject(obj);
+
+    qDebug() << obj["generic"].toObject()["TEMPERATURE"].toString() << "set_TEMPERATURE 467";
+
+}
+
+
+void
+Profile::set_INTEGRAL(QString num)
+{
+
+}
+
+void
+Profile::set_PROPTIONAL(QString num)
+{
+
+}
+
+void
+Profile::set_DERIVATIVE(QString num)
+{
+
+}
+
+//TODO saveFile.write(saveDoc.toJson(QJsonDocument::Indented)); or QJsonDocument::Compact
+void
+Profile::saveProfileDocument()
+{
+    QString str = PROFILE_PATH + getProfileFileName(profileIndex);
+
+    QFile file(str);
+    if(file.open(QFile::WriteOnly))
+    {
+        file.write(profile_doc.toJson(QJsonDocument::Indented));
+        file.close();
+    }else{
+        qDebug() << "Document dosn't open " << "Profile::saveProfileDocument 487";
+    }
+
+}
+
+
+//----------------- profile Document
 
 void
 Profile::Profiles_increment(int idx)
@@ -473,7 +559,7 @@ Profile::init_profile()
     if(loadProfile())
     {
 
-        profile_filename = getProfileFileName(0); // TODO Найти профиль по-умолчанию.
+        profile_filename = getProfileFileName(profileIndex); // TODO Найти профиль по-умолчанию.
         profile_doc = loadDocument(profile_filename);
         qDebug() << parseError.errorString() << "init_profile:302";
 

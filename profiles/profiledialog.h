@@ -26,6 +26,10 @@ public:
 private slots:
     void on_profileComboBox_currentIndexChanged(int index);
 
+    void on_profile_pushButton_Save_clicked();
+
+    void on_temprature_lineEdit_editingFinished();
+
 private:
     Ui::ProfileDialog *uia;
 
@@ -43,3 +47,4 @@ private:
 };
 
 #endif // PROFILEDIALOG_H
+

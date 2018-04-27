@@ -101,6 +101,12 @@ public:
 
     QString get_DERIVATIVE();
 
+    void  set_TEMPERATURE(QString num);
+    void  set_INTEGRAL(QString num);
+    void  set_PROPTIONAL(QString num);
+    void  set_DERIVATIVE(QString num);
+
+    void saveProfileDocument();
 
 private:
 
@@ -118,6 +124,8 @@ private:
 
     QString readFile(const QString &filename);
 
+    void writeObject(QJsonObject &json, QString key, QJsonObject newobj);
+
 //--------- vars
 
     QJsonArray profileNamesArray;   // Список профилей
@@ -129,6 +137,9 @@ private:
     QJsonDocument profile_doc; // Документ текущего профиля.
 
     QJsonParseError parseError;
+
+    int profileIndex;
+
 
 };
 
