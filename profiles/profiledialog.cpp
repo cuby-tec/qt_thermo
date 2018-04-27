@@ -72,12 +72,19 @@ void ProfileDialog::fillProfilePage()
     else
         uia->profileDefault_checkBox->setCheckState(Qt::Unchecked);
 
+//----------------- Page 2 Temperature
+
+    uia->temprature_lineEdit->setText(profile->get_TEMPERATURE());
+    uia->tpropotional_lineEdit->setText(profile->get_PROPTIONAL());
+    uia->tintegral_lineEdit->setText(profile->get_INTEGRAL());
+    uia->tderivative_lineEdit->setText(profile->get_DERIVATIVE());
+
 }
 
 void  ProfileDialog::setupProfile(QWidget * tab)
 {
     profile = new Profile();
-    if( profile->init_profile(tab))
+    if( profile->init_profile())
     {
         for(int i=0;i<profile->getProfileNameCount();i++)
         {

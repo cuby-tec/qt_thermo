@@ -3,7 +3,7 @@
 
 #include <QFile>
 #include <QTextStream>
-#include <QJsonParseError>
+
 #include <QDebug>
 #include <QJsonObject>
 
@@ -13,12 +13,14 @@
 #define PROFILE_BUFFER_SiZE	1024
 
 
+//#define PROFILE_PATH    ":/profile/"
+#define PROFILE_PATH    "profile/"
 
 
 
 //------------- vars
 
-static const char* profile_file_name = "profiles.json";	// Список профилей
+static const char* profiles_file_name = "profiles.json";	// Список профилей
 
 static JSON_Array *root_array;
 static JSON_Value *root_value;
@@ -48,7 +50,7 @@ prfl_StringArray * prfl_names = &_pprfl_names;
 
 Profile::Profile()
 {
-    pprofile_file_name = profile_file_name;	// Список профилей
+    pprofile_file_name = profiles_file_name;	// Список профилей
 
 
     _pprfl_names.index = 0;
@@ -121,9 +123,13 @@ Profile::_fill_prfl_names(JSON_Array* array)
 }
 
 
+QString
+Profile::readFile(const QString &filename)
+{
+    QString str = PROFILE_PATH + filename;
 
-QString readFile(const QString &filename) {
-    QFile f(filename);
+    QFile f(str);
+
     if(f.exists()){
         if (!f.open(QFile::ReadOnly | QFile::Text)) {
             return QString();
@@ -137,12 +143,31 @@ QString readFile(const QString &filename) {
 }
 
 
-// Загрузка профиля из файла
+QJsonDocument
+Profile::loadDocument(QString filename)
+{
+    QJsonDocument doc;
+//    QJsonParseError error ;
+
+    QString str = readFile(filename);
+
+    if (str.isEmpty())
+        qFatal("Could not read JSON file!");
+    QByteArray arr = str.toUtf8();
+
+    doc = QJsonDocument::fromJson(arr,&parseError);
+
+    return doc;
+}
+
+// Загрузка списка профилей из файла
 bool
 Profile::loadProfile()
 {
 
-    QString json1 = readFile(":/profile/profiles.json");
+//    QString path = PROFILE_PATH+QString("profiles.json");
+
+    QString json1 = readFile("profiles.json");
 
 //  QTextStream in(&loadFile);
 //  QString json = in.readAll();//loadFile.readAll();
@@ -243,6 +268,182 @@ Profile::isDefaultProfile(int index)
     return check;
 }
 
+//----------------- Profile document
+
+
+#define GENERIC_GET_VALUE(gen,field) obj = profile_doc.object();\
+    generic_obj = obj[gen].toObject();\
+    result = generic_obj[field].toString()
+
+
+// DEFAULT_X_STEPS_PER_MM"
+QString
+Profile::getX_STEPS()
+{
+
+    QString result;
+
+    QJsonObject obj;
+    QJsonObject generic_obj;
+
+//    profile_doc
+//    obj = profile_doc.object();
+//    generic_obj = obj["generic"].toObject();
+//    result = generic_obj["DEFAULT_X_STEPS_PER_MM"].toString();
+
+
+    GENERIC_GET_VALUE("generic","DEFAULT_X_STEPS_PER_MM");
+
+//    qDebug() << generic_obj.count() << "getX_STEPS 290";
+//    qDebug() << result << "getX_STEPS 294";
+
+    return result;
+}
+
+//DEFAULT_Y_STEPS_PER_MM
+QString
+Profile::getY_STEPS()
+{
+    QString result;
+
+    QJsonObject obj;
+    QJsonObject generic_obj;
+
+    GENERIC_GET_VALUE("generic","DEFAULT_Y_STEPS_PER_MM");
+
+    return result;
+}
+
+//DEFAULT_Z_STEPS_PER_MM
+QString
+Profile::getZ_STEPS()
+{
+    QString result;
+
+    QJsonObject obj;
+    QJsonObject generic_obj;
+
+    GENERIC_GET_VALUE("generic","DEFAULT_Z_STEPS_PER_MM");
+
+    return result;
+}
+
+//DEFAULT_X_MAX_RATE
+QString
+Profile::getX_MAX_RATE()
+{
+    QString result;
+
+    QJsonObject obj;
+    QJsonObject generic_obj;
+
+    GENERIC_GET_VALUE("generic","DEFAULT_X_MAX_RATE");
+
+    return result;
+}
+
+//DEFAULT_Y_MAX_RATE
+
+//DEFAULT_Z_MAX_RATE
+
+//DEFAULT_X_ACCELERATION
+
+//DEFAULT_Y_ACCELERATION
+
+//DEFAULT_Z_ACCELERATION
+
+//DEFAULT_X_MAX_TRAVEL
+
+//DEFAULT_Y_MAX_TRAVEL
+
+//DEFAULT_Z_MAX_TRAVEL
+
+//DEFAULT_STEP_PULSE_MICROSECONDS
+
+//DEFAULT_STEPPING_INVERT_MASK
+
+//DEFAULT_DIRECTION_INVERT_MASK
+
+//DEFAULT_STEPPER_IDLE_LOCK_TIME
+
+//DEFAULT_STATUS_REPORT_MASK
+
+//DEFAULT_JUNCTION_DEVIATION
+
+//DEFAULT_ARC_TOLERANCE
+
+//DEFAULT_FLAGS
+
+//DEFAULT_HOMING_DIR_MASK
+
+//DEFAULT_HOMING_FEED_RATE
+
+//DEFAULT_HOMING_SEEK_RATE
+
+//DEFAULT_HOMING_DEBOUNCE_DELAY
+
+//DEFAULT_HOMING_PULLOFF
+
+//TEMPERATURE
+QString
+Profile::get_TEMPERATURE()
+{
+    QString result;
+
+    QJsonObject obj;
+    QJsonObject generic_obj;
+
+    GENERIC_GET_VALUE("generic","TEMPERATURE");
+
+    return result;
+}
+
+
+//PROPTIONAL
+QString
+Profile::get_PROPTIONAL()
+{
+    QString result;
+
+    QJsonObject obj;
+    QJsonObject generic_obj;
+
+    GENERIC_GET_VALUE("generic","PROPTIONAL");
+
+    return result;
+}
+
+
+//INTEGRAL
+QString
+Profile::get_INTEGRAL()
+{
+    QString result;
+
+    QJsonObject obj;
+    QJsonObject generic_obj;
+
+    GENERIC_GET_VALUE("generic","INTEGRAL");
+
+    return result;
+}
+
+//DERIVATIVE
+QString
+Profile::get_DERIVATIVE()
+{
+    QString result;
+
+    QJsonObject obj;
+    QJsonObject generic_obj;
+
+    GENERIC_GET_VALUE("generic","DERIVATIVE");
+
+    return result;
+}
+
+//-----------------
+
 void
 Profile::Profiles_increment(int idx)
 {
@@ -262,28 +463,32 @@ Profile::Profiles_increment(int idx)
  * создать новый профиль профиль по-умолчанию.
  */
 bool
-Profile::init_profile(QWidget *tab)
+Profile::init_profile()
 {
-    profPage = tab;
     bool result = false;
 
-    profiles = profPage->findChild<QComboBox *>("profileComboBox",Qt::FindChildrenRecursively);
-    //  QList<QComboBox *> profiles = profPage->findChildren<QComboBox *>();
 
-    if(profiles != 0)
+    quint8 i;
+
+    if(loadProfile())
     {
 
-        quint8 i;
+        profile_filename = getProfileFileName(0); // TODO Найти профиль по-умолчанию.
+        profile_doc = loadDocument(profile_filename);
+        qDebug() << parseError.errorString() << "init_profile:302";
 
-        if(loadProfile())
+        if(profile_doc.isEmpty())
         {
-            i = 1;
-        }else{
-            i = 1;
+            qDebug() << "Empty init_profile 335 \n";
         }
+
+
+//       QString str = getX_STEPS();
+
         result = true;
-    }else{
-        qDebug() << "QComboBox * profiles in null. ";
+
+        i = 1;
     }
+
     return result;
 }

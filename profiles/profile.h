@@ -21,6 +21,7 @@
 #include <QTabWidget>
 #include <QComboBox>
 #include <QJsonArray>
+#include <QJsonParseError>
 
 //#include "profiles/profiledialog.h"
 
@@ -68,7 +69,7 @@ public:
      * Проверка наличия файла профиля и его правильность или
      * создать новый профиль профиль по-умолчанию.
      */
-    bool init_profile(QWidget *tab);
+    bool init_profile();
 
     void Profiles_increment(int idx);
 
@@ -81,6 +82,24 @@ public:
     QString getProfileFileName(int index);
 
     bool isDefaultProfile(int index);
+
+//----------- Generic
+
+    QString getX_STEPS();
+
+    QString getY_STEPS();
+
+    QString getZ_STEPS();
+
+    QString getX_MAX_RATE();
+
+    QString get_TEMPERATURE();
+
+    QString get_INTEGRAL();
+
+    QString get_PROPTIONAL();
+
+    QString get_DERIVATIVE();
 
 
 private:
@@ -95,12 +114,22 @@ private:
 
     char*  _dotnamebuffer(const char *root, const char* name);
 
-    QJsonArray profileNamesArray;
+    QJsonDocument loadDocument(QString filename);
 
+    QString readFile(const QString &filename);
 
-    QComboBox *profiles;
+//--------- vars
 
-//    Ui::ProfileDialog *uia;
+    QJsonArray profileNamesArray;   // Список профилей
+
+//    QComboBox *profiles;
+
+    QString profile_filename;
+
+    QJsonDocument profile_doc; // Документ текущего профиля.
+
+    QJsonParseError parseError;
+
 };
 
 #endif // PROFILE_H
