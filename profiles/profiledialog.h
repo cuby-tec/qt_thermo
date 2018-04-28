@@ -28,7 +28,20 @@ private slots:
 
     void on_profile_pushButton_Save_clicked();
 
-    void on_temprature_lineEdit_editingFinished();
+
+    void on_temprature_lineEdit_textEdited(const QString &arg1);
+
+    void on_tpropotional_lineEdit_textEdited(const QString &arg1);
+
+    void on_tintegral_lineEdit_textEdited(const QString &arg1);
+
+    void on_tderivative_lineEdit_textEdited(const QString &arg1);
+
+    void on_pfofileNameEdit_textEdited(const QString &arg1);
+
+    void on_profileDescription_textEdit_textChanged();
+
+    void on_profileFile_Edit_textEdited(const QString &arg1);
 
 private:
     Ui::ProfileDialog *uia;
@@ -44,6 +57,10 @@ private:
     void setupProfile(QWidget * tab);
 
     void fillProfilePage();
+
+    void indicate_ProfileSaved();
+
+    bool profileSaved;
 };
 
 #endif // PROFILEDIALOG_H

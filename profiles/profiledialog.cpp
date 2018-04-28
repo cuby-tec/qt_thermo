@@ -10,6 +10,7 @@ ProfileDialog::ProfileDialog(QWidget *parent) :
     setupPlot(uia->customPlot);
     setupExchange();
     setupProfile(uia->tab_3);
+    profileSaved = true;
 }
 
 ProfileDialog::~ProfileDialog()
@@ -107,13 +108,100 @@ void ProfileDialog::on_profileComboBox_currentIndexChanged(int index)
 //    profile->Profiles_increment(index);
 }
 
+// profileSaved, tabWidget_2
+void ProfileDialog::indicate_ProfileSaved()
+{
+    QString tab = uia->tabWidget_2->tabText(0);
+
+    if(!profileSaved){
+        //TODO Проверить наличие символа * и удалить его
+        if(!tab.contains('*',Qt::CaseInsensitive))
+        {
+            tab.append(QChar('*'));
+        }
+    }else{
+        //TODO Поверить наличие символа * и если его нет, то добавить
+        if(tab.contains('*'))
+        {
+            tab.remove(QChar('*'),Qt::CaseInsensitive);
+        }
+    }
+    uia->tabWidget_2->setTabText(0,tab);
+
+}
+
+// -------------- Temperature
+
 
 void ProfileDialog::on_profile_pushButton_Save_clicked()
 {
     profile->saveProfileDocument(); // Save current Document
+    profileSaved = true;
+    indicate_ProfileSaved();
 }
 
-void ProfileDialog::on_temprature_lineEdit_editingFinished()
+void ProfileDialog::on_temprature_lineEdit_textEdited(const QString &arg1)
 {
-    profile->set_TEMPERATURE(uia->temprature_lineEdit->text());
+    //    profile->set_TEMPERATURE(uia->temprature_lineEdit->text());
+    profile->set_TEMPERATURE(arg1);
+    profileSaved = false;
+    indicate_ProfileSaved();
+
 }
+
+void ProfileDialog::on_tpropotional_lineEdit_textEdited(const QString &arg1)
+{
+//    profile->set_PROPTIONAL(uia->tpropotional_lineEdit->text()); // tpropotional_lineEdit
+    profile->set_PROPTIONAL(arg1);
+    profileSaved = false;
+    indicate_ProfileSaved();
+
+}
+
+void ProfileDialog::on_tintegral_lineEdit_textEdited(const QString &arg1)
+{
+//    profile->set_INTEGRAL(uia->tintegral_lineEdit->text()); // tintegral_lineEdit
+    profile->set_INTEGRAL(arg1);
+    profileSaved = false;
+    indicate_ProfileSaved();
+
+}
+
+
+
+void ProfileDialog::on_tderivative_lineEdit_textEdited(const QString &arg1)
+{
+//    profile->set_DERIVATIVE(uia->tderivative_lineEdit->text());
+    profile->set_DERIVATIVE(arg1);
+    profileSaved = false;
+    indicate_ProfileSaved();
+
+}
+
+void ProfileDialog::on_pfofileNameEdit_textEdited(const QString &arg1)
+{
+    profileSaved = false;
+    indicate_ProfileSaved();
+
+}
+
+
+
+void ProfileDialog::on_profileDescription_textEdit_textChanged()
+{
+//    profileSaved = false;
+    // TODO Программная загрузка вызывает это событие и взводдит
+    // флаг Запись.
+    indicate_ProfileSaved();
+
+}
+
+
+void ProfileDialog::on_profileFile_Edit_textEdited(const QString &arg1)
+{
+    profileSaved = false;
+    indicate_ProfileSaved();
+}
+
+
+//-------------- temperature

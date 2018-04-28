@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>images/copy.png</file>
         <file>profile/profiles.json</file>
+        <file>images/write.png</file>
     </qresource>
 </RCC>

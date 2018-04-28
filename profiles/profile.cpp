@@ -469,44 +469,54 @@ Profile::writeObject(QJsonObject &json,QString key,QJsonObject newobj)
 
 }
 
+#define SET_FILED_VALUE(field)     obj = profile_doc.object();\
+    QJsonObject nob;\
+    nob[field] = num;\
+    writeObject(obj,"generic",nob);\
+    profile_doc.setObject(obj)
 
 
-//TEMPERATURE
+
+
+
+// TEMPERATURE
 void
 Profile::set_TEMPERATURE(QString num)
 {
     QJsonObject obj;
 
-    obj = profile_doc.object();
+    SET_FILED_VALUE("TEMPERATURE");
 
-    QJsonObject nob;
-
-    nob["TEMPERATURE"] = num;
-
-    writeObject(obj,"generic",nob);
-
-    profile_doc.setObject(obj);
-
-    qDebug() << obj["generic"].toObject()["TEMPERATURE"].toString() << "set_TEMPERATURE 467";
+//    qDebug() << obj["generic"].toObject()["TEMPERATURE"].toString() << "set_TEMPERATURE 467";
 
 }
 
-
+// INTEGRAL
 void
 Profile::set_INTEGRAL(QString num)
 {
+    QJsonObject obj;
 
+    SET_FILED_VALUE("INTEGRAL");
 }
 
+// PROPTIONAL
 void
 Profile::set_PROPTIONAL(QString num)
 {
+    QJsonObject obj;
+
+    SET_FILED_VALUE("PROPTIONAL");
 
 }
 
+// DERIVATIVE
 void
 Profile::set_DERIVATIVE(QString num)
 {
+    QJsonObject obj;
+
+    SET_FILED_VALUE("DERIVATIVE");
 
 }
 

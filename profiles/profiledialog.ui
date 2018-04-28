@@ -13,22 +13,6 @@
   <property name="windowTitle">
    <string>Profiles Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>500</y>
-     <width>301</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
@@ -91,13 +75,30 @@
        <x>0</x>
        <y>0</y>
        <width>481</width>
-       <height>321</height>
+       <height>371</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_3">
+      <property name="font">
+       <font>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <attribute name="icon">
+       <iconset resource="../resources.qrc">
+        <normaloff>:/images/copy.png</normaloff>
+        <normalon>:/images/write.png</normalon>:/images/copy.png</iconset>
+      </attribute>
       <attribute name="title">
        <string>Profile</string>
       </attribute>
@@ -221,16 +222,16 @@
       <attribute name="title">
        <string>Temperature</string>
       </attribute>
-      <widget class="QWidget" name="formLayoutWidget">
+      <widget class="QWidget" name="horizontalLayoutWidget_2">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>271</width>
-         <height>171</height>
+         <x>9</x>
+         <y>9</y>
+         <width>461</width>
+         <height>321</height>
         </rect>
        </property>
-       <layout class="QFormLayout" name="formLayout">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <property name="leftMargin">
          <number>10</number>
         </property>
@@ -243,61 +244,394 @@
         <property name="bottomMargin">
          <number>10</number>
         </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Temperature</string>
+        <item>
+         <layout class="QFormLayout" name="formLayout">
+          <property name="leftMargin">
+           <number>10</number>
           </property>
-         </widget>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Temperature</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="temprature_lineEdit">
+            <property name="inputMask">
+             <string>0000</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Proportional term Kp</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="tpropotional_lineEdit">
+            <property name="maxLength">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Integral term Ki</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="tintegral_lineEdit">
+            <property name="inputMask">
+             <string>000.000</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Derivative term Kd</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="tderivative_lineEdit">
+            <property name="inputMask">
+             <string>000.0000</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="temprature_lineEdit">
-          <property name="inputMask">
-           <string>0000</string>
+        <item>
+         <layout class="QFormLayout" name="formLayout_4">
+          <property name="leftMargin">
+           <number>10</number>
           </property>
-         </widget>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="hOMING_DIR_MASKLabel">
+            <property name="text">
+             <string>HOMING_DIR_MASK</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="hOMING_DIR_MASKLineEdit">
+            <property name="toolTip">
+             <string>HOMING_DIR_MASK</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="hOMING_FEED_RATELabel">
+            <property name="text">
+             <string>HOMING_FEED_RATE</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="hOMING_FEED_RATELineEdit"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="hOMING_SEEK_RATELabel">
+            <property name="text">
+             <string>HOMING_SEEK_RATE</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="hOMING_SEEK_RATELineEdit"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="hOMING_D_DELAYLabel">
+            <property name="text">
+             <string>HOMING_D_DELAY</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="hOMING_D_DELAYLineEdit">
+            <property name="toolTip">
+             <string>HOMING_DEBOUNCE_DELAY</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="hOMING_PULLOFFLabel">
+            <property name="text">
+             <string>HOMING_PULLOFF</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="hOMING_PULLOFFLineEdit"/>
+          </item>
+         </layout>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>Proportional term Kp</string>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_5">
+      <attribute name="title">
+       <string>Axis</string>
+      </attribute>
+      <widget class="QWidget" name="horizontalLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>471</width>
+         <height>341</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
+        <property name="topMargin">
+         <number>10</number>
+        </property>
+        <property name="rightMargin">
+         <number>10</number>
+        </property>
+        <property name="bottomMargin">
+         <number>10</number>
+        </property>
+        <item>
+         <layout class="QFormLayout" name="formLayout_2">
+          <property name="leftMargin">
+           <number>10</number>
           </property>
-         </widget>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>X_STEPS_PER_MM</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Y_STEPS_PER_MM</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_2"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Z_STEPS_PER_MM</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="lineEdit_3"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>X_MAX_RATE</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEdit_4"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Y_MAX_RATE</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="lineEdit_5"/>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Z_MAX_RATE</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="lineEdit_6"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>X_ACCELERATION</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Y_ACCELERATION</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="lineEdit_7"/>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLineEdit" name="lineEdit_8"/>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Z_ACCELERATION</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QLineEdit" name="lineEdit_9"/>
+          </item>
+         </layout>
         </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="tpropotional_lineEdit">
-          <property name="inputMask">
-           <string>000.000</string>
+        <item>
+         <layout class="QFormLayout" name="formLayout_3">
+          <property name="leftMargin">
+           <number>10</number>
           </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Integral term Ki</string>
+          <property name="topMargin">
+           <number>10</number>
           </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="tintegral_lineEdit">
-          <property name="inputMask">
-           <string>000.000</string>
+          <property name="rightMargin">
+           <number>10</number>
           </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>Derivative term Kd</string>
+          <property name="bottomMargin">
+           <number>10</number>
           </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="tderivative_lineEdit">
-          <property name="inputMask">
-           <string>000.0000</string>
-          </property>
-         </widget>
+          <item row="0" column="0">
+           <widget class="QLabel" name="x_MAX_TRAVELLabel">
+            <property name="text">
+             <string>X_MAX_TRAVEL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="x_MAX_TRAVELLineEdit"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="y_MAX_TRAVELLabel">
+            <property name="text">
+             <string>Y_MAX_TRAVEL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="y_MAX_TRAVELLineEdit"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="z_MAX_TRAVELLabel">
+            <property name="text">
+             <string>Z_MAX_TRAVEL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="z_MAX_TRAVELLineEdit"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="sTEP_PULSE_MICROSECONDSLabel">
+            <property name="toolTip">
+             <string>STEP_PULSE_MICROSECONDS</string>
+            </property>
+            <property name="text">
+             <string>STEP_PULSE_MS</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="step_PULSE_MICROSECONDSLineEdit"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="s_iNVERT_MASKLabel">
+            <property name="toolTip">
+             <string>STEPPING_INVERT_MASK</string>
+            </property>
+            <property name="text">
+             <string>S_invert_MASK</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="invert_MASKLineEdit"/>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="d_INVERT_MASKLabel">
+            <property name="toolTip">
+             <string>DIRECTION_INVERT_MASK</string>
+            </property>
+            <property name="text">
+             <string>D_invert_MASK</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="d_INVERT_MASKLineEdit"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="idle_LOCK_TIMELabel">
+            <property name="toolTip">
+             <string>STEPPER_IDLE_LOCK_TIME</string>
+            </property>
+            <property name="text">
+             <string>idle_LOCK_TIME</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="idle_LOCK_TIMELineEdit"/>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="aRC_TOLERANCELabel">
+            <property name="text">
+             <string>ARC_TOLERANCE</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLineEdit" name="aRC_TOLERANCELineEdit"/>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -337,8 +671,8 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>470</y>
-     <width>489</width>
+     <y>510</y>
+     <width>451</width>
      <height>20</height>
     </rect>
    </property>
@@ -361,39 +695,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>ProfileDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>ProfileDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
+ <connections/>
 </ui>
