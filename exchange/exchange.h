@@ -24,14 +24,14 @@ public:
 
     void buildComData(struct ComDataReq_t* comdata);
 
+    void buildComData(ComDataReq_t *comdata, eOrder order);
+
     /**
      * params:
      * 	psc - data to be filled.
      * 	i - offset for line number.
      */
     void build_segment_default(struct sSegment* psc, uint32_t i);
-
-    void load_defaults(struct sControl* pctl);
 
     int sendRequest(ComDataReq_t* request);
 
@@ -44,11 +44,15 @@ private:
 
     int sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp);
 
+    void buildProfile(sProfile *profile);
+
     ComDataReq_t comdata;
 
     Status_t* c_status;
 
     void print_status(Status_t* c_status);
+
+    void load_defaults(struct sControl* pctl);
 
 };
 

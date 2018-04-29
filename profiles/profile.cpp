@@ -39,15 +39,8 @@ const char* filename_extention = "json";
 static char buffer[PROFILE_BUFFER_SiZE];
 
 
-static prfl_StringArray _pprfl_names;// = {0,PRFL_NAMES_NUMBER,{{0,{"as"}},{0,{"sds"}},{0,{"sdsa"}},{0,{"sdsa"}},{0,{"sdsa"}},{0,{"sdsa"}}
-                                     //,{0,{"sdsa"}},{0,{"sdsa"}},{0,{"sdsa"}},{0,{"sdsa"}}}};
-
-
-prfl_StringArray * prfl_names = &_pprfl_names;
-
-
 //------------------- functions
-
+/*
 Profile::Profile()
 {
     pprofile_file_name = profiles_file_name;	// Список профилей
@@ -59,7 +52,7 @@ Profile::Profile()
 
     profileIndex = 0;
 }
-
+*/
 
 // формирование строки пути к значению JSON-объекта.
 

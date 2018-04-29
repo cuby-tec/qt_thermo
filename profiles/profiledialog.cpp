@@ -84,7 +84,8 @@ void ProfileDialog::fillProfilePage()
 
 void  ProfileDialog::setupProfile(QWidget * tab)
 {
-    profile = new Profile();
+//    profile = new Profile();
+    profile = Profile::instance();
     if( profile->init_profile())
     {
         for(int i=0;i<profile->getProfileNameCount();i++)

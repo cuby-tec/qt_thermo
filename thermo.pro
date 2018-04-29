@@ -33,7 +33,8 @@ HEADERS  += mainwindow.h \
     exchange/cnccommand.h \
     profile.h \
     profiles/profiledialog.h \
-    profiles/profile.h
+    profiles/profile.h \
+    links/sProfile.h
 
 FORMS    += mainwindow.ui \
     profiles/profiledialog.ui

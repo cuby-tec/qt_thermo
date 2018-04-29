@@ -35,6 +35,10 @@
 #define PRFL_NAME_SIZE			128
 #define PRFL_DESCRIPTION_SIZE	1024
 
+//#define     profiles_file_name  "profiles.json"
+//;	// Список профилей
+
+
 
 typedef struct _prfl_StringArray_t prfl_StringArray;
 typedef  struct _prfl_String_t	prfl_String;
@@ -60,7 +64,16 @@ struct _prfl_StringArray_t{
 class Profile
 {
 public:
-    Profile();
+
+    static Profile* instance() {
+//        if(!_instance){
+//            _instance = new Profile();
+//        }
+//        return _instance;
+        static Profile p;
+        return &p;
+    }
+
 
     bool loadProfile();
 
@@ -138,8 +151,19 @@ private:
 
     QJsonParseError parseError;
 
+
     int profileIndex;
 
+    static Profile* _instance;
+
+    Profile() {
+        pprofile_file_name = "profiles.json";	// Список профилей
+
+                   profileIndex = 0; }
+
+    ~Profile() {}
+    Profile(Profile const&) = delete;
+    void operator = (Profile const&) = delete;
 
 };
 

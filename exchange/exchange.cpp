@@ -1,5 +1,10 @@
-#include "exchange.h"
+/**
 
+*/
+
+
+#include "exchange.h"
+#include "profiles/profile.h"
 
 //#include from FeeRTOS project.
 
@@ -294,6 +299,40 @@ Exchange::buildComData(ComDataReq_t* comdata)
     comdata->command.order = eoSegment;
 
 }
+
+void
+Exchange::buildProfile(sProfile* profile)
+{
+
+}
+
+/**
+  Формирование запроса для определённой команды
+ * @brief Exchange::buildComData
+ * @param comdata
+ * @param order
+ */
+void
+Exchange::buildComData(ComDataReq_t *comdata, eOrder order)
+{
+    /*
+     * eoState,            // Запрос состояния устройства.
+     * eoHotendParams,    // Задание параметров Hotend
+     *  eoSegment
+     * */
+    switch (order) {
+    case eoState:
+
+        break;
+    case eoProfile:
+        break;
+    case eoSegment:
+        buildComData(comdata);
+        break;
+    }
+
+}
+
 
 void
 Exchange::NoOperation()
