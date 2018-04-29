@@ -11,11 +11,15 @@
 #include <QIODevice>
 #include <QTextStream>
 
+#include "profiles/profile.h"
+
 #ifndef EXIT_FAILURE
 #define EXIT_FAILURE    -1
 #endif
 
 #define EXIT_SUCCESS    0
+
+static uint requestIndex = 0;
 
 class Exchange
 {
@@ -39,16 +43,18 @@ public:
 
     Status_t* getStatus() { return c_status; }
 
+
 private:
     QFile *fp;
 
     int sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp);
 
-    void buildProfile(sProfile *profile);
+    void buildProfile(sProfile *sprofile_dst);
 
     ComDataReq_t comdata;
 
     Status_t* c_status;
+
 
     void print_status(Status_t* c_status);
 

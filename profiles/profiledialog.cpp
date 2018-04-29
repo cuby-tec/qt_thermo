@@ -114,7 +114,8 @@ void ProfileDialog::indicate_ProfileSaved()
 {
     QString tab = uia->tabWidget_2->tabText(0);
 
-    if(!profileSaved){
+//    if(!profileSaved){
+    if(!profile->profileSaved){
         //TODO Проверить наличие символа * и удалить его
         if(!tab.contains('*',Qt::CaseInsensitive))
         {
@@ -137,7 +138,7 @@ void ProfileDialog::indicate_ProfileSaved()
 void ProfileDialog::on_profile_pushButton_Save_clicked()
 {
     profile->saveProfileDocument(); // Save current Document
-    profileSaved = true;
+    profile->profileSaved = true;
     indicate_ProfileSaved();
 }
 
@@ -145,7 +146,7 @@ void ProfileDialog::on_temprature_lineEdit_textEdited(const QString &arg1)
 {
     //    profile->set_TEMPERATURE(uia->temprature_lineEdit->text());
     profile->set_TEMPERATURE(arg1);
-    profileSaved = false;
+    profile->profileSaved = false;
     indicate_ProfileSaved();
 
 }
@@ -154,7 +155,7 @@ void ProfileDialog::on_tpropotional_lineEdit_textEdited(const QString &arg1)
 {
 //    profile->set_PROPTIONAL(uia->tpropotional_lineEdit->text()); // tpropotional_lineEdit
     profile->set_PROPTIONAL(arg1);
-    profileSaved = false;
+    profile->profileSaved = false;
     indicate_ProfileSaved();
 
 }
@@ -163,7 +164,7 @@ void ProfileDialog::on_tintegral_lineEdit_textEdited(const QString &arg1)
 {
 //    profile->set_INTEGRAL(uia->tintegral_lineEdit->text()); // tintegral_lineEdit
     profile->set_INTEGRAL(arg1);
-    profileSaved = false;
+    profile->profileSaved = false;
     indicate_ProfileSaved();
 
 }
@@ -174,14 +175,14 @@ void ProfileDialog::on_tderivative_lineEdit_textEdited(const QString &arg1)
 {
 //    profile->set_DERIVATIVE(uia->tderivative_lineEdit->text());
     profile->set_DERIVATIVE(arg1);
-    profileSaved = false;
+    profile->profileSaved = false;
     indicate_ProfileSaved();
 
 }
 
 void ProfileDialog::on_pfofileNameEdit_textEdited(const QString &arg1)
 {
-    profileSaved = false;
+    profile->profileSaved = false;
     indicate_ProfileSaved();
 
 }
@@ -200,8 +201,16 @@ void ProfileDialog::on_profileDescription_textEdit_textChanged()
 
 void ProfileDialog::on_profileFile_Edit_textEdited(const QString &arg1)
 {
-    profileSaved = false;
+    profile->profileSaved = false;
     indicate_ProfileSaved();
+}
+
+
+void ProfileDialog::on_pushButton_3_clicked()
+{
+  Exchange* exch = new Exchange();
+  ComDataReq_t comdata;
+  exch->buildComData(&comdata,eoProfile);
 }
 
 

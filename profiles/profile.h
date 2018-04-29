@@ -75,6 +75,9 @@ public:
     }
 
 
+    bool profileSaved;
+
+
     bool loadProfile();
 
     /**
@@ -158,8 +161,9 @@ private:
 
     Profile() {
         pprofile_file_name = "profiles.json";	// Список профилей
-
-                   profileIndex = 0; }
+        profileSaved = true;
+        profileIndex = 0;
+    }
 
     ~Profile() {}
     Profile(Profile const&) = delete;

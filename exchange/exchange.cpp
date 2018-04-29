@@ -4,7 +4,6 @@
 
 
 #include "exchange.h"
-#include "profiles/profile.h"
 
 //#include from FeeRTOS project.
 
@@ -286,7 +285,6 @@ void
 Exchange::buildComData(ComDataReq_t* comdata)
 {
     uint32_t index = 3;
-    static uint32_t requestIndex;
 
     struct sSegment* psc = &comdata->payload.instrument1_parameter; //&sc;
 
@@ -301,8 +299,19 @@ Exchange::buildComData(ComDataReq_t* comdata)
 }
 
 void
-Exchange::buildProfile(sProfile* profile)
+Exchange::buildProfile(sProfile* sprofile_dst)
 {
+    bool ok_conversion;
+
+  Profile* profile = Profile::instance();
+
+  sprofile_dst->TEMPERATURE = profile->get_TEMPERATURE().toFloat(&ok_conversion);
+
+  sprofile_dst->PROPTIONAL = profile->get_PROPTIONAL().toFloat(&ok_conversion);
+
+  sprofile_dst->INTEGRAL = profile->get_INTEGRAL().toFloat(&ok_conversion);
+
+  sprofile_dst->DERIVATIVE = profile->get_DERIVATIVE().toFloat(&ok_conversion);
 
 }
 
@@ -325,7 +334,16 @@ Exchange::buildComData(ComDataReq_t *comdata, eOrder order)
 
         break;
     case eoProfile:
+        buildProfile(&comdata->payload.profile);
+        comdata->size = sizeof(struct ComDataReq_t);
+        comdata->requestNumber = ++requestIndex;
+        comdata->instruments = N_AXIS;
+
+        comdata->command.order = eoProfile;
+
+        sendRequest(comdata); // TODO Get request in Controller.
         break;
+
     case eoSegment:
         buildComData(comdata);
         break;

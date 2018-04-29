@@ -43,6 +43,8 @@ private slots:
 
     void on_profileFile_Edit_textEdited(const QString &arg1);
 
+    void on_pushButton_3_clicked();
+
 private:
     Ui::ProfileDialog *uia;
 
