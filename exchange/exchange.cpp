@@ -4,6 +4,8 @@
 
 
 #include "exchange.h"
+//#include <cstdio>
+#include <QDebug>
 
 //#include from FeeRTOS project.
 
@@ -27,29 +29,100 @@ static
 char buffer2[256];
 
 
-
+#define STDFILE
 //--------- functions
+
 int
 Exchange::sendRequest(ComDataReq_t* request)
 {
-    quint8* data = (quint8*)request;
+    quint8* rdata = (quint8*)request;
+    int result, size, length;
+#ifndef STDFILE
+    QString line;
+    QTextStream print(stdout, QIODevice::WriteOnly); // stdin
+#endif
+#ifdef STDFILE
+    std::FILE* pFile;
+
+    pFile = std::fopen(fname,"r+");
+    if (pFile!=NULL)
+    {
+        //  fputs ("fopen example",pFile);
+//        line = QString("File opened. %1 \n").arg(fname);
+//        print<<line<<"sendRequest 48";
+        qDebug() << "File opened :"<< fname << "sendRequest 48";
+
+        if(sendBuffer(rdata,sizeof(ComDataReq_t),pFile) ==  EXIT_SUCCESS)
+        {
+            size = sizeof(struct Status_t);
+            length = fread(buffer2,1,size,pFile);
+
+            if(length < 0){
+                qDebug()<< "Can't read file %1 \n" << fname ;
+            }else{
+
+                //printf("Recieved:%u\n",result);
+                qDebug() << "Recieved :" << length;
+
+                c_status = (struct Status_t*)buffer2;
+
+                print_status(c_status);
+            }
+
+        }
+
+        fclose (pFile);
+    }
+
+#else
+
+    QFile data(fname);
 
 
 
-    int result;
-    if(fp->isOpen()){
-         result = sendBuffer(data,sizeof(ComDataReq_t),fp);
+    if(data.open(QIODevice::WriteOnly))
+    {
+        //         result = sendBuffer(rdata,sizeof(ComDataReq_t),&data);
+        if(sendBuffer(rdata,sizeof(ComDataReq_t),&data) ==  EXIT_SUCCESS)
+        {
+            data.close();
+
+            if(data.open(QIODevice::ReadOnly))
+            {
+                size = sizeof(struct Status_t);
+
+                length = data.read(buffer2,size);
+
+                if(length < 0){
+                    line = QString("Can't read file %1 \n").arg(fname);
+                }else{
+                    //printf("Recieved:%u\n",result);
+                    line = QString("Recieved %1 \n").arg(length);
+
+                    c_status = (struct Status_t*)buffer2;
+
+                    print_status(c_status);
+                }
+            }
+         }
+
+         data.close();
     }else{
         result = EXIT_FAILURE;
     }
+#endif
     return result;
 }
 
-
+#define EXCHANGE_IN_CONST_NO
 
 Exchange::Exchange()
 {
-
+#ifdef    EXCHANGE_IN_CONST
+#ifdef STDFILE
+    buildComData(&comdata);
+    sendRequest(&comdata);
+#else
     int length, size;
 
     QTextStream print(stdout, QIODevice::WriteOnly); // stdin
@@ -80,7 +153,7 @@ Exchange::Exchange()
             }else{
                 //printf("Recieved:%u\n",result);
                 line = QString("Recieved %1 \n").arg(length);
-
+                print <<line; print.flush();
                 c_status = (struct Status_t*)buffer2;
 
                 print_status(c_status);
@@ -99,6 +172,8 @@ Exchange::Exchange()
 
         //        return EXIT_FAILURE;
     }
+#endif
+#endif
 }
 
 
@@ -133,6 +208,7 @@ Exchange::print_status(Status_t * c_status)
     line = QString("instrument2_parameter: %1 \n").arg(c_status->instrument2_parameter);print <<line; print.flush();
     line = QString("instrument3_parameter: %1 \n").arg(c_status->instrument3_parameter);print <<line; print.flush();
     line = QString("instrument4_parameter: %1 \n").arg(c_status->instrument4_parameter);print <<line; print.flush();
+    line = QString("Temperaature: %1 \n").arg(c_status->temperature);print <<line; print.flush();
     line = QString(" ======================= \n");print <<line; print.flush();
 
 }
@@ -191,6 +267,58 @@ Exchange::build_segment_default(struct sSegment* psc, uint32_t i)
     }
 }
 
+int
+Exchange::sendBuffer(uint8_t* buffer, uint32_t size, std::FILE* fp)
+{
+    uint8_t* cursor = buffer;
+    uint32_t packet_size, counter = 0;
+    qint64 length=0;
+
+    packet_size = MaxPacketSize;
+
+    qDebug() << "Write packet #1 of size:" << MaxPacketSize;
+
+    length = fwrite(cursor,sizeof(char),MaxPacketSize,fp);// #1 packet
+
+    if(length < 0){
+        qDebug() << "Error Writing to " << fname;
+        return (EXIT_FAILURE);
+    }
+
+    qDebug() << "Sended:"<<length<< "\t to be send: "<< size-counter;
+
+    counter += length;
+    cursor += length;
+
+    qDebug() << "Write packet #2 of size:" << MaxPacketSize;
+
+    length = fwrite(cursor,sizeof(char),MaxPacketSize,fp);// #2 packet
+
+    if(length < 0){
+        qDebug() << "Error Writing to " << fname;
+        return (EXIT_FAILURE);
+    }
+    qDebug() << "Sended:"<<length<< "\t to be send: "<< size-counter;
+
+    counter += length;
+    cursor += length;
+
+    packet_size = sizeof(comdata) - counter;
+
+    qDebug() << "Write packet #2 of size:" << packet_size;
+
+    length = fwrite(cursor,sizeof(char),packet_size,fp);// #3 packet
+
+    if(length < 0){
+        qDebug() << "Error Writing to " << fname;
+        return (EXIT_FAILURE);
+    }
+    qDebug() << "Sended:"<<length<< "\t to be send: "<< size-counter;
+
+
+    return (EXIT_SUCCESS);
+}
+
 // TODO sendBuffer
 int
 Exchange::sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp)
@@ -214,7 +342,7 @@ Exchange::sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp)
     print << line;
     print.flush();
 
-    length = fp->write((const char*)cursor,MaxPacketSize);
+    length = fp->write((const char*)cursor,MaxPacketSize);// #1 packet
     if(length < 0){
 //        printf ("Error Writing to %s\n",fname);
 //		fclose(fp);
@@ -238,7 +366,7 @@ Exchange::sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp)
     print << line;
     print.flush();
 
-    length = fp->write((const char*)cursor,MaxPacketSize);
+    length = fp->write((const char*)cursor,MaxPacketSize);// #2 packet
     if(length < 0){
         line = QString("Error Writing to %1 . \n").arg(fname);
         print << line;
@@ -261,7 +389,7 @@ Exchange::sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp)
     print << line;
     print.flush();
 
-    length = fp->write((const char*)cursor,packet_size);
+    length = fp->write((const char*)cursor,packet_size);// #3 packet
 
     if(length < 0){
         line = QString("Error Writing to %1 . \n").arg(fname);
@@ -270,6 +398,7 @@ Exchange::sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp)
         fp->close();
         return (EXIT_FAILURE);
     }
+    fp->flush();
 
     line = QString("Sended %1 \t to be send: %2 \n").arg(length).arg(sizeof(struct ComDataReq_t)-counter);
     print << line;
