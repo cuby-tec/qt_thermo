@@ -50,7 +50,7 @@ void ProfileDialog::setupPlot(QCustomPlot *customPlot)
 void ProfileDialog::setupExchange()
 {
 
-    Exchange* exchange = new Exchange();
+    Exchange* exchange = Exchange::instance() ;
 
     exchange->NoOperation();
 }
@@ -208,7 +208,7 @@ void ProfileDialog::on_profileFile_Edit_textEdited(const QString &arg1)
 
 void ProfileDialog::on_pushButton_3_clicked()
 {
-  Exchange* exch = new Exchange();
+  Exchange* exch = Exchange::instance();
   ComDataReq_t comdata;
   exch->buildComData(&comdata,eoProfile);
 }

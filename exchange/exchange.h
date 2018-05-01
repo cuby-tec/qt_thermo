@@ -25,7 +25,12 @@ static uint requestIndex = 0;
 class Exchange
 {
 public:
-    Exchange();
+
+    static Exchange* instance()
+    {
+        static Exchange exchange;
+        return &exchange;
+    }
 
     void buildComData(struct ComDataReq_t* comdata);
 
@@ -46,6 +51,11 @@ public:
 
 
 private:
+
+    Exchange(){}
+
+    ~Exchange(){}
+
     QFile *fp;
 
     int sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp);
@@ -62,6 +72,10 @@ private:
     void print_status(Status_t* c_status);
 
     void load_defaults(struct sControl* pctl);
+
+    Exchange(Exchange const&) = delete;
+    void operator =(Exchange const&) = delete;
+
 
 };
 

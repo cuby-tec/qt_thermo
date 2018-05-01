@@ -70,8 +70,14 @@ Exchange::sendRequest(ComDataReq_t* request)
             }
 
         }
-
+        result = EXIT_SUCCESS;
         fclose (pFile);
+    }else{
+        //        printf("Can't open device. maybe module not loaded. Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n"
+        //               "or device dosn't connected.\n");
+        result = EXIT_FAILURE;
+        qDebug() << "Can't open device. maybe module not loaded. Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n \t or device dosn't connected.";
+
     }
 
 #else
@@ -114,7 +120,11 @@ Exchange::sendRequest(ComDataReq_t* request)
     return result;
 }
 
+// Формирование запросов в конструкторе.
 #define EXCHANGE_IN_CONST_NO
+#define SINGLETON
+
+#ifndef SINGLETON
 
 Exchange::Exchange()
 {
@@ -175,7 +185,7 @@ Exchange::Exchange()
 #endif
 #endif
 }
-
+#endif
 
 void
 Exchange::print_status(Status_t * c_status)
