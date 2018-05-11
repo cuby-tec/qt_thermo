@@ -2,6 +2,7 @@
 
 
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 
 #include <QDebug>
@@ -134,6 +135,10 @@ Profile::readFile(const QString &filename)
             result = in.readAll();
             f.close();
         }
+    }else{
+        QFileInfo* finfo = new QFileInfo(f);
+
+        qDebug() << "Profile [138]:" << finfo->absoluteFilePath();
     }
 
     return result;
@@ -169,8 +174,10 @@ Profile::loadProfile()
 //  QTextStream in(&loadFile);
 //  QString json = in.readAll();//loadFile.readAll();
 
-  if (json1.isEmpty())
+  if (json1.isEmpty()){
       qFatal("Could not read JSON file!");
+      return false;
+  }
 
 //  QJsonObject a = QtJson::parse(json, ok).toMap();
   QByteArray arr1 = json1.toUtf8();
@@ -180,7 +187,7 @@ Profile::loadProfile()
   QJsonDocument loadDoc = QJsonDocument::fromJson(arr1,&error);
 
    QJsonObject obj;
-   QJsonArray list;
+//   QJsonArray list;
 
   if(loadDoc.isObject())
       obj = loadDoc.object();
@@ -192,14 +199,20 @@ Profile::loadProfile()
       qDebug() << "Empty \n";
   }
 
-  profileNamesArray = obj["profiles"].toArray();
 
-  if(list.count()>0){
+//  int type = obj["profiles"].type();
+  if(obj["profiles"].type() == QJsonValue::Array)
+      profileNamesArray = obj["profiles"].toArray();
+
+  if(profileNamesArray.count()>0){
       qDebug() << "211 List count:" << profileNamesArray.count();
+  }else{
+      return false;
   }
 
 
-  for(int i=0;i<list.count();i++)
+
+  for(int i=0;i<profileNamesArray.count();i++)
   {
       QJsonObject prof = profileNamesArray[i].toObject()["profile"].toObject();
 
@@ -208,6 +221,7 @@ Profile::loadProfile()
       QString str = prof["name"].toString();
 //      profiles->addItem(str);
   }
+  return true;
 }
 
 QString

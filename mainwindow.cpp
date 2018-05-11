@@ -23,7 +23,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createActions(this);
 
+    setupPlot(ui->plot);
+
 }
+
+
+void
+MainWindow::setupPlot(QCustomPlot *customPlot)
+{
+
+    ThermoPlot* plotter = new ThermoPlot(customPlot);
+
+}
+
 
 void MainWindow::createActions(MainWindow* w)
 {
@@ -55,7 +67,7 @@ void MainWindow::editProfile()
     ProfileDialog* options = new ProfileDialog(this);
 
 
-    qDebug() << "71 editProfile";
+    qDebug() << "editProfile 58";
     if(options->exec())
     {
         options->baseSize();

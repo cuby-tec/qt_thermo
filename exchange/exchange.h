@@ -12,6 +12,8 @@
 #include <QTextStream>
 #include <cstdio>
 
+#include <QMutex>
+
 #include "profiles/profile.h"
 
 #ifndef EXIT_FAILURE
@@ -48,6 +50,8 @@ public:
     void NoOperation();
 
     Status_t* getStatus() { return c_status; }
+
+    QMutex mutex;
 
 
 private:

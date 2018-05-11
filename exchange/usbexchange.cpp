@@ -1,22 +1,24 @@
-/**
-
+/*
+ *
+ *
 */
 
 
-#include "exchange.h"
-//#include <cstdio>
-#include <QDebug>
-#include <QMessageBox>
 
-//#include from FeeRTOS project.
 
+#include "usbexchange.h"
+
+//uint rIndex;
 
 //------------- defs
 #define MaxPacketSize	64
 
+#define DEBUG_M_NO
+
+#define STDFILE
 
 //------------- vars
-const char* fname = "/dev/cnccontrol";
+static const char* fname = "/dev/cnccontrol";
 
 const struct sControl default_block = {
    X_AXIS, 2, 0, 3, 10, 3, 7,  50132, 5370, 50132, 0, {1, 2, 3}, forward, 0, 0
@@ -26,15 +28,17 @@ static const struct sHead default_segment_head = {
    N_AXIS, (X_FLAG|Y_FLAG|Z_FLAG|E_FLAG), 0xFFFF, 1
 };
 
-static
-char buffer2[256];
 
 
-#define STDFILE
 //--------- functions
 
+/**
+ * @brief UsbExchange::sendRequest
+ * @param request
+ * @return
+ */
 int
-Exchange::sendRequest(ComDataReq_t* request)
+UsbExchange::sendRequest(ComDataReq_t* request)
 {
     quint8* rdata = (quint8*)request;
     int result, size, length;
@@ -51,23 +55,28 @@ Exchange::sendRequest(ComDataReq_t* request)
         //  fputs ("fopen example",pFile);
 //        line = QString("File opened. %1 \n").arg(fname);
 //        print<<line<<"sendRequest 48";
+#ifdef DEBUG_M
         qDebug() << "File opened :"<< fname << "sendRequest 48";
-
+#endif
         if(sendBuffer(rdata,sizeof(ComDataReq_t),pFile) ==  EXIT_SUCCESS)
         {
             size = sizeof(struct Status_t);
             length = fread(buffer2,1,size,pFile);
 
             if(length < 0){
+#ifdef DEBUG_M
                 qDebug()<< "Can't read file %1 \n" << fname ;
+#endif
             }else{
 
                 //printf("Recieved:%u\n",result);
+#ifdef DEBUG_M
                 qDebug() << "Recieved :" << length;
-
+#endif
                 c_status = (struct Status_t*)buffer2;
-
+#ifdef DEBUG_M
                 print_status(c_status);
+#endif
             }
 
         }
@@ -79,9 +88,9 @@ Exchange::sendRequest(ComDataReq_t* request)
         result = EXIT_FAILURE;
 //        qDebug() << "Can't open device. maybe module not loaded. \n \t Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n \t or device dosn't connected.";
 
-        QMessageBox msgbox;
-        msgbox.setText("Can't open device. maybe module not loaded. Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n \t or device dosn't connected.");
-        msgbox.exec();
+//        QMessageBox msgbox;
+//        msgbox.setText("Can't open device. maybe module not loaded. Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n \t or device dosn't connected.");
+//        msgbox.exec();
 
     }
 
@@ -127,11 +136,14 @@ Exchange::sendRequest(ComDataReq_t* request)
 
 // Формирование запросов в конструкторе.
 #define EXCHANGE_IN_CONST_NO
-#define SINGLETON
+#define SINGLETON_NO
 
 #ifndef SINGLETON
 
-Exchange::Exchange()
+/**
+ * @brief UsbExchange::UsbExchange
+ */
+UsbExchange::UsbExchange()
 {
 #ifdef    EXCHANGE_IN_CONST
 #ifdef STDFILE
@@ -192,8 +204,12 @@ Exchange::Exchange()
 }
 #endif
 
+/**
+ * @brief UsbExchange::print_status
+ * @param c_status
+ */
 void
-Exchange::print_status(Status_t * c_status)
+UsbExchange::print_status(Status_t * c_status)
 {
 
     QString line;
@@ -229,8 +245,12 @@ Exchange::print_status(Status_t * c_status)
 }
 
 
+/**
+ * @brief UsbExchange::load_defaults
+ * @param pctl
+ */
 void
-Exchange::load_defaults(struct sControl* pctl)
+UsbExchange::load_defaults(struct sControl* pctl)
 {
     pctl->steps = default_block.steps;
     pctl->microsteps = default_block.microsteps;
@@ -248,8 +268,13 @@ Exchange::load_defaults(struct sControl* pctl)
     pctl->direction = default_block.direction;
 }
 
+/**
+ * @brief UsbExchange::build_segment_default
+ * @param psc
+ * @param i
+ */
 void
-Exchange::build_segment_default(struct sSegment* psc, uint32_t i)
+UsbExchange::build_segment_default(struct sSegment* psc, uint32_t i)
 {
     uint32_t j;
 
@@ -282,61 +307,77 @@ Exchange::build_segment_default(struct sSegment* psc, uint32_t i)
     }
 }
 
+/**
+ * @brief UsbExchange::sendBuffer
+ * @param buffer
+ * @param size
+ * @param fp
+ * @return
+ */
 int
-Exchange::sendBuffer(uint8_t* buffer, uint32_t size, std::FILE* fp)
+UsbExchange::sendBuffer(uint8_t* buffer, uint32_t size, std::FILE* fp)
 {
     uint8_t* cursor = buffer;
     uint32_t packet_size, counter = 0;
     qint64 length=0;
 
     packet_size = MaxPacketSize;
-
+#ifdef DEBUG_M
     qDebug() << "Write packet #1 of size:" << MaxPacketSize;
-
+#endif
     length = fwrite(cursor,sizeof(char),MaxPacketSize,fp);// #1 packet
 
     if(length < 0){
         qDebug() << "Error Writing to " << fname;
         return (EXIT_FAILURE);
     }
-
+#ifdef DEBUG_M
     qDebug() << "Sended:"<<length<< "\t to be send: "<< size-counter;
-
+#endif
     counter += length;
     cursor += length;
-
+#ifdef DEBUG_M
     qDebug() << "Write packet #2 of size:" << MaxPacketSize;
-
+#endif
     length = fwrite(cursor,sizeof(char),MaxPacketSize,fp);// #2 packet
 
     if(length < 0){
         qDebug() << "Error Writing to " << fname;
         return (EXIT_FAILURE);
     }
+#ifdef DEBUG_M
     qDebug() << "Sended:"<<length<< "\t to be send: "<< size-counter;
-
+#endif
     counter += length;
     cursor += length;
 
     packet_size = sizeof(comdata) - counter;
-
+#ifdef DEBUG_M
     qDebug() << "Write packet #2 of size:" << packet_size;
-
+#endif
     length = fwrite(cursor,sizeof(char),packet_size,fp);// #3 packet
 
     if(length < 0){
         qDebug() << "Error Writing to " << fname;
         return (EXIT_FAILURE);
     }
+#ifdef DEBUG_M
     qDebug() << "Sended:"<<length<< "\t to be send: "<< size-counter;
-
+#endif
 
     return (EXIT_SUCCESS);
 }
 
 // TODO sendBuffer
+/**
+ * @brief UsbExchange::sendBuffer
+ * @param buffer
+ * @param size
+ * @param fp
+ * @return
+ */
 int
-Exchange::sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp)
+UsbExchange::sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp)
 {
     uint8_t* cursor = buffer;
     uint32_t packet_size, counter = 0;
@@ -348,7 +389,7 @@ Exchange::sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp)
 
 
 //    length = fwrite(cursor,sizeof(uint8_t),packet_size,fp);
-
+#ifdef DEBUG_M
 //    printf("Write packet of size:%u\n", packet_size);
     QTextStream print(stdout, QIODevice::WriteOnly); // stdin
 
@@ -356,77 +397,87 @@ Exchange::sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp)
 //    line.arg(QString::number(packet_size));
     print << line;
     print.flush();
-
+#endif
     length = fp->write((const char*)cursor,MaxPacketSize);// #1 packet
     if(length < 0){
 //        printf ("Error Writing to %s\n",fname);
 //		fclose(fp);
 //		return EXIT_FAILURE;
+#ifdef DEBUG_M
         line = QString("Error Writing to %1 . \n").arg(fname);
         print << line;
         print.flush();
+#endif
         fp->close();
         return (EXIT_FAILURE);
     }
-
+#ifdef DEBUG_M
     line = QString("Sended %1 \t to be send: %2 \n").arg(length).arg(sizeof(struct ComDataReq_t)-counter);
     print << line;
     print.flush();
-
+#endif
     counter += length;
     cursor += length;
-
+#ifdef DEBUG_M
     line =  QString("Write packet of size: %1 \n").arg(QString::number(packet_size));
 //    line.arg(QString::number(packet_size));
     print << line;
     print.flush();
-
+#endif
     length = fp->write((const char*)cursor,MaxPacketSize);// #2 packet
     if(length < 0){
+#ifdef DEBUG_M
         line = QString("Error Writing to %1 . \n").arg(fname);
         print << line;
         print.flush();
+#endif
         fp->close();
         return (EXIT_FAILURE);
     }
-
+#ifdef DEBUG_M
     line = QString("Sended %1 \t to be send: %2 \n").arg(length).arg(sizeof(struct ComDataReq_t)-counter);
     print << line;
     print.flush();
-
+#endif
     counter += length;
     cursor += length;
 
     packet_size = sizeof(comdata) - counter;
-
+#ifdef DEBUG_M
     line =  QString("Write packet of size: %1 \n").arg(QString::number(packet_size));
 //    line.arg(QString::number(packet_size));
     print << line;
     print.flush();
-
+#endif
     length = fp->write((const char*)cursor,packet_size);// #3 packet
 
     if(length < 0){
+#ifdef DEBUG_M
         line = QString("Error Writing to %1 . \n").arg(fname);
         print << line;
         print.flush();
+#endif
         fp->close();
         return (EXIT_FAILURE);
     }
     fp->flush();
-
+#ifdef DEBUG_M
     line = QString("Sended %1 \t to be send: %2 \n").arg(length).arg(sizeof(struct ComDataReq_t)-counter);
     print << line;
     print.flush();
-
+#endif
 
 
     return EXIT_SUCCESS;
 //    return result;
 }
 
+/**
+ * @brief UsbExchange::buildComData
+ * @param comdata
+ */
 void
-Exchange::buildComData(ComDataReq_t* comdata)
+UsbExchange::buildComData(ComDataReq_t* comdata)
 {
     uint32_t index = 3;
 
@@ -435,15 +486,19 @@ Exchange::buildComData(ComDataReq_t* comdata)
     build_segment_default(psc, index);
 
     comdata->size = sizeof(struct ComDataReq_t);
-    comdata->requestNumber = ++requestIndex;
+    comdata->requestNumber = ++ MyGlobal::mglobal;
     comdata->instruments = N_AXIS;
 
     comdata->command.order = eoSegment;
 
 }
 
+/**
+ * @brief UsbExchange::buildProfile
+ * @param sprofile_dst
+ */
 void
-Exchange::buildProfile(sProfile* sprofile_dst)
+UsbExchange::buildProfile(sProfile* sprofile_dst)
 {
     bool ok_conversion;
 
@@ -466,7 +521,7 @@ Exchange::buildProfile(sProfile* sprofile_dst)
  * @param order
  */
 void
-Exchange::buildComData(ComDataReq_t *comdata, eOrder order)
+UsbExchange::buildComData(ComDataReq_t *comdata, eOrder order)
 {
     /*
      * eoState,            // Запрос состояния устройства.
@@ -475,12 +530,17 @@ Exchange::buildComData(ComDataReq_t *comdata, eOrder order)
      * */
     switch (order) {
     case eoState:
-
+        //TODO request Status only
+        comdata->size = sizeof(struct ComDataReq_t);
+        comdata->requestNumber = ++MyGlobal::requestIndex;
+        comdata->command.order = eoState;
+//        sendRequest(comdata);
         break;
+
     case eoProfile:
         buildProfile(&comdata->payload.profile);
         comdata->size = sizeof(struct ComDataReq_t);
-        comdata->requestNumber = ++requestIndex;
+        comdata->requestNumber = ++MyGlobal::requestIndex;
         comdata->instruments = N_AXIS;
 
         comdata->command.order = eoProfile;
@@ -497,7 +557,7 @@ Exchange::buildComData(ComDataReq_t *comdata, eOrder order)
 
 
 void
-Exchange::NoOperation()
+UsbExchange::NoOperation()
 {
     volatile static uint i;
     i++;

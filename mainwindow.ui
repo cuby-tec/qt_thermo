@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
-    <height>447</height>
+    <width>640</width>
+    <height>522</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,32 +21,30 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>530</width>
-    <height>445</height>
+    <width>0</width>
+    <height>0</height>
    </size>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
   </property>
   <property name="windowTitle">
    <string>Thermo plotting</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>-1</x>
-      <y>-1</y>
-      <width>491</width>
-      <height>371</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout"/>
-   </widget>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>530</width>
+     <width>640</width>
      <height>27</height>
     </rect>
    </property>
@@ -71,14 +69,125 @@
    <addaction name="menuStop"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
+    <enum>LeftToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>250</width>
+     <height>220</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>524287</width>
+     <height>300</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(245, 192, 155);
+border-color: rgb(255, 4, 44);</string>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::RightDockWidgetArea</set>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <widget class="QWidget" name="thermoplotWidget" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>241</width>
+       <height>211</height>
+      </rect>
+     </property>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>221</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="leftMargin">
+        <number>10</number>
+       </property>
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="rightMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
+        <number>10</number>
+       </property>
+       <item>
+        <widget class="QCustomPlot" name="plot" native="true"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="temperatureIcon">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="temperatureLabel">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
   <action name="actionAstart">
    <property name="text">
     <string>astart</string>
@@ -91,6 +200,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

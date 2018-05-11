@@ -18,6 +18,8 @@ ProfileDialog::~ProfileDialog()
     delete uia;
 }
 
+#define RealtimeData
+
 void ProfileDialog::setupPlot(QCustomPlot *customPlot)
 {
     plotName = "Hotend temperature";
@@ -205,12 +207,17 @@ void ProfileDialog::on_profileFile_Edit_textEdited(const QString &arg1)
     indicate_ProfileSaved();
 }
 
-
+/**
+ * @brief ProfileDialog::on_pushButton_3_clicked
+ * Запрос обмена данными с Контроллером.
+ */
 void ProfileDialog::on_pushButton_3_clicked()
 {
   Exchange* exch = Exchange::instance();
   ComDataReq_t comdata;
+  exch->mutex.lock();
   exch->buildComData(&comdata,eoProfile);
+  exch->mutex.unlock();
 }
 
 

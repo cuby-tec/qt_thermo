@@ -2,12 +2,11 @@
 #define MAINWINDOW_H
 
 
-
 #include <QMainWindow>
 #include <QAction>
 
 #include "qcustomplot.h"
-
+#include "thermoplot.h"
 //#include "profiles/profile.h"
 
 namespace Ui {
@@ -41,6 +40,8 @@ private:
     QMenu *optionsMenu;
 
     QAction* optionEditAct;
+
+    void setupPlot(QCustomPlot *customPlot);
 
 };
 
