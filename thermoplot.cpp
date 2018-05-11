@@ -2,6 +2,8 @@
 
 #include <QMessageBox>
 #include <QTextBlock>
+#include <QDateTime>
+#include <QFileInfo>
 
 
 ThermoPlot::ThermoPlot(QObject* parent) : QObject(parent)
@@ -15,6 +17,8 @@ ThermoPlot::ThermoPlot(QCustomPlot* plot)
     this->plot = plot;
     setupPlot(plot);
     oldTemperature = 0;
+
+    createLog();
 }
 
 
@@ -124,6 +128,7 @@ ThermoPlot::failedStatus()
     indicateTemperature(eiFail,QString("Can't open device. maybe module not loaded. Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n \t or device dosn't connected."));
 }
 
+
 void
 ThermoPlot::printStatus(const Status_t *c_status)
 {
@@ -177,9 +182,97 @@ ThermoPlot::printStatus(const Status_t *c_status)
 #endif
 }
 
+QString
+ThermoPlot::datetime()
+{
+    QDateTime* dt = new QDateTime(QDate::currentDate(),QTime::currentTime(),Qt::LocalTime);
+
+    QString str = dt->toString("ddMMyy-hhmmss");
+
+    return str;
+}
+
+/**
+ * init
+ * Prepare log file and open it.
+ * @brief ThermoPlot::createLog
+ */
+void
+ThermoPlot::createLog()
+{
+    //QDate QDate::currentDate
+
+    const static QString path = "profile/";
+
+    QDateTime* dt = new QDateTime(QDate::currentDate(),QTime::currentTime(),Qt::LocalTime);
+
+    QString str = dt->toString("ddMMyy-hhmmss");
+
+    QString head = QString("Logfile termo sensor. CUBY.Ltd\n");
+
+    logfileName = QString("thermo-%1").arg(str);
+
+    QDir::setCurrent(QDir::homePath()+"/tmp");
+
+    logfile.setFileName(str);
+
+    QFileInfo info = QFileInfo(logfile);
+
+    if(!logfile.exists())
+    {
+      if(logfile.open(QFile::WriteOnly | QFile::Text))  ; // create file
+      {
+
+          QTextStream out(&logfile);
+
+          out << head;
+
+          logfile.close();
+
+          logfile.open(QIODevice::Append);
+      }
+    }
+
+    qDebug() << "ThermoPlot[207]"<<info.absoluteFilePath();
+
+}
+
+
+/**
+ * Запись лога температур в файл.
+ * @brief ThermoPlot::updateStatus
+ * @param status
+ */
+void
+ThermoPlot::writeLog()
+{
+    QString line = datetime();
+    line += "  ";
+    line.append(QString("  %1").arg(status->temperature));
+//    line.arg(status->temperature);
+    line += "\n";
+    uint len;
+
+    if(logfile.isOpen())
+    {
+        QTextStream out(&logfile);
+//        len = logfile.write(line);
+        out << line;
+
+
+//        qDebug() << "ThermoPlot[219]:" << len;
+    }
+
+}
+
+
 void
 ThermoPlot::updateStatus(const Status_t *status)
 {
+
+    this->status = status;
+    writeLog();
+
 
     static QTime time(QTime::currentTime());
     // calculate two new data points:

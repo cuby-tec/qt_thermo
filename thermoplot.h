@@ -32,6 +32,10 @@ public:
 
     ThermoPlot(QCustomPlot *plot);
 
+    ~ThermoPlot()
+    {
+        logfile.close();
+    }
 
 private slots:
   void realtimeDataSlot();
@@ -47,16 +51,27 @@ private:
 
     float oldTemperature;
 
-
     QTimer dataTimer;
 
     ThermoThread thread;
+
+    QString logfileName;
+
+    QFile logfile;
+
+    const Status_t* status;
 
     void setupPlot(QCustomPlot* customPlot);
 
     void printStatus(const Status_t *c_status);
 
     void  indicateTemperature(eIndicate ind, QString message);
+
+    void createLog();
+
+    void writeLog();
+
+    QString datetime();
 
 };
 

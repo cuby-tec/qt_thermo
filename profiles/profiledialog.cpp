@@ -209,15 +209,15 @@ void ProfileDialog::on_profileFile_Edit_textEdited(const QString &arg1)
 
 /**
  * @brief ProfileDialog::on_pushButton_3_clicked
- * Запрос обмена данными с Контроллером.
+ * Загрузка лога темпреатур.
  */
 void ProfileDialog::on_pushButton_3_clicked()
 {
-  Exchange* exch = Exchange::instance();
-  ComDataReq_t comdata;
-  exch->mutex.lock();
-  exch->buildComData(&comdata,eoProfile);
-  exch->mutex.unlock();
+//  Exchange* exch = Exchange::instance();
+//  ComDataReq_t comdata;
+//  exch->mutex.lock();
+//  exch->buildComData(&comdata,eoProfile);
+//  exch->mutex.unlock();
 }
 
 
