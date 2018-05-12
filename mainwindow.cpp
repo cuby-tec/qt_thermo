@@ -10,6 +10,7 @@
 //#include "profile.h"
 
 #include "profiles/profiledialog.h"
+#include "thermolog/thermologdialog.h"
 
 #include <QDebug>
 
@@ -36,6 +37,11 @@ MainWindow::setupPlot(QCustomPlot *customPlot)
 
 }
 
+//----------- Menu ACtions
+
+const QString actionName1(QObject::tr("&Thermo"));
+const QString actionName2(QObject::tr("&Config"));
+
 
 void MainWindow::createActions(MainWindow* w)
 {
@@ -51,18 +57,46 @@ void MainWindow::createActions(MainWindow* w)
 
     optionEditAct = new QAction(tr("&Edit"),w);
 
-    optionsMenu->addAction(optionEditAct);
-
     optionEditAct->setStatusTip(tr("Edit profile"));
+
+    optionsMenu->addAction(optionEditAct);
 
     connect(optionEditAct,&QAction::triggered,w,&MainWindow::editProfile);
 
 
 
+
+    menuTools = ui->menuTools;
+
+    actThermo = new QAction(actionName1,w); // Thermo
+    actThermo->setStatusTip("View thermo log.");
+    menuTools->addAction(actThermo);
+    connect(actThermo,&QAction::triggered,w,&MainWindow::actTermoDo);
+
+
+    actConfig = new QAction(actionName2,w); // Config
+
+//    QList<QAction *> act = menuTools->findChildren<QAction *>();// Config
+
+//    qDebug() << "MainWindow[61]" << act[0]->text();
+
+}
+
+void
+MainWindow::actTermoDo()
+{
+    //TODO
+    qDebug() << "MainWindow::actTermoDo()[83]";
+
+    ThermoLogDialog* thermolog = new ThermoLogDialog(this);
+
+    thermolog->show();
+
 }
 
 
-void MainWindow::editProfile()
+void
+MainWindow::editProfile()
 {
     ProfileDialog* options = new ProfileDialog(this);
 

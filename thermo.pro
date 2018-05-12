@@ -32,8 +32,11 @@ HEADERS += mainwindow.h \
     thermoplot.h \
     exchange/thermothread.h \
     exchange/usbexchange.h \
-    myglobal.h
-FORMS += mainwindow.ui profiles/profiledialog.ui
+    myglobal.h \
+    thermolog/thermologview.h \
+    thermolog/thermologdialog.h
+FORMS += mainwindow.ui profiles/profiledialog.ui \
+    thermolog/thermologdialog.ui
 SOURCES += main.cpp \
            mainwindow.cpp \
            qcustomplot.cpp \
@@ -46,7 +49,9 @@ SOURCES += main.cpp \
     thermoplot.cpp \
     exchange/thermothread.cpp \
     exchange/usbexchange.cpp \
-    myglobal.cpp
+    myglobal.cpp \
+    thermolog/thermologview.cpp \
+    thermolog/thermologdialog.cpp
 RESOURCES += resources.qrc
 
 DISTFILES += \

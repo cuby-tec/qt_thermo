@@ -5,7 +5,6 @@
 #include <QDateTime>
 #include <QFileInfo>
 
-
 ThermoPlot::ThermoPlot(QObject* parent) : QObject(parent)
 {
 
@@ -64,6 +63,9 @@ ThermoPlot::setupPlot(QCustomPlot* customPlot)
     dataTimer.start(1000); // Interval 0 means to refresh as fast as possible
 }
 
+const QString message1("Can't open device. maybe module not loaded. Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n \t or device dosn't connected.");
+const QString message2("Can't open device.");
+const QString message3("Temperature in Hotend.(grad Celsium)");
 
 void
 ThermoPlot::indicateTemperature(eIndicate ind, QString message)
@@ -79,6 +81,9 @@ ThermoPlot::indicateTemperature(eIndicate ind, QString message)
         {
             label->setPixmap(QPixmap(":/images/write.png"));
             label->setScaledContents(true);
+            tempLabel->setText(message2);
+            tempLabel->setToolTip(message1);
+
         }
         break;
 
@@ -87,16 +92,12 @@ ThermoPlot::indicateTemperature(eIndicate ind, QString message)
         {
             label->setPixmap(QPixmap(":/images/copy.png"));
             label->setScaledContents(true);
+             tempLabel->setText(message);
+            tempLabel->setToolTip(message3);
         }
 
         break;
     }
-
-    if(tempLabel)
-   {
-       tempLabel->setText(message);
-
-   }
 }
 
 void
@@ -208,13 +209,25 @@ ThermoPlot::createLog()
 
     QString str = dt->toString("ddMMyy-hhmmss");
 
-    QString head = QString("Logfile termo sensor. CUBY.Ltd\n");
+    QString head = QString("#Logfile termo sensor. CUBY.Ltd\n");
 
     logfileName = QString("thermo-%1").arg(str);
 
-    QDir::setCurrent(QDir::homePath()+"/tmp");
+    logfileName += ".log";
 
-    logfile.setFileName(str);
+    QString st;
+
+//    QDir::setCurrent(QDir::homePath()+"/tmp");
+//    QString st(MyGlobal::logfileDir);
+
+//    st = MyGlobal::logfileDir;
+
+    st = MyGlobal::logfileDir;
+
+
+    QDir::setCurrent(st);
+
+    logfile.setFileName(logfileName);
 
     QFileInfo info = QFileInfo(logfile);
 
@@ -222,7 +235,6 @@ ThermoPlot::createLog()
     {
       if(logfile.open(QFile::WriteOnly | QFile::Text))  ; // create file
       {
-
           QTextStream out(&logfile);
 
           out << head;
@@ -246,8 +258,9 @@ ThermoPlot::createLog()
 void
 ThermoPlot::writeLog()
 {
-    QString line = datetime();
-    line += "  ";
+    QString line = QString("");
+    line += datetime();
+    line += MyGlobal::logfileDelimiter;
     line.append(QString("  %1").arg(status->temperature));
 //    line.arg(status->temperature);
     line += "\n";

@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 #include <QApplication>
-
+#include "myglobal.h"
 
 QMutex thermo_gmutex;
 
+MyGlobal mglobal;
 
 int main(int argc, char *argv[])
 {

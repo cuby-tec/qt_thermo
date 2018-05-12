@@ -39,7 +39,16 @@ private:
 
     QMenu *optionsMenu;
 
-    QAction* optionEditAct;
+    QAction* optionEditAct; // Profile
+
+    QMenu * menuTools;
+
+    QAction* actThermo;
+
+    void actTermoDo();
+
+    QAction* actConfig;
+
 
     void setupPlot(QCustomPlot *customPlot);
 

@@ -15,6 +15,11 @@
 
 #include "exchange/thermothread.h"
 
+#include "myglobal.h"
+
+
+extern MyGlobal mglobal;
+
 enum eIndicate
 {
     eiFail, eiGood

@@ -1,6 +1,7 @@
 #include "profile.h"
 
 
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
@@ -10,6 +11,9 @@
 
 #include <QList>
 #include <QComboBox>
+#include "myglobal.h"
+
+//------------------------ defs
 
 #define PROFILE_BUFFER_SiZE	1024
 
@@ -124,6 +128,8 @@ Profile::readFile(const QString &filename)
 {
     QString str = PROFILE_PATH + filename;
     QString result;
+
+    QDir::setCurrent(MyGlobal::profilefileDir);
 
     QFile f(str);
 
