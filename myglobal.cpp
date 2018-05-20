@@ -28,6 +28,9 @@ QString MyGlobal::logfileDelimiter(";");
 
 QString MyGlobal::comment("#");
 
+uint32_t MyGlobal::commandIndex = 1;
+
+
 MyGlobal::MyGlobal()
 {
 //    MyGlobal::mglobal = 0;

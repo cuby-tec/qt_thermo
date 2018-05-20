@@ -45,6 +45,10 @@ private:
 
     QAction* actThermo;
 
+    QAction* pidParams;
+
+    void pidParamsDo();
+
     void actTermoDo();
 
     QAction* actConfig;

@@ -37,6 +37,10 @@ public:
 
     static QString message5;
 
+    //-------- exchange
+
+    static u_int32_t commandIndex;
+
 };
 
 #endif // MYGLOBAL_H

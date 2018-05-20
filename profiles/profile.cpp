@@ -227,6 +227,9 @@ Profile::loadProfile()
       QString str = prof["name"].toString();
 //      profiles->addItem(str);
   }
+
+  profileAtive = true;
+
   return true;
 }
 
@@ -577,26 +580,27 @@ Profile::init_profile()
     bool result = false;
 
 
-    quint8 i;
+//    quint8 i;
 
     if(loadProfile())
     {
 
         profile_filename = getProfileFileName(profileIndex); // TODO Найти профиль по-умолчанию.
         profile_doc = loadDocument(profile_filename);
-        qDebug() << parseError.errorString() << "init_profile:302";
+        qDebug() << parseError.errorString() << "init_profile:590";
 
         if(profile_doc.isEmpty())
         {
             qDebug() << "Empty init_profile 335 \n";
-        }
+        }else{
 
 
 //       QString str = getX_STEPS();
+            profileAtive = true;
+            result = true;
+        }
 
-        result = true;
-
-        i = 1;
+//        i = 1;
     }
 
     return result;

@@ -11,6 +11,7 @@
 
 #include "profiles/profiledialog.h"
 #include "thermolog/thermologdialog.h"
+#include "profiles/thermopiddialog.h"
 
 #include <QDebug>
 
@@ -41,7 +42,7 @@ MainWindow::setupPlot(QCustomPlot *customPlot)
 
 const QString actionName1(QObject::tr("&Thermo"));
 const QString actionName2(QObject::tr("&Config"));
-
+const QString actionName3(QObject::tr("PID params"));
 
 void MainWindow::createActions(MainWindow* w)
 {
@@ -80,13 +81,27 @@ void MainWindow::createActions(MainWindow* w)
 
 //    qDebug() << "MainWindow[61]" << act[0]->text();
 
+    pidParams = new QAction(actionName3,w);//
+    pidParams->setStatusTip("setting up PID parameters in current session.");
+    menuTools->addAction(pidParams);
+    connect(pidParams,&QAction::triggered,w,&MainWindow::pidParamsDo);
+
 }
+
+
+void
+MainWindow::pidParamsDo()
+{
+    ThermoPIDDialog* tpidDialg = new ThermoPIDDialog(this);
+    tpidDialg->show();
+}
+
 
 void
 MainWindow::actTermoDo()
 {
-    //TODO
-    qDebug() << "MainWindow::actTermoDo()[83]";
+
+    qDebug() << "MainWindow::actTermoDo()[103]";
 
     ThermoLogDialog* thermolog = new ThermoLogDialog(this);
 

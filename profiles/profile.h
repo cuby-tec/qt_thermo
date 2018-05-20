@@ -77,6 +77,7 @@ public:
 
     bool profileSaved;
 
+    bool profileAtive;     // profile's data loaded from file.
 
     bool loadProfile();
 
@@ -163,6 +164,7 @@ private:
         pprofile_file_name = "profiles.json";	// Список профилей
         profileSaved = true;
         profileIndex = 0;
+        profileAtive = false;
     }
 
     ~Profile() {}

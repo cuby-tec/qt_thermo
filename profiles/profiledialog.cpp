@@ -86,17 +86,27 @@ void ProfileDialog::fillProfilePage()
 
 void  ProfileDialog::setupProfile(QWidget * tab)
 {
-//    profile = new Profile();
+    //    profile = new Profile();
     profile = Profile::instance();
-    if( profile->init_profile())
+
+    if(!profile->profileAtive)
     {
+        if( profile->init_profile())
+        {
+            for(int i=0;i<profile->getProfileNameCount();i++)
+            {
+                uia->profileComboBox->addItem(profile->getProfileName(i));
+            }
+
+            fillProfilePage();
+        }
+    }else{
         for(int i=0;i<profile->getProfileNameCount();i++)
         {
             uia->profileComboBox->addItem(profile->getProfileName(i));
         }
 
         fillProfilePage();
-
     }
     //    connect(tab,SIGNAL(currentIndexChanged(int)), SLOT(on_profileComboBox_currentIndexChanged(int)));
 
