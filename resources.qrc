@@ -3,5 +3,7 @@
         <file>images/copy.png</file>
         <file>profile/profiles.json</file>
         <file>images/write.png</file>
+        <file>images/exmple.gcode</file>
+        <file>log/gParcer.log</file>
     </qresource>
 </RCC>
