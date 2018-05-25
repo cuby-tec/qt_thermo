@@ -9,6 +9,9 @@
 #include "thermoplot.h"
 //#include "profiles/profile.h"
 
+#include "gparcer/gcodeworker.h"
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -25,6 +28,7 @@ public:
 
 private slots:
     void editProfile();
+    void openFileDo();
 
 private:
     Ui::MainWindow *ui;
@@ -53,8 +57,15 @@ private:
 
     QAction* actConfig;
 
+    QAction* actFileOpen;
+
+
+    GcodeWorker* gcodeworker;
+
 
     void setupPlot(QCustomPlot *customPlot);
+
+
 
 };
 

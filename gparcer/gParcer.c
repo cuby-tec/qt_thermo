@@ -1276,7 +1276,7 @@ scannerstart:
 
         fsm.eofile = fsm.lenfile != fsm.space;
 
-        format_execute( &fsm, fsm.p, fsm.lenfile, fsm.eofile );
+       format_execute( &fsm, fsm.p, fsm.lenfile, fsm.eofile );
         fsm.state = 1;
          return;
 
@@ -1343,4 +1343,18 @@ int main()
     fclose(flog);
     return 0;
 }
+
 #endif
+
+int parcerFileOpen()
+{
+    fp = fopen("/home/walery/Документы/3d-printer/ragel/exmple.gcode","r");
+       if (fp==NULL) {fputs ("File error",stderr); exit (1);}
+}
+
+void parcerFileClose()
+{
+    fclose(fp);
+}
+
+

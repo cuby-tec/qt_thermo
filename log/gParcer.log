@@ -1,0 +1,28 @@
+gcomment(1): ;Generated with Cura_SteamEngine 15.05
+Command(1): 
+
+gcomment(2): ; Default start code
+Command(2): 
+
+G command(3): G28
+gcomment(3): ; Home extruder
+Command(3): 
+
+G command(4): G1
+	Z parameter(4): Z15
+	F parameter(4): F100
+Command(4): 
+
+M command(5): M107
+gcomment(5): ; Turn off fan
+Command(5): 
+
+G command(6): G90
+gcomment(6): ; Absolute positioning
+Command(6): 
+
+M command(7): M82
+gcomment(7): ; Extruder in absolute mode
+Command(7): 
+
+

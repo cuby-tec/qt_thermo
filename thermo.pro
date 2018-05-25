@@ -39,7 +39,8 @@ HEADERS += mainwindow.h \
     gparcer/gParcer.h \
     gparcer/ghelper.h \
     gparcer/sgcode.h \
-    gparcer/sgparam.h
+    gparcer/sgparam.h \
+    gparcer/gcodeworker.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui
@@ -60,7 +61,8 @@ SOURCES += main.cpp \
     thermolog/thermologdialog.cpp \
     profiles/thermopiddialog.cpp \
     gparcer/gParcer.c \
-    gparcer/ghelper.c
+    gparcer/ghelper.c \
+    gparcer/gcodeworker.cpp
 RESOURCES += resources.qrc
 
 DISTFILES += \

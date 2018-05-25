@@ -43,6 +43,11 @@ MainWindow::setupPlot(QCustomPlot *customPlot)
 const QString actionName1(QObject::tr("&Thermo"));
 const QString actionName2(QObject::tr("&Config"));
 const QString actionName3(QObject::tr("PID params"));
+const QString actionName4(QObject::tr("&Open"));
+
+
+const QString statusToolTip1(QObject::tr("Open file with G-Code content."));
+
 
 void MainWindow::createActions(MainWindow* w)
 {
@@ -52,8 +57,18 @@ void MainWindow::createActions(MainWindow* w)
 //    newAct->setStatusTip(tr("Edit profile"));
 
 //    connect(newAct,&QAction::triggered,w,&MainWindow::editProfile);
+//------------------- MENU File
+    QMenu* menuFile = ui->menuFile;
 
+    actFileOpen = new QAction(actionName4,w); // File Open.
+    actFileOpen->setStatusTip(statusToolTip1);
 
+    menuFile->addAction(actFileOpen);
+
+    connect(actFileOpen,&QAction::triggered,w,&MainWindow::openFileDo);
+//    connect(actFileOpen,&QAction::triggered,w,SLOT(openFileDo()));
+
+//--------------------MWNU Options
     optionsMenu = ui->menuOptions;
 
     optionEditAct = new QAction(tr("&Edit"),w);
@@ -64,9 +79,7 @@ void MainWindow::createActions(MainWindow* w)
 
     connect(optionEditAct,&QAction::triggered,w,&MainWindow::editProfile);
 
-
-
-
+//------------------ MENU Tools
     menuTools = ui->menuTools;
 
     actThermo = new QAction(actionName1,w); // Thermo
@@ -88,6 +101,24 @@ void MainWindow::createActions(MainWindow* w)
 
 }
 
+
+void MainWindow::openFileDo()
+{
+QString folder("/home/walery/Документы/3d-printer/ragel"); //home/walery/Документы/3d-printer/ragel/exmple.gcode
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open G-Code file"),folder,tr("Gcode (*.gcode );; All (*.*)"));
+
+    if(filename.isNull())
+    {
+        qDebug() << "File don't selected.";
+    }else{
+
+        qDebug()<< "Open faile with G-code file:"<<filename;
+
+        gcodeworker = new GcodeWorker();
+        gcodeworker->fileOpen(filename);
+
+    }
+}
 
 void
 MainWindow::pidParamsDo()

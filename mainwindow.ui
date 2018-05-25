@@ -64,24 +64,23 @@
      <height>27</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuStart">
+   <widget class="QMenu" name="menuOptions">
     <property name="title">
-     <string>start</string>
+     <string>Options</string>
     </property>
-    <addaction name="actionAstart"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>Tools</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuOptions">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>Options</string>
+     <string>File</string>
     </property>
    </widget>
+   <addaction name="menuFile"/>
    <addaction name="menuOptions"/>
-   <addaction name="menuStart"/>
    <addaction name="menuTools"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -223,26 +222,6 @@ border-color: rgb(255, 4, 44);</string>
     </widget>
    </widget>
   </widget>
-  <action name="actionAstart">
-   <property name="text">
-    <string>astart</string>
-   </property>
-  </action>
-  <action name="action_Options">
-   <property name="text">
-    <string>&amp;Options</string>
-   </property>
-  </action>
-  <action name="actionOptions">
-   <property name="text">
-    <string>&amp;Config</string>
-   </property>
-  </action>
-  <action name="actionThermo">
-   <property name="text">
-    <string>&amp;Thermo</string>
-   </property>
-  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
