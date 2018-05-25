@@ -1346,15 +1346,16 @@ int main()
 
 #endif
 
-int parcerFileOpen()
+int parcerFileOpen(char *filename)
 {
-    fp = fopen("/home/walery/Документы/3d-printer/ragel/exmple.gcode","r");
+    fp = fopen(filename,"r");
        if (fp==NULL) {fputs ("File error",stderr); exit (1);}
 }
 
 void parcerFileClose()
 {
-    fclose(fp);
+    if(fp!= NULL)
+        fclose(fp);
 }
 
 

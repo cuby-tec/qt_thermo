@@ -77,7 +77,7 @@ GcodeWorker::fileOpen(QString filename)
 //     fclose(flog);
 
 // /home/walery/Документы/3d-printer/ragel/exmple.gcode
-     if(parcerFileOpen())
+     if(parcerFileOpen(buffer))
      {
          parcerFileClose();
          qDebug() << "Opened:" << __LC_NAME;

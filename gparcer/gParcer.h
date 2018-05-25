@@ -21,7 +21,7 @@ extern FILE *flog;
 //Разбор очередной строки.
 extern void scanner();
 
-extern int parcerFileOpen();
+extern int parcerFileOpen(char* filename);
 
 extern void parcerFileClose();
 
