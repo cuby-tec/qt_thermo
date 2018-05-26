@@ -8,7 +8,6 @@
 #include <QDir>
 
 
-
 class MyGlobal
 {
 public:

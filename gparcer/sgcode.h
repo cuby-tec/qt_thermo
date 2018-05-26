@@ -2,9 +2,10 @@
 #define SGCODE_H
 
 
-#include <stdint.h>
-#include <stddef.h>
+//#include <stdint.h>
+//#include <stddef.h>
 #include "sgparam.h"
+
 
 struct sGcode{
     char group;

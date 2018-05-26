@@ -5,6 +5,7 @@
 
 ///----------------- vars
 
+
 int MyGlobal::mglobal = 0;
 
 uint MyGlobal::requestIndex = 0;

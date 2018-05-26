@@ -7,7 +7,7 @@
 
 #include "gParcer.h"
 
-//#include <stdio.h>
+#include <stdio.h>
 //#include <string.h>
 //#include <stdlib.h>
 //#include <string.h>
@@ -18,19 +18,19 @@
 
 typedef void (*gfunction)(size_t, char *, size_t );  // Declare typedef
 
-#define INPUT_BUFSIZE 1024
+//#define INPUT_BUFSIZE 1024
 
 
 
 
 
-enum prsCmd{
-    eCommand, eComment, eGcommand, eXparam, eYparam, eZparam, eAparam
-    , eBparam, eCparam, eDparam, eEparam, eFparam, eIparam, eJparam
-    , eKparam, eLparam, eMparam, eNparam, ePparam, eRparam, eSparam
-    , eTpaam, eUparam, eVparam, eWparam, eStarparam
+//enum prsCmd{
+//    eCommand, eComment, eGcommand, eXparam, eYparam, eZparam, eAparam
+//    , eBparam, eCparam, eDparam, eEparam, eFparam, eIparam, eJparam
+//    , eKparam, eLparam, eMparam, eNparam, ePparam, eRparam, eSparam
+//    , eTpaam, eUparam, eVparam, eWparam, eStarparam,ePunct
 
-};
+//};
 
 /*
 struct sGParam{
@@ -46,7 +46,7 @@ struct sGcode{
 };
 
 */
-
+/*
 typedef void (*WriteFunc)( char *data, int len );
 
 struct format
@@ -74,7 +74,7 @@ struct format
     int lenfile;
     uint state;
 };
-
+*/
 //#define curline	fsm->curline
 
 //------------------- vars
@@ -90,10 +90,9 @@ char buf[INPUT_BUFSIZE];
 //	char *ts, *te = 0;
 //	int done = 0;
 
-    struct sGcode sgcode;
 
-    FILE *fp;
-    FILE *flog;
+//static    FILE *fp;
+//static    FILE *flog;
 //static void (* parser_out)(size_t number, char * param, size_t len);
 
 static gfunction parser_out;
@@ -124,6 +123,7 @@ static gfunction parser_out;
  void v_parameter(size_t curline, char * param, size_t len);
  void w_parameter(size_t curline, char * param, size_t len);
  void star_parameter(size_t curline, char * param, size_t len);
+ void gpunct(size_t curline, char * param, size_t len);
 
 gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
     , &y_coordinate	,&z_coordinate,&a_parameter, &b_parameter
@@ -131,14 +131,16 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
     , &i_parameter, &j_parameter, &k_parameter, &l_parameter
     , &m_parameter, &n_parameter, &p_parameter, &r_parameter
     , &s_parameter, &t_parameter, &u_parameter, &v_parameter
-    , &w_parameter, &star_parameter };
+    , &w_parameter, &star_parameter, &gpunct  };
 
 
 // g Command
  void command (size_t curline, char * param, size_t len){
+#ifdef FLOG
         fprintf(flog, "Command(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_command(curline,param,len);
 #endif
@@ -149,9 +151,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 
 // g comment
  void gcomment (size_t curline, char * param, size_t len){
+#ifdef FLOG
         fprintf(flog, "gcomment(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_gcomment(curline,param,len);
 #endif
@@ -159,9 +163,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 
 // g GXX.X digit 		=command=	command GXX.X
  void g_command (size_t curline, char * param, size_t len){
-        fprintf(flog, "G command(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "G command(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_g_command (curline, param, len);
 #endif
@@ -170,9 +176,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g X coordinate
  void x_coordinate(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tX parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tX parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_x_coordinate (curline, param, len);
 #endif
@@ -181,9 +189,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g Y 	coordinat
  void y_coordinate(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tY parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tY parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_y_coordinate (curline, param, len);
 #endif
@@ -192,9 +202,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g Z 	coordiane Line78
  void z_coordinate(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tZ parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tZ parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_z_coordinate (curline, param, len);
 #endif
@@ -204,9 +216,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 
  void a_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tA parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tA parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_a_parameter (curline, param, len);
 #endif
@@ -215,9 +229,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g B	 decimal Stepper B position or angle {Bnnn}
  void b_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tB parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tB parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_b_parameter (curline, param, len);
 #endif
@@ -226,9 +242,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g C	 decimal Stepper C position or angle {Cnnn}
  void c_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tC parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tC parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_c_parameter (curline, param, len);
 #endif
@@ -237,9 +255,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g D	 none Adjust Diagonal Rod {D}
  void d_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tD parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tD parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_d_parameter (curline, param, len);
 #endif
@@ -248,9 +268,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g E	 optional coordinate
  void e_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tE parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tE parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_e_parameter (curline, param, len);
 #endif
@@ -259,9 +281,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g F 	decimal Feed rate parameter in G-command
  void f_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tF parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tF parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_f_parameter (curline, param, len);
 #endif
@@ -270,9 +294,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g I 	optional X offset for arcs and G87 canned cycles
  void i_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tI parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tI parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_i_parameter (curline, param, len);
 #endif
@@ -281,9 +307,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g J	 decimal Y offset for arcs and G87 canned cycles
  void j_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tJ parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tJ parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_j_parameter (curline, param, len);
 #endif
@@ -292,9 +320,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g K 	decimal Z offset for arcs and G87 canned cycles.
  void k_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tK parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tK parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_k_parameter (curline, param, len);
 #endif
@@ -303,9 +333,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g L 			decimal	 generic parameter word for G10, M66 and others
  void l_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tL parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tL parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_l_parameter (curline, param, len);
 #endif
@@ -314,9 +346,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g M 	digit 	= command= Code Modal Groups
  void m_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "M command(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "M command(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_m_parameter (curline, param, len);
 #endif
@@ -325,9 +359,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g N digit				Line number
  void n_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tN parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tN parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_n_parameter (curline, param, len);
 #endif
@@ -336,9 +372,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g P	alnum_u		Command parameter, such as time in milliseconds; proportional (Kp) in PID Tuning
  void p_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tP parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tP parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_p_parameter (curline, param, len);
 #endif
@@ -347,9 +385,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g R 	optional	Arc radius or canned cycle plane
  void r_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tR parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tR parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_r_parameter (curline, param, len);
 #endif
@@ -358,9 +398,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g S	optional	Spindle speed; Command parameter, such as time in seconds; temperatures; voltage to send to a motor
  void s_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tS parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tS parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_s_parameter (curline, param, len);
 #endif
@@ -369,9 +411,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g T	digit	=command= 	Tool selection
  void t_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tT parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tT parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_t_parameter (curline, param, len);
 #endif
@@ -380,9 +424,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g U	optional  	U axis of machine;
  void u_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tU parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tU parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_u_parameter (curline, param, len);
 #endif
@@ -391,9 +437,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g V	optional  	V axis of machine;
  void v_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tV parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tV parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_v_parameter (curline, param, len);
 #endif
@@ -402,9 +450,11 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g W	optional  	W axis of machine;
  void w_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tW parameter(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tW parameter(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_w_parameter (curline, param, len);
 #endif
@@ -413,16 +463,25 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate
 // g *	digit		Checksum
  void star_parameter(size_t curline, char * param, size_t len)
 {
-        fprintf(flog, "\tchecksum_lit(%lu): ", curline );
+#ifdef FLOG
+     fprintf(flog, "\tchecksum_lit(%lu): ", curline );
         fwrite( param, 1, len, flog );
         fprintf(flog,"\n");
+#endif
 #ifdef SCANNER
         b_star_parameter (curline, param, len);
 #endif
 }
 
-
-
+ void gpunct(size_t curline, char * param, size_t len)
+ {
+#ifdef FLOG
+     fprintf(flog, "symbol(%lu): %c\n", curline, *param );
+#endif
+ #ifdef SCANNER
+     b_punct(curline, param, len);
+ #endif
+}
 
 // 		punct			Symbols.
 
@@ -903,8 +962,8 @@ _eof_trans:
     case 11:
 #line 644 "gParcer.rl"
     { fsm->te = ( fsm->p)+1;{
-        fprintf(flog, "symbol(%i): %c\n", fsm->curline, fsm->ts[0] );
-    }}
+        //fprintf(flog, "symbol(%i): %c\n", fsm->curline, fsm->ts[0] );
+        (*prs[ePunct])(fsm->curline,fsm->ts,1);    }}
     break;
     case 12:
 #line 481 "gParcer.rl"
@@ -1070,8 +1129,8 @@ _eof_trans:
     case 35:
 #line 644 "gParcer.rl"
     { fsm->te = ( fsm->p);( fsm->p)--;{
-        fprintf(flog, "symbol(%i): %c\n", fsm->curline, fsm->ts[0] );
-    }}
+        //fprintf(flog, "symbol(%i): %c\n", fsm->curline, fsm->ts[0] );
+        (*prs[ePunct])(fsm->curline,fsm->ts,1);    }}
     break;
     case 36:
 #line 491 "gParcer.rl"
@@ -1202,8 +1261,8 @@ _eof_trans:
     case 54:
 #line 644 "gParcer.rl"
     {{( fsm->p) = (( fsm->te))-1;}{
-        fprintf(flog, "symbol(%i): %c\n", fsm->curline, fsm->ts[0] );
-    }}
+        //fprintf(flog, "symbol(%i): %c\n", fsm->curline, fsm->ts[0] );
+        (*prs[ePunct])(fsm->curline,fsm->ts,1);    }}
     break;
     case 55:
 #line 1 "NONE"
@@ -1249,15 +1308,23 @@ _again:
 
 #line 701 "gParcer.rl"
 
-        if ( format_finish( fsm ) <= 0 )
-        printf("[602] FAIL  %-10s \n", data);
+        if ( format_finish( fsm ) <= 0 ){
+//        printf("[602] FAIL  %c {%X} ==\n", data[0], data[0]);
+//           printf("[602] FAIL  :%-10s {%X} ==\n", data, data[30]);
+          printf("[602] FAIL ==>> \n");
+          for(int i=0;i<20;i++){
+              printf("%c {%p}/ ", data[i], &data[i]);
+          }
+          printf("\n\n");
+          printf("[1318]:%p\n",fsm->buf);
+        }
 
 
 }
 
 
 
-void scanner(){
+int scanner(){
 scannerstart:
     switch (fsm.state)
     {
@@ -1272,13 +1339,15 @@ scannerstart:
             exit(1);
         }
 
-        fsm.lenfile = fread( fsm.buf+fsm.have, 1, fsm.space, fp );
-
+//        fsm.lenfile = fread( fsm.buf+fsm.have, 1, fsm.space, fp );
+        fsm.state = 4;
+        return (fsm.state);
+case 4:
         fsm.eofile = fsm.lenfile != fsm.space;
-
+printf("gParcer [1339] fsm.eofile:%i \n\n",fsm.eofile);
        format_execute( &fsm, fsm.p, fsm.lenfile, fsm.eofile );
         fsm.state = 1;
-         return;
+         return (fsm.state);
 
     case 1:
         if(fsm.done)
@@ -1286,13 +1355,15 @@ scannerstart:
             fsm.done = 0;
             fsm.lenfile = INPUT_BUFSIZE - (fsm.pe - fsm.buf);
             format_execute( &fsm, fsm.pe, fsm.lenfile, fsm.eofile );
-            return;
+            return (fsm.state);
+        }else{
+            fsm.state = 3;
         }
     case 3:
 //		printf("[646] done:  %i \n", fsm.done);
         if ( fsm.eofile ){
 //			fprintf(stderr, " [650] EOF lenfile:%i  space:%i \n", fsm.lenfile , fsm.space);
-            return;
+            return (fsm.state);
         //	break;
         }
 
@@ -1346,16 +1417,19 @@ int main()
 
 #endif
 
-int parcerFileOpen(char *filename)
+/*
+ * 	static char buf[BUFSIZE];
+    int cs, act, have = 0, curline = 1;
+    char *ts, *te = 0;
+    int done = 0;
+*/
+void initGparcer()
 {
-    fp = fopen(filename,"r");
-       if (fp==NULL) {fputs ("File error",stderr); exit (1);}
+    fsm.buf = buf;
+    fsm.state = 0;
+    fsm.have = 0;
+    fsm.curline = 1;
+    fsm.te = 0;
+    fsm.done = 0;
+    format_init(&fsm);
 }
-
-void parcerFileClose()
-{
-    if(fp!= NULL)
-        fclose(fp);
-}
-
-

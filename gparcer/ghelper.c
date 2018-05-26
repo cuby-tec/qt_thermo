@@ -37,15 +37,17 @@ void clear_sgcode()
 
 }
 
-
+// It's an End of build command.
 void b_command (size_t curline, char * param, size_t len)
 {
-
+    sgcode.line = curline;
 }
 
 void b_gcomment (size_t curline, char * param, size_t len)
 {
-
+//sgcode.comment
+    sgcode.line = curline;
+    memcpy(sgcode.comment, param, (len<79)?len:79);
 }
 
 void b_g_command (size_t curline, char * param, size_t len)
@@ -154,5 +156,8 @@ void b_star_parameter(size_t curline, char * param, size_t len)
 {
 }
 
+void b_punct(size_t curline, char* param, size_t len)
+{
 
+}
 

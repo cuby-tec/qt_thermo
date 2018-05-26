@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include "gParcer.h"
+
+//enum prsCmd
 
 struct sGparam {
     char group;

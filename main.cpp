@@ -2,6 +2,7 @@
 #include <QApplication>
 #include "myglobal.h"
 
+
 QMutex thermo_gmutex;
 
 MyGlobal mglobal;

@@ -13,10 +13,9 @@
 #include "sgcode.h"
 
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stddef.h>
 
 //---------------- var
@@ -56,6 +55,7 @@ extern void b_u_parameter(size_t curline, char * param, size_t len);
 extern void b_v_parameter(size_t curline, char * param, size_t len);
 extern void b_w_parameter(size_t curline, char * param, size_t len);
 extern void b_star_parameter(size_t curline, char * param, size_t len);
+extern void b_punct(size_t curline, char* param, size_t len);
 #endif
 #ifdef __cplusplus
    }
