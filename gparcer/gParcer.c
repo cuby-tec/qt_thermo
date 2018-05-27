@@ -977,6 +977,7 @@ _eof_trans:
     { fsm->te = ( fsm->p);( fsm->p)--;{
         //parser_out = g_command;
         (*prs[eGcommand])(fsm->curline ,fsm->ts,fsm->te-fsm->ts);
+//                printf("\tGparcer[980] curline:%i ts:%c%c%c",fsm->curline,fsm->ts[0],fsm->ts[1],fsm->ts[2]);
         }}
     break;
     case 14:
@@ -1137,6 +1138,7 @@ _eof_trans:
     {{( fsm->p) = (( fsm->te))-1;}{
         //parser_out = g_command;
         (*prs[eGcommand])(fsm->curline ,fsm->ts,fsm->te-fsm->ts);
+//                printf("\tGparcer[1148] curline:%i",fsm->curline);
         }}
     break;
     case 37:
@@ -1338,13 +1340,12 @@ scannerstart:
             fprintf(stderr, "OUT OF BUFFER SPACE\n" );
             exit(1);
         }
-
 //        fsm.lenfile = fread( fsm.buf+fsm.have, 1, fsm.space, fp );
         fsm.state = 4;
         return (fsm.state);
 case 4:
         fsm.eofile = fsm.lenfile != fsm.space;
-printf("gParcer [1339] fsm.eofile:%i \n\n",fsm.eofile);
+// printf("gParcer [1339] fsm.eofile:%i \n\n",fsm.eofile);
        format_execute( &fsm, fsm.p, fsm.lenfile, fsm.eofile );
         fsm.state = 1;
          return (fsm.state);

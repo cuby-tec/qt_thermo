@@ -8,8 +8,8 @@
 #ifndef GCODEWORKER_H
 #define GCODEWORKER_H
 
-#include <cstdio>
-
+//#include <cstdio>
+#include <QFile>
 #include <QString>
 
 
@@ -23,8 +23,10 @@ public:
 
 private:
 
-    std::FILE* fp;
-    std::FILE* flog;
+//    std::FILE* fp;
+//    std::FILE* flog;
+    QFile fp;
+    QFile flog;
 
 };
 

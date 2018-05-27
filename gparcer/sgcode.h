@@ -12,6 +12,7 @@ struct sGcode{
     char value[10];
     uint32_t line;
     char comment[80];
+    char param_number;
     struct sGparam param[15];
 };
 

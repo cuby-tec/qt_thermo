@@ -33,19 +33,67 @@ GcodeWorker::fileOpen(QString filename)
     if (pFile!=NULL)
     {
      * */
+    int state;
+
+#ifdef STD
     char buffer[128];
     char tmpbuffer[256];
 
-    int state;
 
     std::string fname = filename.toStdString();
     strncpy(buffer,fname.data(),sizeof(buffer)-1);
 
     QString __log = QString("/home/walery/tmp/gParcer.log");
     std::string _log = __log.toStdString();
+#endif
 
     initGparcer();
 
+//------------------------- begen parcing
+    fp.setFileName(filename);
+    if(!fp.open(QIODevice::ReadOnly | QIODevice::Text)){
+        //TODO Exception
+        qDebug() << "File Error:" << filename;
+        return;
+    }
+
+    clear_sgcode();
+
+
+    state = scanner();
+
+    while(state!=3 && !fsm.eofile)
+    {
+        if(sgcode.line != 0){
+            clear_sgcode();
+        }
+        switch (state)
+        {
+        case 4:
+            fsm.lenfile = fp.read(fsm.buf+fsm.have,fsm.space);
+            state = scanner();
+            break;
+
+        case 1:
+            state = scanner();
+            break;
+
+        case 3:
+            if ( fsm.eofile ){
+                qDebug() << "End of file: lenfile:" << fsm.lenfile << "  have:" << fsm.have;
+                break;
+            }
+            break;
+
+        }// switch
+    }
+
+
+    fp.close();
+     qDebug() << "File closed.";
+//---------------------------- exn parcing
+
+#ifdef STD
     fp = std::fopen(buffer, "r");
     if(fp!=NULL)
     {
@@ -67,10 +115,11 @@ GcodeWorker::fileOpen(QString filename)
             qDebug() <<"sGcode.comment:"<< sgcode.comment;
             qDebug() << "sGcode.group:" << sgcode.group;
             qDebug() << "sGcode.line:" << sgcode.line ;
-            qDebug() << "fsm.cs:" <<fsm.cs ;
-            qDebug() << "fsm.space :" <<fsm.space ;
-            qDebug() << "fsm.have :" <<fsm.have ;
-            qDebug() << "fsm.buf :" <<fsm.buf[0] ;
+            if(sgcode.param_number>0)
+                qDebug() << "sGcode.param_number:" << sgcode.param_number;
+            else
+                qDebug() << "sGcode.param_number:" << "0";
+
             qDebug() << "=============================";
 
 
@@ -88,31 +137,10 @@ GcodeWorker::fileOpen(QString filename)
         qDebug()<< "File error:"<<buffer;
         return;
     }
+#endif
 
 
-    // debug
-    fp = std::fopen(buffer, "r");
-    if(fp != NULL)
-    {
-        int len_t = fread(tmpbuffer,1,sizeof(tmpbuffer),fp);
 
-        qDebug() << "tmp.buf :" <<tmpbuffer[0] ;
-
-        fclose(fp);
-    }
-
-/*
-    QFile file(buffer);
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-      qint64 tmplen = file.read(tmpbuffer,sizeof(tmpbuffer));
-
-      qDebug() << "tmp.buf :" <<tmpbuffer[0] ;
-
-      file.close();
-
-    }
-*/
 /*
     strncpy(buffer,_log.data(),sizeof(buffer));
 
@@ -143,6 +171,8 @@ GcodeWorker::fileOpen(QString filename)
 
      }
 */
+
+
 /*
     QFileInfo floginfo(__log);
 
