@@ -42,6 +42,10 @@ public:
         logfile.close();
     }
 
+signals:
+    void sg_statusChanged(const Status_t* status);
+
+
 private slots:
   void realtimeDataSlot();
   void updateStatus(const Status_t* status);

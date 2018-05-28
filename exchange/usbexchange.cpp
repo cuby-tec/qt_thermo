@@ -143,7 +143,8 @@ UsbExchange::sendRequest(ComDataReq_t* request)
 /**
  * @brief UsbExchange::UsbExchange
  */
-UsbExchange::UsbExchange()
+//ThermoPlot::ThermoPlot(QObject* parent) : QObject(parent)
+UsbExchange::UsbExchange(QObject *parent) : QObject(parent)
 {
 #ifdef    EXCHANGE_IN_CONST
 #ifdef STDFILE
@@ -234,7 +235,7 @@ UsbExchange::print_status(Status_t * c_status)
     line = QString("coordinatus Y: %1 \n").arg(c_status->coordinatus[Y_AXIS]);print <<line; print.flush();
     line = QString("coordinatus Z: %1 \n").arg(c_status->coordinatus[Z_AXIS]);print <<line; print.flush();
     line = QString("coordinatus E: %1 \n").arg(c_status->coordinatus[E_AXIS]);print <<line; print.flush();
-    line = QString("modelState: %1 \n").arg(c_status->modelState);print <<line; print.flush();
+    line = QString("modelState: %1 \n").arg(c_status->modelState.modelState);print <<line; print.flush();
     line = QString("currentSegmentNumber: %1 \n").arg(c_status->currentSegmentNumber);print <<line; print.flush();
     line = QString("instrument2_parameter: %1 \n").arg(c_status->instrument2_parameter);print <<line; print.flush();
     line = QString("instrument3_parameter: %1 \n").arg(c_status->instrument3_parameter);print <<line; print.flush();
@@ -545,7 +546,7 @@ UsbExchange::buildComData(ComDataReq_t *comdata, eOrder order)
 
         comdata->command.order = eoProfile;
 
-        sendRequest(comdata); // TODO Get request in Controller.
+        sendRequest(comdata); // Get request in Controller.
         break;
 
     case eoSegment:

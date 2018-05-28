@@ -49,7 +49,6 @@ GcodeWorker::fileOpen(QString filename)
 
     initGparcer();
 
-//------------------------- begen parcing
     fp.setFileName(filename);
     if(!fp.open(QIODevice::ReadOnly | QIODevice::Text)){
         //TODO Exception
@@ -59,6 +58,7 @@ GcodeWorker::fileOpen(QString filename)
 
     clear_sgcode();
 
+    //------------------------- begen parcing
 
     state = scanner();
 
@@ -66,6 +66,7 @@ GcodeWorker::fileOpen(QString filename)
     {
         if(sgcode.line != 0){
             clear_sgcode();
+
         }
         switch (state)
         {
@@ -87,11 +88,13 @@ GcodeWorker::fileOpen(QString filename)
 
         }// switch
     }
+//----------------- end parcing
 
 
-    fp.close();
-     qDebug() << "File closed.";
-//---------------------------- exn parcing
+//    fp.close();
+//     qDebug() << "File closed.";
+    fileClose();
+//---------------------------- exit parcing
 
 #ifdef STD
     fp = std::fopen(buffer, "r");
@@ -184,4 +187,13 @@ GcodeWorker::fileOpen(QString filename)
 //     parcerFileClose();
 
 }
+
+void
+GcodeWorker::fileClose()
+{
+    fp.close();
+     qDebug() << "File closed.";
+
+}
+
 

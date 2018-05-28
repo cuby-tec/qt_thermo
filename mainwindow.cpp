@@ -13,6 +13,7 @@
 #include "thermolog/thermologdialog.h"
 #include "profiles/thermopiddialog.h"
 
+
 #include <QDebug>
 
 
@@ -27,14 +28,27 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setupPlot(ui->plot);
 
+
 }
 
+
+
+void
+MainWindow::updateCoordinatus(const Status_t* status)
+{
+//    ui->label_posX;
+    ui->label_posX_value->setText(QString("%1").arg(status->coordinatus[X_AXIS]));
+    ui->label_posY_value->setText(QString("%1").arg(status->coordinatus[Y_AXIS]));
+    ui->label_posY_value->setText(QString("%1").arg(status->coordinatus[Z_AXIS]));
+    ui->label_posE_value->setText(QString("%1").arg(status->coordinatus[E_AXIS]));
+}
 
 void
 MainWindow::setupPlot(QCustomPlot *customPlot)
 {
 
-    ThermoPlot* plotter = new ThermoPlot(customPlot);
+    plotter = new ThermoPlot(customPlot);
+    connect(plotter,SIGNAL(sg_statusChanged(const Status_t*)),this,SLOT(updateCoordinatus(const Status_t* )));
 
 }
 

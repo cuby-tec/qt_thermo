@@ -40,7 +40,6 @@ ThermoThread::process()
          // TODO frameIndex
          index++;
 
-
          exch->buildComData(&request,eoState);
 
          result_exch = exch->sendRequest(&request);

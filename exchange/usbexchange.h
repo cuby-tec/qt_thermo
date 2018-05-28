@@ -6,7 +6,7 @@
 #ifndef UUSBEXCHANGE_H
 #define UUSBEXCHANGE_H
 
-
+#include <QObject>
 #include <QFile>
 #include <QIODevice>
 #include <QTextStream>
@@ -25,13 +25,15 @@
 
 extern uint rIndex;
 
-class UsbExchange
+class UsbExchange : public QObject
 {
+    Q_OBJECT
+
 public:
+    //explicit Base(QObject *parent = 0);
+     explicit UsbExchange(QObject * parent = 0);
 
-    UsbExchange();
-
-    ~UsbExchange();
+    ~UsbExchange(){}
 
     void buildComData(struct ComDataReq_t* comdata);
 
@@ -52,7 +54,13 @@ public:
 
      void print_status(Status_t* c_status);
 
+signals:
+     void sg_statusReceived(struct Status_t* status);
+
+
 private:
+
+
      QFile *fp;
 
       int sendBuffer(uint8_t* buffer, uint32_t size, QFile* fp);

@@ -29,6 +29,7 @@ public:
 private slots:
     void editProfile();
     void openFileDo();
+    void updateCoordinatus(const Status_t* status);
 
 private:
     Ui::MainWindow *ui;
@@ -62,6 +63,8 @@ private:
 
     GcodeWorker* gcodeworker;
 
+
+    ThermoPlot* plotter;
 
     void setupPlot(QCustomPlot *customPlot);
 

@@ -40,7 +40,9 @@ HEADERS += mainwindow.h \
     gparcer/ghelper.h \
     gparcer/sgcode.h \
     gparcer/sgparam.h \
-    gparcer/gcodeworker.h
+    gparcer/gcodeworker.h \
+    links/sModelCompState.h \
+    links/eModelstate.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui

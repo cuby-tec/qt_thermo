@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>522</height>
+    <height>629</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -110,7 +110,10 @@
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(245, 192, 155);
-border-color: rgb(255, 4, 44);</string>
+border-color: rgb(255, 4, 44);
+  border-width: 2px;
+    border-style: solid;
+</string>
    </property>
    <property name="features">
     <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
@@ -122,6 +125,9 @@ border-color: rgb(255, 4, 44);</string>
     <number>2</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <widget class="QWidget" name="thermoplotWidget" native="true">
      <property name="geometry">
       <rect>
@@ -130,6 +136,9 @@ border-color: rgb(255, 4, 44);</string>
        <width>241</width>
        <height>261</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
      </property>
      <widget class="QWidget" name="verticalLayoutWidget">
       <property name="geometry">
@@ -141,16 +150,7 @@ border-color: rgb(255, 4, 44);</string>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="leftMargin">
-        <number>10</number>
-       </property>
-       <property name="topMargin">
-        <number>10</number>
-       </property>
-       <property name="rightMargin">
-        <number>10</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>10</number>
        </property>
        <item>
@@ -165,16 +165,7 @@ border-color: rgb(255, 4, 44);</string>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="leftMargin">
-          <number>10</number>
-         </property>
-         <property name="topMargin">
-          <number>10</number>
-         </property>
-         <property name="rightMargin">
-          <number>10</number>
-         </property>
-         <property name="bottomMargin">
+         <property name="margin">
           <number>10</number>
          </property>
          <item>
@@ -219,6 +210,153 @@ border-color: rgb(255, 4, 44);</string>
        </item>
       </layout>
      </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_2">
+   <property name="maximumSize">
+    <size>
+     <width>524287</width>
+     <height>300</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(245, 192, 155);
+border-color: rgb(255, 4, 44);
+  border-width: 2px;
+    border-style: solid;
+     border-color: darkblue;</string>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::RightDockWidgetArea</set>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <property name="styleSheet">
+     <string notr="true">     border-width: 0px;
+     border-style: solid;
+     border-color: darkblue;</string>
+    </property>
+    <widget class="QWidget" name="formLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>19</x>
+       <y>19</y>
+       <width>211</width>
+       <height>211</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_posX">
+        <property name="styleSheet">
+         <string notr="true">     border-width: 0px;
+     border-style: solid;
+     border-color: darkblue;</string>
+        </property>
+        <property name="text">
+         <string>pos X axis</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_posX_value">
+        <property name="styleSheet">
+         <string notr="true">     border-width: 0px;
+     border-style: solid;
+     border-color: darkblue;</string>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_posY">
+        <property name="styleSheet">
+         <string notr="true">     border-width: 0px;
+     border-style: solid;
+     border-color: darkblue;</string>
+        </property>
+        <property name="text">
+         <string>pos Y axis</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_posY_value">
+        <property name="styleSheet">
+         <string notr="true">     border-width: 0px;
+     border-style: solid;
+     border-color: darkblue;</string>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_posZ">
+        <property name="styleSheet">
+         <string notr="true">     border-width: 0px;
+     border-style: solid;
+     border-color: darkblue;</string>
+        </property>
+        <property name="text">
+         <string>pos Z axis</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_posZ_value">
+        <property name="styleSheet">
+         <string notr="true">     border-width: 0px;
+</string>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_posE">
+        <property name="styleSheet">
+         <string notr="true">     border-width: 0px;
+     border-style: solid;
+     border-color: darkblue;</string>
+        </property>
+        <property name="text">
+         <string>pos E axis</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLabel" name="label_posE_value">
+        <property name="styleSheet">
+         <string notr="true">     border-width:0px;
+     border-style: solid;
+     border-color: darkblue;</string>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>

@@ -286,6 +286,7 @@ ThermoPlot::updateStatus(const Status_t *status)
     this->status = status;
     writeLog();
 
+    emit sg_statusChanged(status);
 
     static QTime time(QTime::currentTime());
     // calculate two new data points:

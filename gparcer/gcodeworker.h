@@ -20,6 +20,8 @@ public:
 
     void fileOpen(QString filename);
 
+    void fileClose();
+
 
 private:
 
