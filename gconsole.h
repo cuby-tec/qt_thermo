@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <ui_mainwindow.h>
-
+#include "gparcer/sgcode.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,6 +28,15 @@ private:
     Ui::MainWindow* uia;
 
     int oldBlockNumber;
+
+
+    /**
+     * Разбор одной строки.
+     * @brief GcodeWorker::parceString
+     * @param src
+     * @return
+     */
+    sGcode* parceString(char *src, int *error);
 
 };
 

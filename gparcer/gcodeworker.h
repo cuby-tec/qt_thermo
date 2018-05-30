@@ -12,7 +12,6 @@
 #include <QFile>
 #include <QString>
 
-
 class GcodeWorker
 {
 public:
