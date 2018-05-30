@@ -28,15 +28,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setupPlot(ui->plot);
 
-    setupGconsole();
+    setupGconsole(ui);
 
 }
 
 void
- MainWindow::setupGconsole()
+ MainWindow::setupGconsole(Ui::MainWindow* ui)
 {
-    gconsole = new GConsole(this);
+    gconsole = new GConsole(ui);
     connect(ui->pushButton_linestep,SIGNAL(clicked(bool)),gconsole,SLOT(on_pushButton_linestep_clicked()) );
+    connect(ui->textEdit_command,SIGNAL(cursorPositionChanged()),gconsole,SLOT(on_textEdit_command_cursorPositionChanged()) );
 }
 
 

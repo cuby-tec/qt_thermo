@@ -12,6 +12,8 @@
 #include "gparcer/gcodeworker.h"
 #include "gconsole.h"
 
+class GConsole;
+
 namespace Ui {
 class MainWindow;
 }
@@ -67,7 +69,7 @@ private:
 
     void setupPlot(QCustomPlot *customPlot);
 
-    void setupGconsole();
+    void setupGconsole(Ui::MainWindow *ui);
 
 };
 
