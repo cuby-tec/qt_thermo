@@ -5,5 +5,7 @@
         <file>images/write.png</file>
         <file>images/exmple.gcode</file>
         <file>log/gParcer.log</file>
+        <file>images/goo_top.png</file>
+        <file>images/linestep.png</file>
     </qresource>
 </RCC>

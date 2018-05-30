@@ -10,7 +10,7 @@
 //#include "profiles/profile.h"
 
 #include "gparcer/gcodeworker.h"
-
+#include "gconsole.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,7 +23,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
 
 
 private slots:
@@ -60,15 +59,15 @@ private:
 
     QAction* actFileOpen;
 
-
     GcodeWorker* gcodeworker;
 
+    GConsole* gconsole;
 
     ThermoPlot* plotter;
 
     void setupPlot(QCustomPlot *customPlot);
 
-
+    void setupGconsole();
 
 };
 
