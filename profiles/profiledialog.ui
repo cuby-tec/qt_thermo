@@ -354,7 +354,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="hOMING_DIR_MASKLineEdit">
+           <widget class="QLineEdit" name="LineEdit_HOMING_DIR_MASK">
             <property name="toolTip">
              <string>HOMING_DIR_MASK</string>
             </property>
@@ -368,7 +368,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="hOMING_FEED_RATELineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_HOMING_FEED_RATE"/>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="hOMING_SEEK_RATELabel">
@@ -378,7 +378,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="hOMING_SEEK_RATELineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_HOMING_SEEK_RATE"/>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="hOMING_D_DELAYLabel">
@@ -388,7 +388,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="hOMING_D_DELAYLineEdit">
+           <widget class="QLineEdit" name="LineEdit_HOMING_D_DELAY">
             <property name="toolTip">
              <string>HOMING_DEBOUNCE_DELAY</string>
             </property>
@@ -402,7 +402,7 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="hOMING_PULLOFFLineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_HOMING_PULLOFF"/>
           </item>
          </layout>
         </item>
@@ -457,7 +457,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit"/>
+           <widget class="QLineEdit" name="lineEdit_X_STEPS"/>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_7">
@@ -467,7 +467,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_2"/>
+           <widget class="QLineEdit" name="lineEdit_Y_STEPS"/>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_8">
@@ -477,7 +477,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_3"/>
+           <widget class="QLineEdit" name="lineEdit_Z_STEPS"/>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_9">
@@ -487,7 +487,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_4"/>
+           <widget class="QLineEdit" name="lineEdit_X_RATE"/>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="label_10">
@@ -497,7 +497,7 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="lineEdit_5"/>
+           <widget class="QLineEdit" name="lineEdit_Y_RATE"/>
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="label_11">
@@ -507,7 +507,7 @@
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QLineEdit" name="lineEdit_6"/>
+           <widget class="QLineEdit" name="lineEdit_Z_RATE"/>
           </item>
           <item row="6" column="0">
            <widget class="QLabel" name="label_12">
@@ -524,10 +524,10 @@
            </widget>
           </item>
           <item row="6" column="1">
-           <widget class="QLineEdit" name="lineEdit_7"/>
+           <widget class="QLineEdit" name="lineEdit_X_ACCEL"/>
           </item>
           <item row="7" column="1">
-           <widget class="QLineEdit" name="lineEdit_8"/>
+           <widget class="QLineEdit" name="lineEdit_Y_ACCEL"/>
           </item>
           <item row="8" column="0">
            <widget class="QLabel" name="label_14">
@@ -537,7 +537,7 @@
            </widget>
           </item>
           <item row="8" column="1">
-           <widget class="QLineEdit" name="lineEdit_9"/>
+           <widget class="QLineEdit" name="lineEdit_Z_ACCEL"/>
           </item>
          </layout>
         </item>
@@ -563,7 +563,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="x_MAX_TRAVELLineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_X_TRAVEL"/>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="y_MAX_TRAVELLabel">
@@ -573,7 +573,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="y_MAX_TRAVELLineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_Y_TRAVEL"/>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="z_MAX_TRAVELLabel">
@@ -583,7 +583,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="z_MAX_TRAVELLineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_Z_TRAVEL"/>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="sTEP_PULSE_MICROSECONDSLabel">
@@ -596,7 +596,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="step_PULSE_MICROSECONDSLineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_STEP_PULSE_MICROSECONDS"/>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="s_iNVERT_MASKLabel">
@@ -609,7 +609,7 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="invert_MASKLineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_INVERT_MASK"/>
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="d_INVERT_MASKLabel">
@@ -622,7 +622,7 @@
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QLineEdit" name="d_INVERT_MASKLineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_D_INVERT_MASK"/>
           </item>
           <item row="6" column="0">
            <widget class="QLabel" name="idle_LOCK_TIMELabel">
@@ -635,7 +635,7 @@
            </widget>
           </item>
           <item row="6" column="1">
-           <widget class="QLineEdit" name="idle_LOCK_TIMELineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_IDLE_LOCK_TIME"/>
           </item>
           <item row="7" column="0">
            <widget class="QLabel" name="aRC_TOLERANCELabel">
@@ -645,7 +645,7 @@
            </widget>
           </item>
           <item row="7" column="1">
-           <widget class="QLineEdit" name="aRC_TOLERANCELineEdit"/>
+           <widget class="QLineEdit" name="LineEdit_ARC_TOLERANCE"/>
           </item>
          </layout>
         </item>

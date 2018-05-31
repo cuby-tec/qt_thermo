@@ -19,7 +19,7 @@
 
 #include "links/status.h"
 #include "links/ComDataReq_t.h"
-#include "links/profiles/profile.h"
+#include "profiles/profile.h"
 
 #include <myglobal.h>
 

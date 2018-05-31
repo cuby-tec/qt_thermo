@@ -21,7 +21,7 @@ HEADERS += mainwindow.h \
            links/modelState.h \
            links/parson.h \
            links/sHotendControl.h \
-           links/sProfile.h \
+#           links/sProfile.h \
            links/status.h \
            links/Status_t.h \
            profiles/profile.h \
@@ -43,7 +43,9 @@ HEADERS += mainwindow.h \
     gparcer/gcodeworker.h \
     links/sModelCompState.h \
     links/eModelstate.h \
-    gconsole.h
+    gconsole.h \
+    exchange/threadexchange.h \
+    gparcer/comdata.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui
@@ -66,7 +68,9 @@ SOURCES += main.cpp \
     gparcer/gParcer.c \
     gparcer/ghelper.c \
     gparcer/gcodeworker.cpp \
-    gconsole.cpp
+    gconsole.cpp \
+    exchange/threadexchange.cpp \
+    gparcer/comdata.cpp
 RESOURCES += resources.qrc
 
 DISTFILES += \

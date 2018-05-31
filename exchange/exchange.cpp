@@ -60,6 +60,7 @@ Exchange::sendRequest(ComDataReq_t* request)
 
             if(length < 0){
                 qDebug()<< "Can't read file %1 \n" << fname ;
+                c_status = NULL;
             }else{
 
                 //printf("Recieved:%u\n",result);

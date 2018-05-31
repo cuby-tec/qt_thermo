@@ -4,23 +4,111 @@
 
 #include <QDebug>
 
-#include "gparcer/ghelper.h"
-#include "gparcer/gParcer.h"
+
+//#include "links/Status_t.h"
+//#include "usbexchange.h"
 
 
-GConsole::GConsole(QObject *parent) : QObject(parent)
+
+#include "myglobal.h"
+#include <string.h>
+
+
+
+
+GConsole::GConsole(QObject *parent) : QObject(parent)//, req_builder(new ComData())
 {
-
+//    QScopedPointer<ComData> this->req_builder(new ComData());
+//    this->req_builder = req_builder;
+//    this->req_builder = new ComData();
+//    this->req_builder = &_comdata;
 }
 
 
-GConsole::GConsole(Ui::MainWindow* &ui)
+
+
+GConsole::GConsole(Ui::MainWindow* &ui):req_builder(new ComData())
 {
     this->uia = ui;
     oldBlockNumber = -1;
+//    this->req_builder = &_comdata;
+    setupGconsole();
+
+    setupThread();
 }
 
 
+void
+GConsole::setupGconsole()
+{
+    Profile* profile = Profile::instance();
+    if(!profile->profileAtive)
+    {
+        profile->init_profile();
+    }
+
+}
+
+
+void
+GConsole::setupThread()
+{
+    connect(&thread,SIGNAL(sg_status_updated(const Status_t*)),this,SLOT(updateStatus(const Status_t*)) );
+    connect(&thread,SIGNAL(sg_failed_status()),this, SLOT(failedStatus()) );
+}
+
+
+/**
+ * @brief GConsole::buildComData
+ * @param cmdd
+ * @return result
+ */
+bool
+GConsole::buildComData(sGcode* sgcode)
+{
+    bool result;
+
+// TODO build request
+
+
+//    req->setRequestNumber(56);
+
+//    ComDataReq_t* r = req_builder->getRequest();
+
+    req_builder->setRequestNumber(++MyGlobal::commandIndex);
+
+    req_builder->build(sgcode);
+
+
+//    r->requestNumber= ++MyGlobal::commandIndex;
+
+
+
+// TODO send requst and wait signal
+
+
+
+    //===========
+    thread.setRequest(req_builder->getRequest());
+
+    thread.process();
+
+    return result;
+}
+
+//TODO
+void
+GConsole::failedStatus()
+{
+
+}
+
+//TODO
+void
+GConsole::updateStatus(const Status_t* status)
+{
+
+}
 
 /**
  * Разбор одной строки.
@@ -80,7 +168,7 @@ GConsole::on_pushButton_linestep_clicked()
     int bnumber = uia->textEdit_command->textCursor().block().blockNumber();
 
 
-    qDebug()<<"GConsole[60] Clicked line:"<<bnumber ;
+//    qDebug()<<"GConsole[60] Clicked line:"<<bnumber ;
 
     char cmdbuffer[80];
     char* pbuffer;
@@ -105,6 +193,7 @@ GConsole::on_pushButton_linestep_clicked()
     {
 //        uia->label_commandLine->setText(QString(error2)+QString("%1").arg(parce_error) );
         uia->label_commandLine->setText(msg1+ QString(sgcode->group)+QString(sgcode->value) );
+        buildComData(sgcode); // sGcode* sgcode
 
     }else{
         uia->label_commandLine->setText(QString(error1)+QString("%1").arg(parce_error) );
@@ -159,7 +248,7 @@ GConsole::on_textEdit_command_cursorPositionChanged()
 
     }
 
-    qDebug()<< "GConsole[107] old:"<< oldBlockNumber<<" now:"<< bnumber;
+//    qDebug()<< "GConsole[107] old:"<< oldBlockNumber<<" now:"<< bnumber;
     oldBlockNumber = bnumber;
 
 }

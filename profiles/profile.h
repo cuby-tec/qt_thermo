@@ -81,6 +81,9 @@ public:
 
     bool loadProfile();
 
+    bool isProfileActive(){ return profileAtive; }
+
+
     /**
      * Создать переменные и загрузить файл Профилей.
      * Проверка наличия файла профиля и его правильность или
@@ -101,7 +104,7 @@ public:
     bool isDefaultProfile(int index);
 
 //----------- Generic
-
+//----------------------- getters
     QString getX_STEPS();
 
     QString getY_STEPS();
@@ -109,6 +112,69 @@ public:
     QString getZ_STEPS();
 
     QString getX_MAX_RATE();
+
+    //DEFAULT_Y_MAX_RATE
+    QString getY_MAX_RATE();
+
+    //DEFAULT_Z_MAX_RATE
+    QString getZ_MAX_RATE();
+
+    //DEFAULT_X_ACCELERATION
+    QString getX_ACCELERATION();
+
+    //DEFAULT_Y_ACCELERATION
+    QString getY_ACCELERATION();
+
+    //DEFAULT_Z_ACCELERATION
+    QString getZ_ACCELERATION();
+
+    //DEFAULT_X_MAX_TRAVEL
+    QString getX_MAX_TRAVEL();
+
+    //DEFAULT_Y_MAX_TRAVEL
+    QString getY_MAX_TRAVEL();
+
+    //DEFAULT_Z_MAX_TRAVEL
+    QString getZ_MAX_TRAVEL();
+
+    //DEFAULT_STEP_PULSE_MICROSECONDS
+    QString getSTEP_PULSE_MICROSECONDS();
+
+    //DEFAULT_STEPPING_INVERT_MASK
+    QString getSTEPPING_INVERT_MASK();
+
+    //DEFAULT_DIRECTION_INVERT_MASK
+    QString getDIRECTION_INVERT_MASK();
+
+    //DEFAULT_STEPPER_IDLE_LOCK_TIME
+    QString getSTEPPER_IDLE_LOCK_TIME();
+
+    //DEFAULT_STATUS_REPORT_MASK
+    QString getSTATUS_REPORT_MASK();
+
+    //DEFAULT_JUNCTION_DEVIATION
+    QString getJUNCTION_DEVIATION();
+
+    //DEFAULT_ARC_TOLERANCE
+    QString getARC_TOLERANCE();
+
+    //DEFAULT_FLAGS
+    QString getFLAGS();
+
+    //DEFAULT_HOMING_DIR_MASK
+    QString getHOMING_DIR_MASK();
+
+    //DEFAULT_HOMING_FEED_RATE
+    QString getHOMING_FEED_RATE();
+
+    //DEFAULT_HOMING_SEEK_RATE
+    QString getHOMING_SEEK_RATE();
+
+    //DEFAULT_HOMING_DEBOUNCE_DELAY
+    QString getHOMING_DEBOUNCE_DELAY();
+
+    //DEFAULT_HOMING_PULLOFF
+    QString getHOMING_PULLOFF();
 
     QString get_TEMPERATURE();
 
@@ -118,10 +184,89 @@ public:
 
     QString get_DERIVATIVE();
 
+//---------------------------------- setters
+    //DEFAULT_X_STEPS_PER_MM
+    void set_X_STEPS_PER_MM(QString num);
+
+    //DEFAULT_Y_STEPS_PER_MM
+    void setY_STEPS_PER_MM(QString num);
+
+    //DEFAULT_Z_STEPS_PER_MM
+    void setZ_STEPS_PER_MM(QString num);
+
+    //DEFAULT_X_MAX_RATE
+    void setX_MAX_RATE(QString num);
+
+    //DEFAULT_Y_MAX_RATE
+    void setY_MAX_RATE(QString num);
+
+    //DEFAULT_Z_MAX_RATE
+    void setZ_MAX_RATE(QString num);
+
+    //DEFAULT_X_ACCELERATION
+    void setX_ACCELERATION(QString num);
+
+    //DEFAULT_Y_ACCELERATION
+    void setY_ACCELERATION(QString num);
+
+    //DEFAULT_Z_ACCELERATION
+    void setZ_ACCELERATION(QString num);
+
+    //DEFAULT_X_MAX_TRAVEL
+    void setX_MAX_TRAVEL(QString num);
+
+    //DEFAULT_Y_MAX_TRAVEL
+    void setY_MAX_TRAVEL(QString num);
+
+    //DEFAULT_Z_MAX_TRAVEL
+    void setZ_MAX_TRAVEL(QString num);
+
+    //DEFAULT_STEP_PULSE_MICROSECONDS
+    void setSTEP_PULSE_MICROSECONDS(QString num);
+
+    //DEFAULT_STEPPING_INVERT_MASK
+    void setSTEPPING_INVERT_MASK(QString num);
+
+    //DEFAULT_DIRECTION_INVERT_MASK
+    void setDIRECTION_INVERT_MASK(QString num);
+
+    //DEFAULT_STEPPER_IDLE_LOCK_TIME
+    void setSTEPPER_IDLE_LOCK_TIME(QString num);
+
+    //DEFAULT_STATUS_REPORT_MASK
+    void setSTATUS_REPORT_MASK(QString num);
+
+    //DEFAULT_JUNCTION_DEVIATION
+    void setJUNCTION_DEVIATION(QString num);
+
+    //DEFAULT_ARC_TOLERANCE
+    void setARC_TOLERANCE(QString num);
+
+    //DEFAULT_FLAGS
+    void setFLAGS(QString num);
+
+    //DEFAULT_HOMING_DIR_MASK
+    void setHOMING_DIR_MASK(QString num);
+
+    //DEFAULT_HOMING_FEED_RATE
+    void setHOMING_FEED_RATE(QString num);
+
+    //DEFAULT_HOMING_SEEK_RATE
+    void setHOMING_SEEK_RATE(QString num);
+
+    //DEFAULT_HOMING_DEBOUNCE_DELAY
+    void setHOMING_DEBOUNCE_DELAY(QString num);
+
+    //DEFAULT_HOMING_PULLOFF
+    void setHOMING_PULLOFF(QString num);
+
     void  set_TEMPERATURE(QString num);
     void  set_INTEGRAL(QString num);
     void  set_PROPTIONAL(QString num);
     void  set_DERIVATIVE(QString num);
+
+
+
 
     void saveProfileDocument();
 

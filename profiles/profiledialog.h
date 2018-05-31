@@ -45,6 +45,51 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_lineEdit_X_STEPS_textEdited(const QString &arg1);
+
+    void on_lineEdit_Y_STEPS_textEdited(const QString &arg1);
+
+    void on_lineEdit_Z_STEPS_textEdited(const QString &arg1);
+
+    void on_lineEdit_X_RATE_textEdited(const QString &arg1);
+
+    void on_lineEdit_Y_RATE_textEdited(const QString &arg1);
+
+    void on_lineEdit_Z_RATE_textEdited(const QString &arg1);
+
+    void on_lineEdit_X_ACCEL_textEdited(const QString &arg1);
+
+    void on_lineEdit_Y_ACCEL_textEdited(const QString &arg1);
+
+    void on_lineEdit_Z_ACCEL_textEdited(const QString &arg1);
+
+    void on_LineEdit_X_TRAVEL_textEdited(const QString &arg1);
+
+    void on_LineEdit_Y_TRAVEL_textEdited(const QString &arg1);
+
+    void on_LineEdit_Z_TRAVEL_textEdited(const QString &arg1);
+
+    void on_LineEdit_STEP_PULSE_MICROSECONDS_textEdited(const QString &arg1);
+
+    void on_LineEdit_INVERT_MASK_textEdited(const QString &arg1);
+
+    void on_LineEdit_D_INVERT_MASK_textEdited(const QString &arg1);
+
+    void on_LineEdit_IDLE_LOCK_TIME_textEdited(const QString &arg1);
+
+    void on_LineEdit_ARC_TOLERANCE_textEdited(const QString &arg1);
+
+    void on_LineEdit_HOMING_DIR_MASK_textEdited(const QString &arg1);
+
+    void on_LineEdit_HOMING_FEED_RATE_textEdited(const QString &arg1);
+
+    void on_LineEdit_HOMING_SEEK_RATE_textEdited(const QString &arg1);
+
+    void on_LineEdit_HOMING_D_DELAY_textEdited(const QString &arg1);
+
+    void on_LineEdit_HOMING_PULLOFF_textEdited(const QString &arg1);
+
+
 private:
     Ui::ProfileDialog *uia;
 
@@ -66,4 +111,5 @@ private:
 };
 
 #endif // PROFILEDIALOG_H
+
 
