@@ -1,17 +1,13 @@
 #include "gconsole.h"
 
 #include <string.h>
-
 #include <QDebug>
 
+#include "gparcer/coordinatus.h"
+#include "myglobal.h"
 
 //#include "links/Status_t.h"
 //#include "usbexchange.h"
-
-
-
-#include "myglobal.h"
-#include <string.h>
 
 
 
@@ -38,6 +34,13 @@ GConsole::GConsole(Ui::MainWindow* &ui):req_builder(new ComData())
 }
 
 
+/*
+ *     static QString msg_absolute;
+    static QString msg_relative;
+
+    static QString msg_abs_title;
+    static QString msg_rel_title;
+ * */
 void
 GConsole::setupGconsole()
 {
@@ -45,6 +48,16 @@ GConsole::setupGconsole()
     if(!profile->profileAtive)
     {
         profile->init_profile();
+    }
+
+    Coordinatus* cord = Coordinatus::instance();
+    if(cord->isAbsolute())
+    {
+        uia->label_AbsRel->setText(MyGlobal::msg_absolute);
+        uia->label_AbsRel->setToolTip(MyGlobal::msg_abs_title);
+    }else{
+        uia->label_AbsRel->setText(MyGlobal::msg_relative);
+        uia->label_AbsRel->setToolTip(MyGlobal::msg_rel_title);
     }
 
 }

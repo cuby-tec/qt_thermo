@@ -11,6 +11,7 @@
 
 #include "gparcer/gcodeworker.h"
 #include "gconsole.h"
+#include "coordinatuswindow.h"
 
 class GConsole;
 
@@ -67,9 +68,14 @@ private:
 
     ThermoPlot* plotter;
 
+    CoordinatusWindow* coordinatus;
+
+
     void setupPlot(QCustomPlot *customPlot);
 
     void setupGconsole(Ui::MainWindow *ui);
+
+    void setupCoordinatus(Ui::MainWindow *ui);
 
 };
 

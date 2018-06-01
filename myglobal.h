@@ -36,6 +36,12 @@ public:
 
     static QString message5;
 
+    static QString msg_absolute;
+    static QString msg_relative;
+
+    static QString msg_abs_title;
+    static QString msg_rel_title;
+
     //-------- exchange
 
     static u_int32_t commandIndex;

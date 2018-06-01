@@ -45,7 +45,9 @@ HEADERS += mainwindow.h \
     links/eModelstate.h \
     gconsole.h \
     exchange/threadexchange.h \
-    gparcer/comdata.h
+    gparcer/comdata.h \
+    gparcer/coordinatus.h \
+    coordinatuswindow.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui
@@ -70,7 +72,9 @@ SOURCES += main.cpp \
     gparcer/gcodeworker.cpp \
     gconsole.cpp \
     exchange/threadexchange.cpp \
-    gparcer/comdata.cpp
+    gparcer/comdata.cpp \
+    gparcer/coordinatus.cpp \
+    coordinatuswindow.cpp
 RESOURCES += resources.qrc
 
 DISTFILES += \

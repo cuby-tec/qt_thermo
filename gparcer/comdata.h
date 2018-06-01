@@ -5,7 +5,7 @@
 #include "gparcer/sgcode.h"
 
 #include "profiles/profile.h"
-
+#include "coordinatus.h"
 
 class ComData
 {
@@ -35,6 +35,8 @@ private:
 
     Profile* profile;
 
+    Coordinatus* cord;
+
     void buildGgroup();
 
     void buildMgroup();
@@ -42,6 +44,8 @@ private:
     void buildG0command();
 
     void setParam_X(sGparam* param);
+
+    void initWorkAray();
 
 };
 

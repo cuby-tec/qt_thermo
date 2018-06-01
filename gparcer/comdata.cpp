@@ -2,13 +2,21 @@
 #include <string.h>
 #include <QString>
 #include <QDebug>
+#include <QtGlobal>
 
-const QString msg3 = "Conversion error.";
+//const QString msg3 = "Conversion error.";
+//const QString msg4 = "Profile should be selected.";
+const char* msg3 = "Conversion error.";
+const char* msg4 = "Profile should be selected.";
+
 ComData::ComData()
 {
 
     memset(&request,'\0',sizeof(ComDataReq_t));
 //    request.requestNumber = 22;
+
+    profile = Profile::instance();
+
 }
 
 
@@ -16,34 +24,56 @@ void
 ComData::setParam_X(sGparam *param)
 {
     bool ok;
+    int i;
+
+    QString str_val = QString( param->value );
+
     sSegment* segment = &request.payload.instrument1_parameter;
-    float coord = QString(param->value).toFloat(&ok);
-    if(!ok)
+
+    i = str_val.indexOf(',');
+
+
+    if(i>0)
     {
-        qDebug()<<"Error ComData[23]:"<< msg3;
-        exit(1);
+        str_val = str_val.replace(i,1,'.');
     }
 
-    profile = Profile::instance();
-
-    QString value = profile->getX_STEPS();
-
-    int a = value.indexOf(',');
-
-    if(a>0)
+    float coord = str_val.toFloat(&ok);
+    if(!ok)
     {
-        value.replace(a,1,'.');
+        qFatal(msg3);
+    }
+
+
+    if(cord->isAbsolute())
+    {
+        cord->setWorkValue(X_AXIS,coord);
+    }else{
+        float wv = cord->getWorkvalue(X_AXIS);
+        wv += coord;
+        cord->setWorkValue(X_AXIS,wv);
+    }
+
+
+/*
+    QString steps = profile->getX_STEPS();
+
+    i = steps.indexOf(',');
+
+    if(i>0)
+    {
+        steps.replace(i,1,'.');
     }
 
 //    float_t steps_per_mm = QString( profile->getX_STEPS()).toFloat(&ok);
-    float_t steps_per_mm = value.toFloat(&ok);
-    if(ok && steps_per_mm>0)
-        segment->axis[X_AXIS].steps = coord/steps_per_mm;
-    else{
-        qDebug()<<"ERROR ComData[32]:"<< msg3<< "Profile should be selected." ;
-        exit(1);
+    float_t steps_per_mm = steps.toFloat(&ok);
+    if(!(ok && steps_per_mm>0)){
+        qFatal(msg3 + msg4);
     }
-
+    else{
+        segment->axis[X_AXIS].steps = coord/steps_per_mm;
+    }
+*/
 
 }
 
@@ -51,8 +81,8 @@ void
 ComData::buildG0command()
 {
 
-    float coord;
-    bool ok;
+//    float coord;
+//    bool ok;
     sGparam* gparam;
 
 
@@ -60,7 +90,7 @@ ComData::buildG0command()
     {
         gparam = &sgCode->param[i];
 
-        coord = QString(gparam->value).toFloat(&ok);
+//        coord = QString(gparam->value).toFloat(&ok);
 
         switch (gparam->group) {
         case 'X':
@@ -139,6 +169,8 @@ ComData::build(sGcode *sgcode)
 {
     this->sgCode = sgcode;
 
+    initWorkAray();
+
     switch (sgCode->group) {
     case 'G':
         buildGgroup();
@@ -152,5 +184,12 @@ ComData::build(sGcode *sgcode)
         // somthing wrong.
         break;
     }
+    return(&request);
+}
 
+void
+ComData::initWorkAray()
+{
+    cord = Coordinatus::instance();
+    cord->initWork();
 }

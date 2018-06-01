@@ -30,7 +30,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setupGconsole(ui);
 
+    setupCoordinatus(ui);
+
 }
+
+//==============
+
+void
+MainWindow::setupCoordinatus(Ui::MainWindow *ui)
+{
+    coordinatus = new CoordinatusWindow(ui);
+
+}
+
 
 void
  MainWindow::setupGconsole(Ui::MainWindow* ui)
@@ -45,10 +57,10 @@ void
 MainWindow::updateCoordinatus(const Status_t* status)
 {
 //    ui->label_posX;
-    ui->label_posX_value->setText(QString("%1").arg(status->coordinatus[X_AXIS]));
-    ui->label_posY_value->setText(QString("%1").arg(status->coordinatus[Y_AXIS]));
-    ui->label_posY_value->setText(QString("%1").arg(status->coordinatus[Z_AXIS]));
-    ui->label_posE_value->setText(QString("%1").arg(status->coordinatus[E_AXIS]));
+    ui->c_label_posX_value->setText(QString("%1").arg(status->coordinatus[X_AXIS]));
+    ui->c_label_posY_value->setText(QString("%1").arg(status->coordinatus[Y_AXIS]));
+    ui->c_label_posY_value->setText(QString("%1").arg(status->coordinatus[Z_AXIS]));
+    ui->c_label_posE_value->setText(QString("%1").arg(status->coordinatus[E_AXIS]));
 }
 
 void

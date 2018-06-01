@@ -25,6 +25,13 @@ QString MyGlobal::message4("File dos't selected.");
 
 QString MyGlobal::message5("File corrupted.");
 
+QString MyGlobal::msg_absolute("Abs");
+QString MyGlobal::msg_relative("Rel");
+
+QString MyGlobal::msg_abs_title("Absolute positioning.");
+QString MyGlobal::msg_rel_title("Relative positioning.");
+
+
 QString MyGlobal::logfileDelimiter(";");
 
 QString MyGlobal::comment("#");
