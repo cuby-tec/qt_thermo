@@ -30,6 +30,8 @@ public slots:
 private:
     Ui::MainWindow* uic;
 
+    Coordinatus* coordinatus;
+
 };
 
 #endif // COORDINATUSWINDOW_H

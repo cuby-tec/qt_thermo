@@ -9,6 +9,8 @@ CoordinatusWindow::CoordinatusWindow(QObject *parent) : QObject(parent)
 CoordinatusWindow::CoordinatusWindow(Ui::MainWindow* ui)
 {
     this->uic = ui;
+
+    coordinatus = Coordinatus::instance();
 }
 
 /*
