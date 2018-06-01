@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setGeometry(400, 250, 742, 590);
+    setGeometry(100, 100, 840, 700);
 
     createActions(this);
 

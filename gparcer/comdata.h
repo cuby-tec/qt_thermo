@@ -7,6 +7,8 @@
 #include "profiles/profile.h"
 #include "coordinatus.h"
 
+#include <QChar>
+
 class ComData
 {
 public:
@@ -43,7 +45,7 @@ private:
 
     void buildG0command();
 
-    void setParam_X(sGparam* param);
+    void setParam_coord(sGparam* param);
 
     void initWorkAray();
 

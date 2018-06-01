@@ -30,6 +30,10 @@ public:
     void setAbsolute(bool value){absrel = value;}
 
 
+signals:
+    void sg_coordUpdated();
+
+
 private:
     float current[N_AXIS];
 
@@ -38,6 +42,8 @@ private:
     float work[N_AXIS];
 
     bool absrel;
+
+    void sendSignalCoord();
 
     Coordinatus()
     {

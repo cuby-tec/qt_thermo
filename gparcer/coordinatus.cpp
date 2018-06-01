@@ -27,8 +27,8 @@ void
 Coordinatus::setWorkValue(size_t axis,float value)
 {
     Q_ASSERT(axis < N_AXIS);
-
     work[axis] = value;
+    sendSignalCoord();
 }
 
 float
@@ -45,4 +45,10 @@ Coordinatus::getCurrentValue(size_t axis)
     Q_ASSERT(axis < N_AXIS);
 
     return (current[axis]);
+}
+
+void
+Coordinatus::sendSignalCoord()
+{
+    emit(sg_coordUpdated());
 }

@@ -31,6 +31,7 @@ private:
     Ui::MainWindow* uic;
 
     Coordinatus* coordinatus;
+    void setupCoordinatus();
 
 };
 

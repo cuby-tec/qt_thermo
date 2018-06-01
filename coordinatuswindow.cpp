@@ -1,4 +1,7 @@
+
+
 #include "coordinatuswindow.h"
+#include "myglobal.h"
 
 CoordinatusWindow::CoordinatusWindow(QObject *parent) : QObject(parent)
 {
@@ -9,20 +12,36 @@ CoordinatusWindow::CoordinatusWindow(QObject *parent) : QObject(parent)
 CoordinatusWindow::CoordinatusWindow(Ui::MainWindow* ui)
 {
     this->uic = ui;
-
-    coordinatus = Coordinatus::instance();
+    setupCoordinatus();
 }
 
-/*
- *
- * //    ui->label_posX;
-    ui->c_label_posX_value->setText(QString("%1").arg(status->coordinatus[X_AXIS]));
-    ui->c_label_posY_value->setText(QString("%1").arg(status->coordinatus[Y_AXIS]));
-    ui->c_label_posY_value->setText(QString("%1").arg(status->coordinatus[Z_AXIS]));
-    ui->c_label_posE_value->setText(QString("%1").arg(status->coordinatus[E_AXIS]));
- * */
+
+
+void
+CoordinatusWindow::setupCoordinatus()
+{
+    coordinatus = Coordinatus::instance();
+    connect(coordinatus,SIGNAL(sg_coordUpdated()),this, SLOT(update()) );
+
+}
+
+#define ui_pos(arg1) uic->c_label_pos##arg1##_value->setText(QString("%1").arg(coordinatus->getWorkvalue( arg1##_AXIS )))
+
 void
 CoordinatusWindow::update()
 {
-    uic->c_label_positioning_value->setText("Tmp");
+    if(coordinatus->isAbsolute())
+    {
+        uic->c_label_positioning_value->setText(MyGlobal::msg_absolute);
+        uic->c_label_positioning_value->setToolTip(MyGlobal::msg_abs_title);
+    }else
+    {
+        uic->c_label_positioning_value->setText(MyGlobal::msg_relative);
+        uic->c_label_positioning_value->setToolTip(MyGlobal::msg_rel_title);
+    }
+    ui_pos(X);
+    ui_pos(Y);
+    ui_pos(Z);
+    ui_pos(E);
+
 }

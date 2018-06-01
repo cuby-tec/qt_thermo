@@ -16,15 +16,18 @@ ComData::ComData()
 //    request.requestNumber = 22;
 
     profile = Profile::instance();
+    cord = Coordinatus::instance();
+
 
 }
 
 
 void
-ComData::setParam_X(sGparam *param)
+ComData::setParam_coord(sGparam *param)
 {
     bool ok;
     int i;
+    size_t axis_num;
 
     QString str_val = QString( param->value );
 
@@ -38,6 +41,24 @@ ComData::setParam_X(sGparam *param)
         str_val = str_val.replace(i,1,'.');
     }
 
+    switch (param->group) {
+    case 'X':
+       axis_num = X_AXIS;
+        break;
+    case 'Y':
+        axis_num = Y_AXIS;
+        break;
+    case 'Z':
+        axis_num = Z_AXIS;
+        break;
+    case 'E':
+        axis_num = E_AXIS;
+        break;
+    default:
+        break;
+    }
+
+
     float coord = str_val.toFloat(&ok);
     if(!ok)
     {
@@ -47,11 +68,11 @@ ComData::setParam_X(sGparam *param)
 
     if(cord->isAbsolute())
     {
-        cord->setWorkValue(X_AXIS,coord);
+        cord->setWorkValue(axis_num,coord);
     }else{
-        float wv = cord->getWorkvalue(X_AXIS);
+        float wv = cord->getWorkvalue(axis_num);
         wv += coord;
-        cord->setWorkValue(X_AXIS,wv);
+        cord->setWorkValue(axis_num,wv);
     }
 
 
@@ -92,13 +113,16 @@ ComData::buildG0command()
 
 //        coord = QString(gparam->value).toFloat(&ok);
 
-        switch (gparam->group) {
-        case 'X':
-            setParam_X(gparam);
-            break;
-        default:
-            break;
-        }
+//        switch (gparam->group) {
+//        case 'X':
+            setParam_coord(gparam);
+//            break;
+//        case 'Y':
+
+//            break;
+//        default:
+//            break;
+//        }
 
     }
 
@@ -169,7 +193,8 @@ ComData::build(sGcode *sgcode)
 {
     this->sgCode = sgcode;
 
-    initWorkAray();
+//    initWorkAray();
+    cord->initWork();
 
     switch (sgCode->group) {
     case 'G':
@@ -190,6 +215,6 @@ ComData::build(sGcode *sgcode)
 void
 ComData::initWorkAray()
 {
-    cord = Coordinatus::instance();
+//    cord = Coordinatus::instance();
     cord->initWork();
 }

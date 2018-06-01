@@ -262,7 +262,7 @@ border-color: rgb(255, 4, 44);
      border-color: darkblue;</string>
    </property>
    <property name="allowedAreas">
-    <set>Qt::RightDockWidgetArea</set>
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
    </property>
    <property name="windowTitle">
     <string>Coordinatus</string>
