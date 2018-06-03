@@ -15,9 +15,8 @@ typedef struct block_state_t {
     //  Индикатор текущего и начального состояния автомата обработки прерываний по оси X.
     byte state;
     uint8_t  direction_bits;            // The direction bit set for this block (refers to *_DIRECTION_BIT in config.h)
-    word steps_x;
-    word steps_y;
-    word steps_z;
+    uint8_t axis_mask;          // маска активности оси
+    word steps;
     word accelerate_until;
     word decelerate_after;
     word initial_rate;
@@ -31,6 +30,13 @@ typedef struct block_state_t {
 //	float tangent_inv; //  Обратное значение тангенса. Для подпрограммы обработки прерываний.
     float nominal_speed;
     float acceleration;
+
+    float	entry_speed;
+    float	max_entry_speed;
+    float	millimeters;
+    byte	recalculate_flag;
+    byte	nominal_length_flag;
+
 
     /**	  Схема описывает порядок переходов состояний."
      *

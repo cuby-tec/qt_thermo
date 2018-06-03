@@ -12,6 +12,38 @@
 
 #include <QChar>
 
+#define DIRECTION_BIT    	1  // Port X Pin X
+#define STEP_BIT         	2  // Port X pin X
+
+
+#define X_DIRECTION_BIT    	0  // Port X Pin X
+#define X_STEP_BIT         	1  // Port X pin X
+
+#define Y_DIRECTION_BIT    	2  // Port Y Pin Y
+#define Y_STEP_BIT         	3  // Port Y pin Y
+
+#define Z_DIRECTION_BIT    	4  // Port Z Pin Z
+#define Z_STEP_BIT         	5  // Port Z pin Z
+
+#define E_DIRECTION_BIT    	6  // Port Z Pin Z
+#define E_STEP_BIT         	7  // Port Z pin Z
+
+
+#define X_DIRECTION_MASK 		(1<<Y_DIRECTION_BIT) // All direction bits
+#define X_STEP_MASK 			(1<<Y_STEP_BIT) // All step bits
+
+#define Y_DIRECTION_MASK 		(1<<Y_DIRECTION_BIT) // All direction bits
+#define Y_STEP_MASK 			(1<<Y_STEP_BIT) // All step bits
+
+#define Z_DIRECTION_MASK 		(1<<Y_DIRECTION_BIT) // All direction bits
+#define Z_STEP_MASK 			(1<<Y_STEP_BIT) // All step bits
+
+#define E_DIRECTION_MASK 		(1<<Y_DIRECTION_BIT) // All direction bits
+#define E_STEP_MASK 			(1<<Y_STEP_BIT) // All step bits
+
+
+
+
 class ComData
 {
 public:
@@ -42,7 +74,7 @@ private:
 
     Coordinatus* cord;
 
-    block_state blocks[N_AXIS];
+//    block_state blocks[N_AXIS];
 
     StepMotor* motor;
 
@@ -61,7 +93,11 @@ private:
 
     bool isPlaneHasSteps();
 
-    void setSpeedLeve();
+    void setSpeedLevel();
+
+    void setDirection_bits();
+
+    void planner_recalculate();
 
 };
 

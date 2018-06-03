@@ -63,11 +63,11 @@ ComData::setParam_coord(sGparam *param)
 
 
     float coord = str_val.toFloat(&ok);
-    if(!ok)
-    {
-        qFatal(msg3);
-    }
-
+//    if(!ok)
+//    {
+//        qFatal(msg3);
+//    }
+    Q_ASSERT(ok);
 
     if(cord->isAbsolute())
     {
@@ -117,7 +117,7 @@ ComData::isPlaneHasSteps()
 
 
 void
-ComData::setSpeedLeve()
+ComData::setSpeedLevel()
 {
 //setSpeedLevel(block, psettings->seekSpeed);
 
@@ -137,7 +137,8 @@ ComData::setSpeedLeve()
 
     for(int i=0;i<N_AXIS;i++)
     {
-        block_state* block = &blocks[i];
+//        block_state* block = &blocks[i];
+        block_state* block = &cord->nextBlocks[i];
 
         switch(i)
         {
@@ -176,11 +177,38 @@ ComData::setSpeedLeve()
     }
     //================
 
+}
 
 
-//    dt = motor->steps_rpm(500.0,1250);
+void
+ComData::setDirection_bits()
+{
+    for(int i=0;i<N_AXIS;i++)
+    {
+//        block_state* block = &blocks[i];
+        block_state* block = &cord->nextBlocks[i];
+        float_t ds = cord->getCurrentValue(i)-cord->getNextValue(i);
+
+        if(ds>0){
+            block->direction_bits |= DIRECTION_BIT<<i;
+            block->axis_mask |= STEP_BIT<<i;
+        }else if(ds<0){
+            block->direction_bits &= ~(DIRECTION_BIT<<i);
+            block->axis_mask |= STEP_BIT<<i;
+        }else{
+            block->axis_mask &= ~(STEP_BIT<<i);
+        }
+
+    }
+}
+
+//TODO planner_recalculate
+void
+ComData::planner_recalculate()
+{
 
 }
+
 
 /**
  * @brief ComData::buildG0command
@@ -214,15 +242,18 @@ ComData::buildG0command()
     }
 
     cord->moveWorkToNext();
-    //TODO calculate acceleration.
     if(!isPlaneHasSteps())
     {
         return;
     }
 
-    setSpeedLeve();
+    setSpeedLevel();
 
+    //direction_bits
+    setDirection_bits();
 
+    //planner_recalculate
+    planner_recalculate();
 }
 
 void

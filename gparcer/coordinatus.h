@@ -4,6 +4,8 @@
 #include "links/msmotor/msport.h"
 #include <QString>
 #include <QObject>
+#include "step_motor/block_state_t.h"
+
 
 // Singleton
 class Coordinatus:public QObject
@@ -33,6 +35,10 @@ public:
     void setAbsolute(bool value){absrel = value;}
 
     void moveWorkToNext();
+
+    block_state_t currentBlocks[N_AXIS];
+
+    block_state_t nextBlocks[N_AXIS];
 
 
 signals:
