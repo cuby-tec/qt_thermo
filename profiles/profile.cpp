@@ -403,6 +403,7 @@ Profile::getZ_STEPS()
 }
 
 //DEFAULT_X_MAX_RATE
+//Число оборотов (об/мин)
 QString
 Profile::getX_MAX_RATE()
 {
@@ -418,6 +419,7 @@ Profile::getX_MAX_RATE()
 
 
 //DEFAULT_Y_MAX_RATE
+//Число оборотов (об/мин)
 QString
 Profile::getY_MAX_RATE()
 {
@@ -432,6 +434,7 @@ Profile::getY_MAX_RATE()
 }
 
 //DEFAULT_Z_MAX_RATE
+//Число оборотов (об/мин)
 QString
 Profile::getZ_MAX_RATE()
 {
@@ -642,6 +645,7 @@ Profile::getHOMING_DIR_MASK()
 }
 
 //DEFAULT_HOMING_FEED_RATE
+//Число оборотов (об/мин)
 QString
 Profile::getHOMING_FEED_RATE()
 {
@@ -654,6 +658,7 @@ Profile::getHOMING_FEED_RATE()
     return result;
 }
 
+//Число оборотов (об/мин)
 //DEFAULT_HOMING_SEEK_RATE
 QString
 Profile::getHOMING_SEEK_RATE()
@@ -748,6 +753,33 @@ Profile::get_DERIVATIVE()
 
     return result;
 }
+
+//DEFAULT_E_MAX_RATE
+QString
+Profile::getE_MAX_RATE()
+{
+    QString result;
+    QJsonObject obj;
+    QJsonObject generic_obj;
+
+    GENERIC_GET_VALUE("generic","DEFAULT_E_MAX_RATE");
+
+    return result;
+}
+
+//E_ACCELERATION
+QString
+Profile::getE_ACCELERATION()
+{
+    QString result;
+    QJsonObject obj;
+    QJsonObject generic_obj;
+
+    GENERIC_GET_VALUE("generic","E_ACCELERATION");
+
+    return result;
+}
+
 
 //=================== getter helper ============
 
@@ -1051,6 +1083,24 @@ Profile::set_DERIVATIVE(QString num)
 
 }
 
+//DEFAULT_E_MAX_RATE
+void
+Profile::setE_MAX_RATE(QString num)
+{
+    QJsonObject obj;
+
+    SET_FILED_VALUE("DEFAULT_E_MAX_RATE");
+}
+
+//E_ACCELERATION
+void
+Profile::setE_ACCELERATION(QString num)
+{
+    QJsonObject obj;
+
+    SET_FILED_VALUE("E_ACCELERATION");
+
+}
 
 //======================== setter helper =======
 

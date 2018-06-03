@@ -24,6 +24,13 @@ Coordinatus::initWork()
 }
 
 void
+Coordinatus::moveWorkToNext()
+{
+    memcpy(next,work,sizeof(work)*sizeof(float));
+
+}
+
+void
 Coordinatus::setWorkValue(size_t axis,float value)
 {
     Q_ASSERT(axis < N_AXIS);
@@ -45,6 +52,13 @@ Coordinatus::getCurrentValue(size_t axis)
     Q_ASSERT(axis < N_AXIS);
 
     return (current[axis]);
+}
+
+float Coordinatus::getNextValue(size_t axis)
+{
+    Q_ASSERT(axis<N_AXIS);
+
+    return (next[axis]);
 }
 
 void

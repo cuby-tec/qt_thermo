@@ -101,7 +101,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <property name="font">
@@ -284,7 +284,7 @@
           <item row="0" column="1">
            <widget class="QLineEdit" name="temprature_lineEdit">
             <property name="inputMask">
-             <string>0000</string>
+             <string>0000.0</string>
             </property>
            </widget>
           </item>
@@ -297,8 +297,14 @@
           </item>
           <item row="1" column="1">
            <widget class="QLineEdit" name="tpropotional_lineEdit">
+            <property name="inputMask">
+             <string>000.000</string>
+            </property>
+            <property name="text">
+             <string>.</string>
+            </property>
             <property name="maxLength">
-             <number>3</number>
+             <number>7</number>
             </property>
            </widget>
           </item>
@@ -327,6 +333,40 @@
            <widget class="QLineEdit" name="tderivative_lineEdit">
             <property name="inputMask">
              <string>000.0000</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>DEFAULT_E_MAX_RATE</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="lineEdit_E_RATE">
+            <property name="toolTip">
+             <string>Extruder, roung per minute</string>
+            </property>
+            <property name="inputMask">
+             <string>000.00</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>E_ACCELERATION</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="lineEdit_E_ACCELERATION">
+            <property name="toolTip">
+             <string>radian/second^2</string>
+            </property>
+            <property name="inputMask">
+             <string>000000.0</string>
             </property>
            </widget>
           </item>
@@ -368,7 +408,11 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="LineEdit_HOMING_FEED_RATE"/>
+           <widget class="QLineEdit" name="LineEdit_HOMING_FEED_RATE">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Liberation Sans';&quot;&gt;Число оборотов (об/мин)&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="hOMING_SEEK_RATELabel">
@@ -378,7 +422,12 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="LineEdit_HOMING_SEEK_RATE"/>
+           <widget class="QLineEdit" name="LineEdit_HOMING_SEEK_RATE">
+            <property name="toolTip">
+             <string>Число оборотов (об/мин)
+</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="hOMING_D_DELAYLabel">
@@ -487,7 +536,12 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_X_RATE"/>
+           <widget class="QLineEdit" name="lineEdit_X_RATE">
+            <property name="toolTip">
+             <string>Число оборотов (об/мин)
+</string>
+            </property>
+           </widget>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="label_10">
@@ -497,7 +551,12 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="lineEdit_Y_RATE"/>
+           <widget class="QLineEdit" name="lineEdit_Y_RATE">
+            <property name="toolTip">
+             <string>Число оборотов (об/мин)
+</string>
+            </property>
+           </widget>
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="label_11">
@@ -507,7 +566,12 @@
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QLineEdit" name="lineEdit_Z_RATE"/>
+           <widget class="QLineEdit" name="lineEdit_Z_RATE">
+            <property name="toolTip">
+             <string>Число оборотов (об/мин)
+</string>
+            </property>
+           </widget>
           </item>
           <item row="6" column="0">
            <widget class="QLabel" name="label_12">
@@ -524,10 +588,24 @@
            </widget>
           </item>
           <item row="6" column="1">
-           <widget class="QLineEdit" name="lineEdit_X_ACCEL"/>
+           <widget class="QLineEdit" name="lineEdit_X_ACCEL">
+            <property name="toolTip">
+             <string>radian/second^2</string>
+            </property>
+            <property name="inputMask">
+             <string>000000.0</string>
+            </property>
+           </widget>
           </item>
           <item row="7" column="1">
-           <widget class="QLineEdit" name="lineEdit_Y_ACCEL"/>
+           <widget class="QLineEdit" name="lineEdit_Y_ACCEL">
+            <property name="toolTip">
+             <string>radian/second^2</string>
+            </property>
+            <property name="inputMask">
+             <string>000000.0</string>
+            </property>
+           </widget>
           </item>
           <item row="8" column="0">
            <widget class="QLabel" name="label_14">
@@ -537,7 +615,14 @@
            </widget>
           </item>
           <item row="8" column="1">
-           <widget class="QLineEdit" name="lineEdit_Z_ACCEL"/>
+           <widget class="QLineEdit" name="lineEdit_Z_ACCEL">
+            <property name="toolTip">
+             <string>radian/second^2</string>
+            </property>
+            <property name="inputMask">
+             <string>000000.0</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>

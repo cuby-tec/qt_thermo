@@ -3,6 +3,9 @@
 #include <QString>
 #include <QDebug>
 #include <QtGlobal>
+#include "myglobal.h"
+
+#include <cmath>
 
 //const QString msg3 = "Conversion error.";
 //const QString msg4 = "Profile should be selected.";
@@ -17,7 +20,7 @@ ComData::ComData()
 
     profile = Profile::instance();
     cord = Coordinatus::instance();
-
+    motor = new StepMotor();
 
 }
 
@@ -98,6 +101,90 @@ ComData::setParam_coord(sGparam *param)
 
 }
 
+bool
+ComData::isPlaneHasSteps()
+{
+
+    float sum = 0.0;
+
+    for(int i=0; i<N_AXIS;i++)
+    {
+        sum +=  fabs(cord->getCurrentValue(i) - cord->getNextValue(i));
+    }
+
+    return (sum != 0);
+}
+
+
+void
+ComData::setSpeedLeve()
+{
+//setSpeedLevel(block, psettings->seekSpeed);
+
+//    float seekspeed;
+    bool ok;
+
+    QString fspeed; // rpm unit
+    float speed;
+
+    QString facceleration;
+    float acceleration;
+
+//QString fseek = MyGlobal::formatFloat(profile->getHOMING_SEEK_RATE());
+//    seekspeed = fseek.toFloat(&ok);
+//    Q_ASSERT(ok);
+
+
+    for(int i=0;i<N_AXIS;i++)
+    {
+        block_state* block = &blocks[i];
+
+        switch(i)
+        {
+        case X_AXIS:
+            fspeed = MyGlobal::formatFloat(profile->getX_MAX_RATE());
+            facceleration = MyGlobal::formatFloat(profile->getX_ACCELERATION());
+            break;
+
+        case Y_AXIS:
+            fspeed = MyGlobal::formatFloat(profile->getY_MAX_RATE());
+            facceleration = MyGlobal::formatFloat(profile->getY_ACCELERATION());
+            break;
+
+        case Z_AXIS:
+            fspeed = MyGlobal::formatFloat(profile->getZ_MAX_RATE());
+            facceleration = MyGlobal::formatFloat(profile->getZ_ACCELERATION());
+            break;
+
+        case E_AXIS:
+            fspeed = MyGlobal::formatFloat(profile->getE_MAX_RATE());
+            facceleration = MyGlobal::formatFloat(profile->getE_ACCELERATION());
+            break;
+        }
+
+        speed = fspeed.toFloat(&ok);
+        Q_ASSERT(ok);
+        block->nominal_speed = speed;
+
+        acceleration = facceleration.toFloat(&ok);
+        Q_ASSERT(ok);
+        block->acceleration = acceleration;
+
+        // ступень скорости
+        block->speedLevel = motor->steps_rpm(speed,block->acceleration);
+        qDebug()<<"ComData [171]"<< block->speedLevel;
+    }
+    //================
+
+
+
+//    dt = motor->steps_rpm(500.0,1250);
+
+}
+
+/**
+ * @brief ComData::buildG0command
+ */
 void
 ComData::buildG0command()
 {
@@ -125,6 +212,16 @@ ComData::buildG0command()
 //        }
 
     }
+
+    cord->moveWorkToNext();
+    //TODO calculate acceleration.
+    if(!isPlaneHasSteps())
+    {
+        return;
+    }
+
+    setSpeedLeve();
+
 
 }
 

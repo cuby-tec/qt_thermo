@@ -27,7 +27,6 @@ public:
 
     static QString comment;
 
-    static void mPrint(QString line);
 
     static QString profilefileDir;
 
@@ -42,9 +41,15 @@ public:
     static QString msg_abs_title;
     static QString msg_rel_title;
 
+    static const float PI = 3.1415;
+
     //-------- exchange
 
     static u_int32_t commandIndex;
+
+    static void mPrint(QString line);
+
+    static QString formatFloat(QString fl);
 
 };
 

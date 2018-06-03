@@ -26,8 +26,13 @@ public:
 
     float getCurrentValue(size_t axis);
 
+    float getNextValue(size_t axis);
+
     bool isAbsolute() {return absrel;}
+
     void setAbsolute(bool value){absrel = value;}
+
+    void moveWorkToNext();
 
 
 signals:

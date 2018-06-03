@@ -6,6 +6,9 @@
 
 #include "profiles/profile.h"
 #include "coordinatus.h"
+#include "step_motor/stepmotor.h"
+#include "step_motor/controller.h"
+#include "step_motor/block_state_t.h"
 
 #include <QChar>
 
@@ -39,6 +42,13 @@ private:
 
     Coordinatus* cord;
 
+    block_state blocks[N_AXIS];
+
+    StepMotor* motor;
+
+
+    void calculateAccel();
+
     void buildGgroup();
 
     void buildMgroup();
@@ -48,6 +58,10 @@ private:
     void setParam_coord(sGparam* param);
 
     void initWorkAray();
+
+    bool isPlaneHasSteps();
+
+    void setSpeedLeve();
 
 };
 

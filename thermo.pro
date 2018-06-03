@@ -47,7 +47,10 @@ HEADERS += mainwindow.h \
     exchange/threadexchange.h \
     gparcer/comdata.h \
     gparcer/coordinatus.h \
-    coordinatuswindow.h
+    coordinatuswindow.h \
+    step_motor/stepmotor.h \
+    step_motor/controller.h \
+    step_motor/block_state_t.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui
@@ -74,7 +77,9 @@ SOURCES += main.cpp \
     exchange/threadexchange.cpp \
     gparcer/comdata.cpp \
     gparcer/coordinatus.cpp \
-    coordinatuswindow.cpp
+    coordinatuswindow.cpp \
+    step_motor/stepmotor.cpp \
+    step_motor/controller.cpp
 RESOURCES += resources.qrc
 
 DISTFILES += \

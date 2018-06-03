@@ -125,6 +125,10 @@ void ProfileDialog::fillProfilePage()
     uia->LineEdit_HOMING_D_DELAY->setText(profile->getHOMING_DEBOUNCE_DELAY());
     //DEFAULT_HOMING_PULLOFF
     uia->LineEdit_HOMING_PULLOFF->setText(profile->getHOMING_PULLOFF());
+    //DEFAULT_E_MAX_RATE
+    uia->lineEdit_E_RATE->setText(profile->getE_MAX_RATE());
+    //E_ACCELERATION
+    uia->lineEdit_E_ACCELERATION->setText(profile->getE_ACCELERATION());
 }
 
 void  ProfileDialog::setupProfile(QWidget * tab)
@@ -419,7 +423,20 @@ void ProfileDialog::on_LineEdit_HOMING_PULLOFF_textEdited(const QString &arg1)
     indicate_ProfileSaved();
 }
 
+//DEFAULT_E_MAX_RATE
+void ProfileDialog::on_lineEdit_E_RATE_textEdited(const QString &arg1)
+{
+    profile->setE_MAX_RATE(arg1);
+    profile->profileSaved = false;
+    indicate_ProfileSaved();
 
+}
+
+//E_ACCELERATION
+void ProfileDialog::on_lineEdit_E_ACCELERATION_textEdited(const QString &arg1)
+{
+
+}
 
 
 void ProfileDialog::on_pfofileNameEdit_textEdited(const QString &arg1)
@@ -448,6 +465,7 @@ void ProfileDialog::on_profileFile_Edit_textEdited(const QString &arg1)
 
 
 
+
 /**
  * @brief ProfileDialog::on_pushButton_3_clicked
  * Загрузка лога темпреатур.
@@ -463,3 +481,4 @@ void ProfileDialog::on_pushButton_3_clicked()
 
 
 //-------------- temperature
+

@@ -184,6 +184,13 @@ public:
 
     QString get_DERIVATIVE();
 
+    //DEFAULT_E_MAX_RATE
+    QString getE_MAX_RATE();
+
+    //E_ACCELERATION
+    QString getE_ACCELERATION();
+
+
 //---------------------------------- setters
     //DEFAULT_X_STEPS_PER_MM
     void set_X_STEPS_PER_MM(QString num);
@@ -259,6 +266,12 @@ public:
 
     //DEFAULT_HOMING_PULLOFF
     void setHOMING_PULLOFF(QString num);
+
+    //DEFAULT_E_MAX_RATE
+    void setE_MAX_RATE(QString num);
+
+    //E_ACCELERATION
+    void setE_ACCELERATION(QString num);
 
     void  set_TEMPERATURE(QString num);
     void  set_INTEGRAL(QString num);

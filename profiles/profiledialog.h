@@ -90,6 +90,10 @@ private slots:
     void on_LineEdit_HOMING_PULLOFF_textEdited(const QString &arg1);
 
 
+    void on_lineEdit_E_RATE_textEdited(const QString &arg1);
+
+    void on_lineEdit_E_ACCELERATION_textEdited(const QString &arg1);
+
 private:
     Ui::ProfileDialog *uia;
 

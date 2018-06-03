@@ -50,3 +50,30 @@ MyGlobal::mPrint(QString line)
     QTextStream print(stdout, QIODevice::WriteOnly); // stdin
     print << line;
 }
+
+/*
+ *
+ *     int i;
+
+    QString str_val = QString( param->value );
+
+    i = str_val.indexOf(',');
+
+    if(i>0)
+    {
+        str_val = str_val.replace(i,1,'.');
+    }
+ *
+*/
+QString
+MyGlobal::formatFloat(QString fl)
+{
+    int i;
+
+    i = fl.indexOf(',');
+    if(i>0)
+    {
+        fl = fl.replace(i,1,'.');
+    }
+    return fl;
+}
