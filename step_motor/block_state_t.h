@@ -28,8 +28,8 @@ typedef struct block_state_t {
     word step_event_count;
     float tan_theta;		//  Значение тангенса угла наклона отрезка траектории.
 //	float tangent_inv; //  Обратное значение тангенса. Для подпрограммы обработки прерываний.
-    float nominal_speed;
-    float acceleration;
+    float nominal_speed; //Максимальное значение для это оси из Профиля.
+    float acceleration; // Максимальное значение для оси из Профиля.
 
     float	entry_speed;
     float	max_entry_speed;

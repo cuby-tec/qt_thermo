@@ -3,14 +3,54 @@
 
 #include <stddef.h>
 
+#include "countertime_t.h"
+#include "stepmotor.h"
+#include "links/msmotor/msport.h"
+#include "block_state_t.h"
+#include "gparcer/coordinatus.h"
+#include "ProfileData.h"
+
+
+#define FREQUENCY  50000000 //;frequency = 50000000;
+
+
 class Controller
 {
 public:
     Controller();
 
+    Controller(StepMotor* motor){
+    	this->motor = motor;
+    	frequency = FREQUENCY;
+    }
+
+    ~Controller();
+
+    /**
+      Построение таблицы значений счётчика для заданного количества шагов.
+     * @brief buildCounterValue
+     * @param steps
+     */
+    void buildCounterValue(uint32_t steps, uint8_t axis);
+
+    /**
+     * Заполнение полей разгона, торможения, и т.д.
+     */
+    void buildBlock(Coordinatus* cord);
+
 
 private:
     size_t frequency;
+
+    CounterTime_t* pcountertime[N_AXIS];
+
+    StepMotor* motor;
+
+
+    ProfileData_t profileData;
+
+    void setupProfileData();
+
 };
 
 #endif // CONTROLLER_H

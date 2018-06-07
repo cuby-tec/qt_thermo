@@ -74,6 +74,7 @@
 
 
 #define N_AXIS  4 // Number of axes nuts_bolts
+#define M_AXIS  3 // Number axis for 3D move
 
 #define X_AXIS  0 // Axis indexing value
 #define Y_AXIS  1

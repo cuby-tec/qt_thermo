@@ -6,7 +6,7 @@
 
 #include "profiles/profile.h"
 #include "coordinatus.h"
-#include "step_motor/stepmotor.h"
+//#include "step_motor/stepmotor.h"
 #include "step_motor/controller.h"
 #include "step_motor/block_state_t.h"
 
@@ -66,6 +66,10 @@ private:
 
     ComDataReq_t request;
 
+
+    Controller* controller;
+
+
     int a;
 
     sGcode* sgCode;
@@ -76,7 +80,7 @@ private:
 
 //    block_state blocks[N_AXIS];
 
-    StepMotor* motor;
+//    StepMotor* motor;
 
 
     void calculateAccel();
@@ -93,7 +97,7 @@ private:
 
     bool isPlaneHasSteps();
 
-    void setSpeedLevel();
+    void setProfileValue();
 
     void setDirection_bits();
 

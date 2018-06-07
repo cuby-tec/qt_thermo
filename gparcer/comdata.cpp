@@ -20,7 +20,10 @@ ComData::ComData()
 
     profile = Profile::instance();
     cord = Coordinatus::instance();
-    motor = new StepMotor();
+//    motor = new StepMotor();
+
+    controller = new Controller();
+
 
 }
 
@@ -117,10 +120,9 @@ ComData::isPlaneHasSteps()
 
 
 void
-ComData::setSpeedLevel()
+ComData::setProfileValue()
 {
 //setSpeedLevel(block, psettings->seekSpeed);
-
 //    float seekspeed;
     bool ok;
 
@@ -171,11 +173,8 @@ ComData::setSpeedLevel()
         Q_ASSERT(ok);
         block->acceleration = acceleration;
 
-        // ступень скорости
-        block->speedLevel = motor->steps_rpm(speed,block->acceleration);
         qDebug()<<"ComData [171]"<< block->speedLevel;
     }
-    //================
 
 }
 
@@ -247,13 +246,20 @@ ComData::buildG0command()
         return;
     }
 
-    setSpeedLevel();
+//    setProfileValue();
+
+//TODOH in controller build model acceleration/deceleration
+        controller->buildBlock(cord);
+        // ступень скорости
+//        block->speedLevel = motor->steps_rpm(speed,block->acceleration);
+
+
 
     //direction_bits
-    setDirection_bits();
+//    setDirection_bits();
 
     //planner_recalculate
-    planner_recalculate();
+//    planner_recalculate();
 }
 
 void

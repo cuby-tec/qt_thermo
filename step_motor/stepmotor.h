@@ -8,8 +8,13 @@
 #define STEPMOTOR_H
 
 //#include <QString>
+#include <stdint.h>
 #include <stddef.h>
+
 #include <math.h>
+#include "links/msmotor/msport.h"
+#include "myglobal.h"
+
 
 // "Крутящий момент(Н. см)" 40
 //"Фиксированный крутящий момент(Н. см)" 2.2
@@ -28,6 +33,7 @@
 
 #define _17HS4401
 
+#define PULLEY_DIAMETER	12.1 // pulley_diameter
 
 class StepMotor
 {
@@ -38,7 +44,7 @@ public:
 
     void setStepsPerRound(size_t steps) {this->stepsPerRound = steps;}
 
-	float_t getPulleyDiameter() const {
+	float_t getPulleyDiameter() {
 		return pulley_diameter;
 	}
 
@@ -46,12 +52,15 @@ public:
 		pulley_diameter = pulleyDiameter;
 	}
 
-	float_t getAngle() const {
+	float_t getAngle() {
 		return angle;
 	}
 
-	float_t getAlfa() const {
-		return alfa;
+	/**
+	 * Для каждой оси может быть назначен свой микрошаг.
+	 */
+	float_t getAlfa(uint32_t axis){
+		return (alfa/microstep[axis]);
 	}
 
 	/**
@@ -75,6 +84,29 @@ public:
 	 */
 	float_t steps_rpm(float_t rpm, float_t raccel);
 
+
+	/**
+	 * Преобразование вращательной скорости(об/мин) в линейную.
+	 */
+	float_t linespeed(float_t rpm);
+
+    uint32_t getMicrostep(uint32_t axis) {
+		return microstep[axis];
+	}
+
+
+    void setMicrostep(uint32_t axis, uint32_t _microstep){
+        microstep[axis] = _microstep;
+	}
+
+	float_t getAcceleration() const {
+		return acceleration;
+	}
+
+	void setAcceleration(float_t acceleration) {
+		this->acceleration = acceleration;
+	}
+
 private:
 
     size_t stepsPerRound;
@@ -83,7 +115,13 @@ private:
     
     float_t angle; /// 1.8
 
+
+    uint32_t microstep[N_AXIS];
+
     float_t alfa;
+
+
+    float_t acceleration;
 };
 
 #endif // STEPMOTOR_H

@@ -50,7 +50,8 @@ HEADERS += mainwindow.h \
     coordinatuswindow.h \
     step_motor/stepmotor.h \
     step_motor/controller.h \
-    step_motor/block_state_t.h
+    step_motor/block_state_t.h \
+    step_motor/countertime_t.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui
