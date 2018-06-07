@@ -8,6 +8,9 @@
 
 #include "profiles/profile.h"
 
+#include <algorithm>
+
+
 Controller::Controller()
 {
     frequency = FREQUENCY;
@@ -62,20 +65,32 @@ Controller::buildCounterValue(uint32_t steps,uint8_t axis)
 void Controller::buildBlock(Coordinatus* cord) {
 
 // Длина вектора.
-  float s = 0;
+  float_t s = 0;
 
     for(int i=0; i<N_AXIS;i++){
 		s += powf( cord->getCurrentValue(i)-cord->getNextValue(i),2);
 	}
 	s = sqrt(s);
 
-//TODOH Максимальная скорость по осям(линейная)
+// Максимальная скорость по осям(линейная)
     float v[M_AXIS];
 
     for(int i=0;i<M_AXIS;++i){
-		v[i] = motor->linespeed(profileData.speed_rpm[i]);
+//		v[i] = motor->linespeed(profileData.speed_rpm[i]);
+//        v[i] = (motor->*m_struct[i])(profileData.speed_rpm[i]);
+        convert pf = motor->m_struct[i];
+        v[i] = (motor->*pf)(profileData.speed_rpm[i]);
+//varant 2:     v[i] = (motor->*motor->m_struct[i])(profileData.speed_rpm[i]);
+
 		//	v = cord->nextBlocks[X_AXIS].nominal_speed; // Число оборотов/мин
 	}
+
+    //Максимальная скорость для сегмента
+    float_t maxs = *std::max_element(v,v+M_AXIS);
+
+    //TODOH [3] Синусы направлений
+
+
 
 }
 

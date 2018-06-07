@@ -28,7 +28,13 @@ StepMotor::StepMotor()
    
    this->acceleration = NULL;
 
- }
+#if MENDEL == 1
+   m_struct[X_AXIS] = &StepMotor::linespeed;
+   m_struct[Y_AXIS] = &StepMotor::linespeed;
+   m_struct[Z_AXIS] = &StepMotor::linespeed_pitch;
+#endif
+
+}
 
 /*
 float_t
@@ -70,6 +76,14 @@ float_t StepMotor::linespeed(float_t rpm) {
 	float_t radianps = MyGlobal::PI/30*rpm;
 	radianps *= pulley_diameter/2; // radius
 	return radianps;
+}
+
+// для винта
+float_t StepMotor::linespeed_pitch(float_t rpm) {
+	float_t v;
+	v = rpm/60;
+	v*= SHAFT_PITCH;
+	return v;
 }
 
 

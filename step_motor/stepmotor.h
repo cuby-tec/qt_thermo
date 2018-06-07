@@ -35,6 +35,15 @@
 
 #define PULLEY_DIAMETER	12.1 // pulley_diameter
 
+#define SHAFT_PITCH	1.25 // Шаг винта[mm]
+
+#define MENDEL	1
+
+class StepMotor;
+
+typedef float_t (StepMotor::*convert)(float_t param);
+
+
 class StepMotor
 {
 public:
@@ -90,6 +99,12 @@ public:
 	 */
 	float_t linespeed(float_t rpm);
 
+	/**
+	 * Для винта.
+	 */
+	float_t linespeed_pitch(float_t rpm);
+
+
     uint32_t getMicrostep(uint32_t axis) {
 		return microstep[axis];
 	}
@@ -107,6 +122,8 @@ public:
 		this->acceleration = acceleration;
 	}
 
+    convert m_struct[M_AXIS];
+
 private:
 
     size_t stepsPerRound;
@@ -120,8 +137,10 @@ private:
 
     float_t alfa;
 
-
     float_t acceleration;
+
+
+
 };
 
 #endif // STEPMOTOR_H
