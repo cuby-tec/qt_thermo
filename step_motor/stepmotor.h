@@ -33,15 +33,29 @@
 
 #define _17HS4401
 
+#define MENDEL	1
+
+#if MENDEL == 1
+
 #define PULLEY_DIAMETER	12.1 // pulley_diameter
 
 #define SHAFT_PITCH	1.25 // Шаг винта[mm]
 
-#define MENDEL	1
+#endif
+
+#ifdef _17HS4401
+#define ANGLE	1.8
+#endif
+
+
 
 class StepMotor;
 
-typedef float_t (StepMotor::*convert)(float_t param);
+// Скорость для оси.
+typedef double_t (StepMotor::*convert)(double_t param);
+
+// Длина шага для оси.
+typedef double_t (StepMotor::*lines)(uint32_t axis);
 
 
 class StepMotor
@@ -53,22 +67,22 @@ public:
 
     void setStepsPerRound(size_t steps) {this->stepsPerRound = steps;}
 
-	float_t getPulleyDiameter() {
+	double_t getPulleyDiameter() {
 		return pulley_diameter;
 	}
 
-	void setPulleyDiameter(float_t pulleyDiameter) {
+	void setPulleyDiameter(double_t pulleyDiameter) {
 		pulley_diameter = pulleyDiameter;
 	}
 
-	float_t getAngle() {
+	double_t getAngle() {
 		return angle;
 	}
 
 	/**
 	 * Для каждой оси может быть назначен свой микрошаг.
 	 */
-	float_t getAlfa(uint32_t axis){
+	double_t getAlfa(uint32_t axis){
 		return (alfa/microstep[axis]);
 	}
 
@@ -77,32 +91,32 @@ public:
 	 * in: mm/second
 	 * out: radian/second
 	 */
-	float_t angular_velocity_tan(float_t tangential_speed);
+	double_t angular_velocity_tan(double_t tangential_speed);
 
 	/**
 	 * Round per min to angular velocity
 	 * in: Round per min
 	 * out: rad/sec
 	 */
-	float_t angular_velocity_rpm(float_t rpm);
+	double_t angular_velocity_rpm(double_t rpm);
 
 	/**
 	 * in: Round per min
 	 * in: raccel rad/sec^2
 	 * out: steps to achieve rpm.
 	 */
-	float_t steps_rpm(float_t rpm, float_t raccel);
+	double_t steps_rpm(double_t rpm, double_t raccel);
 
 
 	/**
 	 * Преобразование вращательной скорости(об/мин) в линейную.
 	 */
-	float_t linespeed(float_t rpm);
+	double_t linespeed(double_t rpm);
 
 	/**
 	 * Для винта.
 	 */
-	float_t linespeed_pitch(float_t rpm);
+	double_t linespeed_pitch(double_t rpm);
 
 
     uint32_t getMicrostep(uint32_t axis) {
@@ -114,30 +128,38 @@ public:
         microstep[axis] = _microstep;
 	}
 
-	float_t getAcceleration() const {
+	double_t getAcceleration() const {
 		return acceleration;
 	}
 
-	void setAcceleration(float_t acceleration) {
+	void setAcceleration(double_t acceleration) {
 		this->acceleration = acceleration;
 	}
 
     convert m_struct[M_AXIS];
 
+    lines getLineStep[M_AXIS];
+
+    //Длина шага для шкива
+    double_t lineStep(uint32_t axis);
+
+    // длина шага для винта
+    double_t pulleyStep(uint32_t axis);
+
 private:
 
     size_t stepsPerRound;
     
-    float_t pulley_diameter; // 12.1
+    double_t pulley_diameter; // 12.1
     
-    float_t angle; /// 1.8
+    double_t angle; /// 1.8
 
 
     uint32_t microstep[N_AXIS];
 
-    float_t alfa;
+    double_t alfa;
 
-    float_t acceleration;
+    double_t acceleration;
 
 
 

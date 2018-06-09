@@ -9,7 +9,8 @@
 #include "block_state_t.h"
 #include "gparcer/coordinatus.h"
 #include "ProfileData.h"
-
+#include "trapeze_t.h"
+#include "accelerationtable.h"
 
 #define FREQUENCY  50000000 //;frequency = 50000000;
 
@@ -50,6 +51,13 @@ private:
     ProfileData_t profileData;
 
     void setupProfileData();
+
+    Trapeze_t trapeze[M_AXIS];
+
+    // Расчёт трапеций для каждой оси.
+    void calculateTrapeze();
+
+    AccelerationTable* acctable;
 
 };
 

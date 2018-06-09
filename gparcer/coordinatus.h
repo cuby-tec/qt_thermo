@@ -5,7 +5,7 @@
 #include <QString>
 #include <QObject>
 #include "step_motor/block_state_t.h"
-
+#include <math.h>
 
 // Singleton
 class Coordinatus:public QObject
@@ -22,13 +22,13 @@ public:
     // coping from current array to work array.
     void initWork();
 
-    void setWorkValue(size_t axis,float value);
+    void setWorkValue(size_t axis, double_t value);
 
-    float getWorkvalue(size_t axis);
+    double_t getWorkvalue(size_t axis);
 
-    float getCurrentValue(size_t axis);
+    double_t getCurrentValue(size_t axis);
 
-    float getNextValue(size_t axis);
+    double_t getNextValue(size_t axis);
 
     bool isAbsolute() {return absrel;}
 
@@ -46,11 +46,11 @@ signals:
 
 
 private:
-    float current[N_AXIS];
+    double_t current[N_AXIS];
 
-    float next[N_AXIS];
+    double_t next[N_AXIS];
 
-    float work[N_AXIS];
+    double_t work[N_AXIS];
 
     bool absrel;
 

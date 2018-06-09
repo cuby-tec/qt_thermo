@@ -51,7 +51,9 @@ HEADERS += mainwindow.h \
     step_motor/stepmotor.h \
     step_motor/controller.h \
     step_motor/block_state_t.h \
-    step_motor/countertime_t.h
+    step_motor/countertime_t.h \
+    step_motor/trapeze_t.h \
+    step_motor/accelerationtable.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui
@@ -80,7 +82,8 @@ SOURCES += main.cpp \
     gparcer/coordinatus.cpp \
     coordinatuswindow.cpp \
     step_motor/stepmotor.cpp \
-    step_motor/controller.cpp
+    step_motor/controller.cpp \
+    step_motor/accelerationtable.cpp
 RESOURCES += resources.qrc
 
 DISTFILES += \

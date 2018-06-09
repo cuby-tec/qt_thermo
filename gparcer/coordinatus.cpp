@@ -20,25 +20,25 @@ Coordinatus::Coordinatus()
 void
 Coordinatus::initWork()
 {
-    memcpy(work,current,sizeof(work)*sizeof(float) );
+    memcpy(work,current,sizeof(work)*sizeof(double_t) );
 }
 
 void
 Coordinatus::moveWorkToNext()
 {
-    memcpy(next,work,sizeof(work)*sizeof(float));
+    memcpy(next,work,sizeof(work)*sizeof(double_t));
 
 }
 
 void
-Coordinatus::setWorkValue(size_t axis,float value)
+Coordinatus::setWorkValue(size_t axis,double_t value)
 {
     Q_ASSERT(axis < N_AXIS);
     work[axis] = value;
     sendSignalCoord();
 }
 
-float
+double_t
 Coordinatus::getWorkvalue(size_t axis)
 {
     Q_ASSERT(axis < N_AXIS);
@@ -46,7 +46,7 @@ Coordinatus::getWorkvalue(size_t axis)
     return (work[axis]);
 }
 
-float
+double_t
 Coordinatus::getCurrentValue(size_t axis)
 {
     Q_ASSERT(axis < N_AXIS);
@@ -54,7 +54,8 @@ Coordinatus::getCurrentValue(size_t axis)
     return (current[axis]);
 }
 
-float Coordinatus::getNextValue(size_t axis)
+double_t
+Coordinatus::getNextValue(size_t axis)
 {
     Q_ASSERT(axis<N_AXIS);
 
