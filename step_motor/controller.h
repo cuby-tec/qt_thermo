@@ -19,12 +19,12 @@ class Controller
 {
 public:
     Controller();
-
+/*
     Controller(StepMotor* motor){
     	this->motor = motor;
     	frequency = FREQUENCY;
     }
-
+*/
     ~Controller();
 
     /**
@@ -45,7 +45,7 @@ private:
 
     CounterTime_t* pcountertime[N_AXIS];
 
-    StepMotor* motor;
+    StepMotor* motor[M_AXIS];
 
 
     ProfileData_t profileData;

@@ -7,7 +7,7 @@
 //--------- defs
 
 
-StepMotor::StepMotor()
+StepMotor::StepMotor(eMotorType type)
 {
 #ifdef _17HS4401
 
@@ -28,17 +28,31 @@ StepMotor::StepMotor()
    
    this->acceleration = NULL;
 
+   switch(type){
+   case e17HS4401_pulley:
+	   getLineSpeed = &StepMotor::linespeed;
+	   getLineStep = &StepMotor::lineStep;
+	   break;
+
+   case e17HS4401_shuft:
+	   getLineSpeed = &StepMotor::linespeed_pitch;
+	   getLineStep = &StepMotor::pulleyStep;
+	   break;
+   }
+
+
+/*
 #if MENDEL == 1
-   m_struct[X_AXIS] = &StepMotor::linespeed;
-   m_struct[Y_AXIS] = &StepMotor::linespeed;
-   m_struct[Z_AXIS] = &StepMotor::linespeed_pitch;
+   getLineSpeed[X_AXIS] = &StepMotor::linespeed;
+   getLineSpeed[Y_AXIS] = &StepMotor::linespeed;
+   getLineSpeed[Z_AXIS] = &StepMotor::linespeed_pitch;
 
    getLineStep[X_AXIS] = &StepMotor::lineStep;
    getLineStep[Y_AXIS] = &StepMotor::lineStep;
    getLineStep[Z_AXIS] = &StepMotor::pulleyStep;
 
 #endif
-
+*/
 }
 
 /*
@@ -75,6 +89,7 @@ double_t StepMotor::steps_rpm(double_t rpm, double_t raccel) {
 	return (pow(aps,2)/(2*alfa*raccel));
 }
 
+// для шкива
 double_t StepMotor::linespeed(double_t rpm) {
 
 	//Число оборотов (об/мин)		500

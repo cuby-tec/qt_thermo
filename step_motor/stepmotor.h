@@ -58,10 +58,15 @@ typedef double_t (StepMotor::*convert)(double_t param);
 typedef double_t (StepMotor::*lines)(uint32_t axis);
 
 
+enum eMotorType{
+	e17HS4401_pulley, e17HS4401_shuft
+};
+
+
 class StepMotor
 {
 public:
-    StepMotor();
+    StepMotor(eMotorType type);
 
     size_t getStepsPerRound() {return stepsPerRound;}
 
@@ -108,20 +113,11 @@ public:
 	double_t steps_rpm(double_t rpm, double_t raccel);
 
 
-	/**
-	 * Преобразование вращательной скорости(об/мин) в линейную.
-	 */
-	double_t linespeed(double_t rpm);
-
-	/**
-	 * Для винта.
-	 */
-	double_t linespeed_pitch(double_t rpm);
-
 
     uint32_t getMicrostep(uint32_t axis) {
 		return microstep[axis];
 	}
+
 
 
     void setMicrostep(uint32_t axis, uint32_t _microstep){
@@ -142,15 +138,30 @@ public:
 	// максимального углового ускорения.
 	double_t getLinearAcceleration();
 
-    convert m_struct[M_AXIS];
+    convert getLineSpeed;
 
-    lines getLineStep[M_AXIS];
+    lines getLineStep;
+
+//protected:
 
     //Длина шага для шкива
     double_t lineStep(uint32_t axis);
 
     // длина шага для винта
     double_t pulleyStep(uint32_t axis);
+
+
+
+	/**
+	 * Преобразование вращательной скорости(об/мин) в линейную.
+	 */
+	double_t linespeed(double_t rpm);
+
+	/**
+	 * Для винта.
+	 */
+	double_t linespeed_pitch(double_t rpm);
+
 
 private:
 
