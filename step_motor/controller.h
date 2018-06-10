@@ -55,7 +55,7 @@ private:
     Trapeze_t trapeze[M_AXIS];
 
     // Расчёт трапеций для каждой оси.
-    void calculateTrapeze();
+    uint32_t calculateTrapeze();
 
     AccelerationTable* acctable;
 

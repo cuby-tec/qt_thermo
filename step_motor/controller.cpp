@@ -129,7 +129,7 @@ void Controller::buildBlock(Coordinatus* cord) {
         lines lm = m->getLineStep;
 //    	lines pstep = motor->getLineStep[i];
 //        cord->nextBlocks[i].steps = fabs(path[i])/( motor->*pstep)(i);
-        cord->nextBlocks[i].steps = fabs(path[i])/( m->*lm)(i);
+        cord->nextBlocks[i].steps = fabs(path[i])/( m->*lm)(i);//TODO в сборку блока
 
 //    	lenline[i] = cord->nextBlocks[i].steps;
 //    	double_t ps = (motor->*pstep)(i);
@@ -148,7 +148,7 @@ void Controller::buildBlock(Coordinatus* cord) {
 
     //[5] Максимальное Угловое ускорение			C28
     for(int i=0;i<M_AXIS;++i){
-    	cord->nextBlocks[i].acceleration = profileData.acceleration[i];
+    	cord->nextBlocks[i].acceleration = profileData.acceleration[i];// TODO в сборку блокаS
     }
 
 
@@ -157,12 +157,6 @@ void Controller::buildBlock(Coordinatus* cord) {
     for(int i=0;i<M_AXIS;i++){
     	velocity[i] = maxs * sins[i];
     }
-
-    //TODOH motor[X_AXIS]
-    double_t maxLineAccel = motor[X_AXIS]->getLinearAcceleration();
-
-    //Время разгона для оси X
-    double_t minimeAccelerationTime = velocity[X_AXIS]/maxLineAccel;
 
 
     //[5] Угловая скорость							C59
@@ -200,8 +194,14 @@ void Controller::buildBlock(Coordinatus* cord) {
 
     // [9] Число шагов разгона пересчёт				C49
 
-    // Построение трапций для осей
-    calculateTrapeze();
+    // Построение трапеций для осей
+    uint32_t index = calculateTrapeze();
+
+    // motor[X_AXIS]
+    double_t maxLineAccel = motor[index]->getLinearAcceleration();
+
+    // Время разгона для оси X
+    double_t minimeAccelerationTime = velocity[index]/maxLineAccel;
 
 #define ACCELERTION_BY_TIME
 // 0,0002%
@@ -275,8 +275,77 @@ void Controller::buildBlock(Coordinatus* cord) {
     qDebug()<< " acc:"<< trapeze[Z_AXIS].accPath << " \t path:"<< trapeze[Z_AXIS].length
     		<<"\t\tflat:"<<norm_counter[Z_AXIS];
 
+    // Сборка============>>>>>>>>>>
+
+    block_state_t* block = cord->nextBlocks;
+//TODO build block
+//    block->steps
+//    block->accelerate_until
+//    block->decelerate_after
+//    block->initial_rate
+//    block->nominal_rate
+//    block->final_rate
+//    block->axis_mask;
+//    block->direction_bits
+//    block->initial_speedLevel
+//    block->final_speedLevel
+//    block->schem
+
 
 } //
+
+
+
+#define TRAPEZE_V1
+// Длина участка принимается как целое число
+// Расчёт трапеций для каждой оси.
+/**
+ * @brief Controller::calculateTrapeze
+ * @return Индекс приоритетной оси.
+ */
+uint32_t
+Controller::calculateTrapeze() {
+	double_t lenline[M_AXIS];
+	uint32_t index; 			//Главная трапеция.
+	double_t coeffic;
+
+	for(int i=0;i<M_AXIS;i++)
+		lenline[i] = trapeze[i].length;
+    // Наибольшая длина линии						C26
+    double_t* pmaxLenLine = std::max_element(lenline,lenline+M_AXIS);
+    index = (pmaxLenLine - lenline)/sizeof(uint32_t);
+
+    //Построение трапеции
+#ifdef TRAPEZE_V1
+    coeffic = trapeze[index].accPath/ floor(trapeze[index].length) ;
+#else
+    coeffic = trapeze[index].accPath/trapeze[index].length;
+#endif
+    // Есть трапеция Pass#1
+    for(uint i=0;i<M_AXIS;++i)
+    {
+        if(i!=index){
+#ifdef TRAPEZE_V1
+            trapeze[i].accPath = floor(trapeze[i].length) * coeffic;
+#else
+            trapeze[i].accPath = trapeze[i].length * coeffic;
+#endif
+        }
+    	// Pass#2
+        if(trapeze[i].accPath*2>trapeze[i].length){
+#ifdef TRAPEZE_V1
+            trapeze[i].accPath = floor( trapeze[i].length )/2;
+#else
+            trapeze[i].accPath = trapeze[i].length/2;
+#endif
+
+        }
+    }
+
+    return index;
+}
+
+
 
 /**
  * Загрузка данных из профиля.
@@ -338,50 +407,6 @@ void Controller::setupProfileData() {
 	    }
 }
 
-
-#define TRAPEZE_V1
-// Длина участка принимается как целое число
-
-// Расчёт трапеций для каждой оси.
-void Controller::calculateTrapeze() {
-	double_t lenline[M_AXIS];
-	uint32_t index; 			//Главная трапеция.
-	double_t coeffic;
-
-	for(int i=0;i<M_AXIS;i++)
-		lenline[i] = trapeze[i].length;
-    // Наибольшая длина линии						C26
-    double_t* pmaxLenLine = std::max_element(lenline,lenline+M_AXIS);
-    index = (pmaxLenLine - lenline)/sizeof(uint32_t);
-
-    //Построение трапеции
-#ifdef TRAPEZE_V1
-    coeffic = trapeze[index].accPath/ floor(trapeze[index].length) ;
-#else
-    coeffic = trapeze[index].accPath/trapeze[index].length;
-#endif
-    // Есть трапеция Pass#1
-    for(uint i=0;i<M_AXIS;++i)
-    {
-        if(i!=index){
-#ifdef TRAPEZE_V1
-            trapeze[i].accPath = floor(trapeze[i].length) * coeffic;
-#else
-            trapeze[i].accPath = trapeze[i].length * coeffic;
-#endif
-        }
-    	// Pass#2
-        if(trapeze[i].accPath*2>trapeze[i].length){
-#ifdef TRAPEZE_V1
-            trapeze[i].accPath = floor( trapeze[i].length )/2;
-#else
-            trapeze[i].accPath = trapeze[i].length/2;
-#endif
-
-        }
-    }
-
-}
 
 
 
