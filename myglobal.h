@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QDir>
 
+#include <math.h>
 
 class MyGlobal
 {
@@ -41,7 +42,7 @@ public:
     static QString msg_abs_title;
     static QString msg_rel_title;
 
-    static const float PI = 3.1415;
+    static const double_t PI = 3.1415926536 ;	//3.1415;
 
     //-------- exchange
 

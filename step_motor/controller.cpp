@@ -20,6 +20,7 @@ Controller::Controller()
     }
     motor = new StepMotor();
     setupProfileData();
+    motor->setAcceleration(profileData.acceleration[X_AXIS]);
 }
 
 
@@ -97,7 +98,7 @@ void Controller::buildBlock(Coordinatus* cord) {
 	}
 
     //Максимальная скорость для сегмента
-    float_t maxs = *std::max_element(v,v+M_AXIS);	//E13
+    double_t maxs = *std::max_element(v,v+M_AXIS);	//E13
 
     //[3] Синусы направлений					C18
     double_t sins[M_AXIS];
@@ -129,16 +130,23 @@ void Controller::buildBlock(Coordinatus* cord) {
     }
 
 
-    //[4] velocity for every axis, line		313.16 47.7
+    //[4] velocity for every axis, line		313.16 47.7 	C54
     double_t velocity[M_AXIS];
     for(int i=0;i<M_AXIS;i++){
     	velocity[i] = maxs * sins[i];
     }
 
+    double_t maxLineAccel = motor->getLinearAcceleration();
+
+    //Время разгона для оси X
+    double_t minimeAccelerationTime = velocity[X_AXIS]/maxLineAccel;
+
+
     //[5] Угловая скорость							C59
     double_t tSpeed[M_AXIS];
     for(int i=0;i<M_AXIS;i++){
     	tSpeed[i] = (velocity[i]/motor->getPulleyDiameter())*2;
+    	qDebug()<<"Controller[142] "<< "speed:"<<tSpeed[i];
     }
 
     //[6] Определяющая координата					C33
@@ -172,13 +180,25 @@ void Controller::buildBlock(Coordinatus* cord) {
     // Построение трапций для осей
     calculateTrapeze();
 
+#define ACCELERTION_BY_TIME
+// 0,0002%
+
     //[12] Угловое ускорения для осей					C64
     double_t accel[M_AXIS];
     for(int i=0;i<M_AXIS;i++){
-    	if(trapeze[i].accPath!=0 && trapeze[i].length!=0)
+        if(trapeze[i].accPath!=0 && trapeze[i].length!=0){
+#ifdef ACCELERTION_BY_TIME
+            accel[i] = (2 * motor->getAlfa(i)*(trapeze[i].accPath))/pow(minimeAccelerationTime,2); //  trapeze[i].accPath
+#else
     		accel[i] = pow(tSpeed[i],2)/(2 * motor->getAlfa(i)* fabs(trapeze[i].accPath)); //  trapeze[i].accPath
-    	else
+#endif
+
+        }else{
+
     		accel[i] = 0;
+
+        }
+    	qDebug()<<"Controller[182"<< "  accel:"<<accel[i]<< "\taccPath:"<<trapeze[i].accPath;
     }
 
     //[13] Начальный счётчик
@@ -296,7 +316,8 @@ void Controller::setupProfileData() {
 }
 
 
-
+#define TRAPEZE_V1
+// Длина участка принимается как целое число
 
 // Расчёт трапеций для каждой оси.
 void Controller::calculateTrapeze() {
@@ -311,16 +332,30 @@ void Controller::calculateTrapeze() {
     index = (pmaxLenLine - lenline)/sizeof(uint32_t);
 
     //Построение трапеции
-    coeffic = (float_t)trapeze[index].accPath/(float_t)trapeze[index].length;
-
+#ifdef TRAPEZE_V1
+    coeffic = trapeze[index].accPath/ floor(trapeze[index].length) ;
+#else
+    coeffic = trapeze[index].accPath/trapeze[index].length;
+#endif
     // Есть трапеция Pass#1
-    for(int i=0;i<M_AXIS;++i)
+    for(uint i=0;i<M_AXIS;++i)
     {
-    	if(i!=index)
-    		trapeze[i].accPath = trapeze[i].length*coeffic;
+        if(i!=index){
+#ifdef TRAPEZE_V1
+            trapeze[i].accPath = floor(trapeze[i].length) * coeffic;
+#else
+            trapeze[i].accPath = trapeze[i].length * coeffic;
+#endif
+        }
     	// Pass#2
-    	if(trapeze[i].accPath*2>trapeze[i].length)
-    		trapeze[i].accPath = trapeze[i].length/2;
+        if(trapeze[i].accPath*2>trapeze[i].length){
+#ifdef TRAPEZE_V1
+            trapeze[i].accPath = floor( trapeze[i].length )/2;
+#else
+            trapeze[i].accPath = trapeze[i].length/2;
+#endif
+
+        }
     }
 
 }

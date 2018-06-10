@@ -128,13 +128,19 @@ public:
         microstep[axis] = _microstep;
 	}
 
+    // Угловое ускорение, рад/сек^2
 	double_t getAcceleration() const {
 		return acceleration;
 	}
 
+	// Угловое ускорение, рад/сек^2
 	void setAcceleration(double_t acceleration) {
 		this->acceleration = acceleration;
 	}
+
+	// Линейное ускорение для заданного
+	// максимального углового ускорения.
+	double_t getLinearAcceleration();
 
     convert m_struct[M_AXIS];
 
@@ -152,13 +158,14 @@ private:
     
     double_t pulley_diameter; // 12.1
     
-    double_t angle; /// 1.8
+    double_t angle; // 1.8град
 
 
     uint32_t microstep[N_AXIS];
 
     double_t alfa;
 
+    // Угловое ускорение, рад/сек^2
     double_t acceleration;
 
 

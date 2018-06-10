@@ -97,6 +97,15 @@ double_t StepMotor::lineStep(uint32_t axis) {
 	return alfa;
 }
 
+
+// Линейное ускорение для заданного
+// максимального углового ускорения.
+double_t StepMotor::getLinearAcceleration() {
+	double_t result;
+	result = acceleration*pulley_diameter/2; // 1250
+	return result;
+}
+
 double_t StepMotor::pulleyStep(uint32_t axis) {
 	double_t result;
 	result = SHAFT_PITCH/(microstep[axis] * stepsPerRound);
