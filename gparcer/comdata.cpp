@@ -186,7 +186,7 @@ ComData::setDirection_bits()
     {
 //        block_state* block = &blocks[i];
         block_state* block = &cord->nextBlocks[i];
-        float_t ds = cord->getCurrentValue(i)-cord->getNextValue(i);
+        float_t ds = cord->getNextValue(i) - cord->getCurrentValue(i);
 
         if(ds>0){
             block->direction_bits |= DIRECTION_BIT<<i;
@@ -248,19 +248,99 @@ ComData::buildG0command()
 
 //    setProfileValue();
 
-//TODOH in controller build model acceleration/deceleration
-        controller->buildBlock(cord);
+//in controller build model acceleration/deceleration
+    Recalculate_flag* flag;
+
+    for(int i=0;i<M_AXIS;i++){
+    	byte* fl = &cord->nextBlocks[i].recalculate_flag;
+    	*fl |= true; // Одиночная команда.
+    }
+
+
+    controller->buildBlock(cord);
         // ступень скорости
 //        block->speedLevel = motor->steps_rpm(speed,block->acceleration);
 
+// build ComDataReq_t
+    buildComdata();
 
+    //TODO Send Data
 
-    //direction_bits
-//    setDirection_bits();
-
-    //planner_recalculate
-//    planner_recalculate();
 }
+
+
+
+void
+ComData::buildComdata()
+{
+	ComDataReq_t* req = &request;
+	sSegment* segment;
+	sControl* control;
+    block_state_t* bstates = cord->nextBlocks;
+
+    memset(req,0,sizeof(ComDataReq_t));
+
+	req->requestNumber = 0;//++MyGlobal::requestIndex;// TODO get request number
+	req->instruments = 1;
+
+	req->command.order = eoSegment;
+	req->command.instrument = 1;
+	req->command.reserved = 0;
+
+	segment = &req->payload.instrument1_parameter;
+
+	//------------ payload =============================
+	segment->head.linenumber = sgCode->line ;
+	segment->head.axis_number = M_AXIS;//0;
+
+	//if(segment->head.reserved == EXIT_CONTINUE)
+	//    ms_finBlock = continueBlock;
+	//else
+	//    ms_finBlock = exitBlock;
+	segment->head.reserved &= ~EXIT_CONTINUE;
+
+	for(int i=0;i<M_AXIS;i++)
+	{
+//		segment->head.axis_mask = 0;
+		if(bstates[i].steps>0)
+			segment->head.axis_mask |= (1<<i);
+		else
+			segment->head.axis_mask &= ~(1<<i);
+	}
+	//======== sControl =========
+
+	for(int i =0;i<M_AXIS;i++){
+		control = &segment->axis[i];
+		block_state_t* bstate = &bstates[i];
+
+		control->accelerate_until = bstate->accelerate_until;
+		control->decelerate_after = bstate->decelerate_after;
+
+		if(bstate->path>0)
+			control->direction = forward;
+		else
+			control->direction = backward;
+
+		control->final_rate = bstate->final_rate;
+		control->initial_rate = bstate->initial_rate;
+		control->nominal_rate = bstate->nominal_rate;
+		control->final_speedLevel = bstate->final_speedLevel;
+
+		control->microsteps = bstate->microstep;
+
+		for(int j=0;j<3;j++){
+			control->schem[j] = bstate->schem[j];
+		}
+
+		control->steps = bstate->steps;
+	}
+
+//TODOH build ComdataReq
+
+
+
+}
+
 
 void
 ComData::buildGgroup()

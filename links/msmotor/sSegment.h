@@ -11,6 +11,8 @@
 #include "sControl.h"
 #include "msport.h"
 
+#define EXIT_CONTINUE   1
+
 /**
  * Заголовочная часть сегмента.
  */

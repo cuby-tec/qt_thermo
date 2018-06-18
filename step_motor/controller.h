@@ -59,6 +59,12 @@ private:
 
     AccelerationTable* acctable;
 
+    void splinePath(block_state_t* privBlock, block_state_t* nextBlock);
+
+    // пересчёт ускорений для одной оси.
+    void planner_recalculate(block_state* prev, block_state* curr);
+
+
 };
 
 #endif // CONTROLLER_H

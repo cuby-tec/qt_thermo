@@ -1,9 +1,11 @@
 #include "thermoplot.h"
 
+
 #include <QMessageBox>
 #include <QTextBlock>
 #include <QDateTime>
 #include <QFileInfo>
+#include "math.h"
 
 ThermoPlot::ThermoPlot(QObject* parent) : QObject(parent)
 {
@@ -301,7 +303,7 @@ ThermoPlot::updateStatus(const Status_t *status)
 //      plot->graph(0)->addData(key, qSin(key)+qrand()/(double)RAND_MAX*1*qSin(key/0.3843));
 
 //      plot->graph(1)->addData(key, qCos(key)+qrand()/(double)RAND_MAX*0.5*qSin(key/0.4364));
-      if(isnan(status->temperature))
+      if(std::isnan(status->temperature))
       {
           plot->graph(0)->addData(key, oldTemperature);
       }else{

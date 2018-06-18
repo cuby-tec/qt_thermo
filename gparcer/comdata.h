@@ -103,6 +103,8 @@ private:
 
     void planner_recalculate();
 
+    void buildComdata();
+
 };
 
 #endif // COMDATA_H

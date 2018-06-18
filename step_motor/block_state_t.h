@@ -1,9 +1,10 @@
 #ifndef BLOCK_STATE_T
 #define BLOCK_STATE_T
 
-#include <stdint.h>
+//#include <stdint.h>
+#include "Recalculate_flag.h"
+//#define byte uint8_t
 
-#define byte uint8_t
 #define word uint32_t
 
 //  Описатель состояний обработки фаз движения по оси Y.
@@ -16,7 +17,9 @@ typedef struct block_state_t {
     byte state;
     uint8_t  direction_bits;            // The direction bit set for this block (refers to *_DIRECTION_BIT in config.h)
     uint8_t axis_mask;          // маска активности оси
+    uint8_t microstep;
     word steps;
+    double_t path;
     word accelerate_until;
     word decelerate_after;
     word initial_rate;
@@ -26,17 +29,16 @@ typedef struct block_state_t {
     word final_rate;
     word final_speedLevel;
     word step_event_count;
-    float tan_theta;		//  Значение тангенса угла наклона отрезка траектории.
-//	float tangent_inv; //  Обратное значение тангенса. Для подпрограммы обработки прерываний.
-    float nominal_speed; //Максимальное значение для это оси из Профиля.
-    float acceleration; // Максимальное значение для оси из Профиля.
+    double_t tan_theta;		//  Значение тангенса угла наклона отрезка траектории.
+//	double_t tangent_inv; //  Обратное значение тангенса. Для подпрограммы обработки прерываний.
+    double_t nominal_speed; //Максимальное значение для это оси из Профиля.
+    double_t acceleration; // Максимальное значение для оси из Профиля.
 
-    float	entry_speed;
-    float	max_entry_speed;
-    float	millimeters;
-    byte	recalculate_flag;
+    double_t	entry_speed;
+    double_t	max_entry_speed;
+    double_t	millimeters;
+    byte	recalculate_flag;	// Recaculate_flag:Набор флагов: для консольной или пограммной обработки;
     byte	nominal_length_flag;
-
 
     /**	  Схема описывает порядок переходов состояний."
      *
@@ -82,7 +84,6 @@ typedef struct block_state_t {
       * и т.д.
      */
     byte schem[3];
-
 }block_state;
 
 /*

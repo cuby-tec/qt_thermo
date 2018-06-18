@@ -38,6 +38,8 @@ QString MyGlobal::comment("#");
 
 uint32_t MyGlobal::commandIndex = 1;
 
+double_t const MyGlobal::PI = 3.1415926536 ;	//3.1415;
+
 
 MyGlobal::MyGlobal()
 {

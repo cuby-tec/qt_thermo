@@ -5,6 +5,7 @@
 #include <QtGlobal>
 #include <QDebug>
 #include <math.h>
+#include <stdbool.h>
 
 #include "profiles/profile.h"
 
@@ -80,7 +81,7 @@ void Controller::buildBlock(Coordinatus* cord) {
 	double_t path[M_AXIS];						//	B2
 
 	for(int i=0;i<M_AXIS;i++){
-		path[i] = cord->getCurrentValue(i) - cord->getNextValue(i);
+		path[i] = cord->getNextValue(i) - cord->getCurrentValue(i);
 		qDebug()<<"Controller[74]"<<" path:"<< path[i];
 	}
 
@@ -277,8 +278,7 @@ void Controller::buildBlock(Coordinatus* cord) {
 
     // Сборка============>>>>>>>>>>
 
-    block_state_t* block = cord->nextBlocks;
-//TODO build block
+    block_state_t* blocks = cord->nextBlocks;
 //    block->steps
 //    block->accelerate_until
 //    block->decelerate_after
@@ -291,8 +291,137 @@ void Controller::buildBlock(Coordinatus* cord) {
 //    block->final_speedLevel
 //    block->schem
 
+//TODO build block
+
+    for(int i=0;i<M_AXIS;++i){
+    	block_state_t block = blocks[i];
+    	block.steps = trapeze[i].length;
+    	block.speedLevel = trapeze[i].accPath;
+    	block.accelerate_until = trapeze[i].accPath;
+    	block.decelerate_after = block.steps-(word)trapeze[i].accPath;
+    	block.initial_rate = start_counter[i];
+    	block.nominal_rate = norm_counter[i];
+    	block.final_rate = start_counter[i];
+    	block.entry_speed = 0;
+    	block.nominal_speed = tSpeed[i];
+    	block.path = path[i];
+    	block.schem[0] = 0;	// Разгон
+    	block.schem[1] = 1;	// равномерно
+    	block.schem[2] = 2;	// торможение
+    	block.microstep = 0; //TODO Micro-step
+
+    }
+
+    splinePath(cord->currentBlocks,blocks);
 
 } //
+
+
+/**
+ * Выравнивание скоростей в смежных сегментах.
+ * Для одноразовой команды это не требуется.
+ */
+void Controller::splinePath(block_state_t* privBlock, block_state_t* currBlock) {
+	double_t dif;
+
+	 Recalculate_flag* flag;
+	 flag = (Recalculate_flag*)&currBlock[X_AXIS].recalculate_flag;
+
+	 if(flag->single == true)
+		 return;
+
+
+	dif = currBlock[X_AXIS].nominal_speed - privBlock[X_AXIS].nominal_speed;
+
+
+	//TODO set scheme
+
+}
+
+/*                             STEPPER RATE DEFINITION
+		                                     +--------+   <- nominal_rate
+		                                    /          \
+		    nominal_rate*entry_factor ->   +            \
+		                                   |             + <- nominal_rate*exit_factor
+		                                   +-------------+
+		                                       time -->
+
+
+	  	                              PLANNER SPEED DEFINITION
+		                                     +--------+   <- current->nominal_speed
+		                                    /          \
+		         current->entry_speed ->   +            \
+		                                   |             + <- next->entry_speed
+		                                   +-------------+
+		                                       time -->
+ */
+//#define CO		psettings->initial_rate/0.676
+void
+Controller::planner_recalculate(block_state* prev, block_state* curr)
+{
+	int16_t dlevel,d2;
+	word meanlevel;
+	word tmp_rate;
+
+	double_t CO = 1.0;//TODO temporary value for debug.
+
+	if(prev->speedLevel == curr->speedLevel) return;
+
+	meanlevel = ((int64_t)prev->nominal_rate + curr->nominal_rate)/2;
+
+	if(prev->speedLevel>curr->speedLevel){
+		// Снижение скорости
+		dlevel = prev->speedLevel - curr->speedLevel;
+		d2 = dlevel/2;
+		dlevel -= d2;
+		prev->decelerate_after = prev->steps - d2;
+		curr->accelerate_until = dlevel;	// todo if dlevel/2 > accelerate_until
+		prev->schem[2] = 3;
+		curr->schem[0] = 4;
+
+		d2 = prev->speedLevel-d2;
+		if(d2){
+			prev->final_speedLevel = d2;
+			tmp_rate = (word)(CO)*(sqrtf(d2+1)-sqrtf(d2));
+			prev->final_rate = (tmp_rate>meanlevel)?(tmp_rate):(meanlevel);
+		}
+		dlevel += curr->speedLevel;
+		if(dlevel){
+			curr->initial_speedLevel = dlevel;
+			tmp_rate = (word)CO*(sqrtf(dlevel+1)-sqrtf(dlevel));
+			curr->initial_rate = (tmp_rate>meanlevel)?(tmp_rate):(meanlevel);
+
+		}
+	}else{
+		// Увеличение скорости
+		dlevel = curr->speedLevel - prev->speedLevel;
+		word rest = prev->steps - prev->decelerate_after;
+		if(rest>dlevel){
+			d2 = dlevel/2;
+		}else{
+			d2 = rest;
+		}
+		dlevel -= d2;
+
+		prev->decelerate_after = prev->steps - d2;
+		curr->accelerate_until = dlevel;	// todo if dlevel/2 > accelerate_until
+		prev->schem[2] = 6;
+		curr->schem[0] = 1;
+		d2 +=prev->speedLevel;
+		if(d2){
+			prev->final_speedLevel = d2;
+			prev->final_rate = (word)CO*(sqrtf(d2+1)-sqrtf(d2));
+		}
+		dlevel = curr->speedLevel - dlevel;
+		if(dlevel){
+			curr->initial_rate = (word)CO*(sqrtf(dlevel+1)-sqrtf(dlevel));
+			curr->initial_speedLevel = dlevel;
+		}
+	}
+	//------------------------- check state go
+
+}
+
 
 
 
@@ -406,15 +535,4 @@ void Controller::setupProfileData() {
 
 	    }
 }
-
-
-
-
-
-
-
-
-
-
-
 
