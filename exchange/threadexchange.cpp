@@ -26,6 +26,7 @@ ThreadExchange ::process()
         restart = true;
         condition.wakeOne();
     }
+    qDebug()<<"ThreadExchange[26]";
 }
 
 
@@ -41,9 +42,13 @@ ThreadExchange ::process()
          thermo_gmutex.lock();
 //         thermo_gmutex.try_lock();
 
+         qDebug()<<"ThreadExchange[41]";
+
          request.requestNumber = ++MyGlobal::requestIndex;
 
          result_exch = exch->sendRequest(&request);
+
+qDebug()<<"ThreadExchange[45]";
 
          if(!result_exch == EXIT_SUCCESS)
          {
@@ -53,6 +58,7 @@ ThreadExchange ::process()
          }else{
 //             status = exch->getStatus();
              memcpy(&status,exch->getStatus(),sizeof(Status_t));
+             qDebug()<<"ThreadExchange[58]";
          }
 
 
