@@ -82,7 +82,7 @@ void Controller::buildBlock(Coordinatus* cord) {
 
 	for(int i=0;i<M_AXIS;i++){
 		path[i] = cord->getNextValue(i) - cord->getCurrentValue(i);
-		qDebug()<<"Controller[74]"<<" path:"<< path[i];
+//		qDebug()<<"Controller[74]"<<" path:"<< path[i];
 	}
 
 
@@ -164,7 +164,7 @@ void Controller::buildBlock(Coordinatus* cord) {
     double_t tSpeed[M_AXIS];
     for(int i=0;i<M_AXIS;i++){
         tSpeed[i] = (velocity[i]/motor[i]->getPulleyDiameter())*2;
-    	qDebug()<<"Controller[142] "<< "speed:"<<tSpeed[i];
+//    	qDebug()<<"Controller[142] "<< "speed:"<<tSpeed[i];
     }
 
     //[6] Определяющая координата					C33
@@ -222,7 +222,7 @@ void Controller::buildBlock(Coordinatus* cord) {
     		accel[i] = 0;
 
         }
-    	qDebug()<<"Controller[182"<< "  accel:"<<accel[i]<< "\taccPath:"<<trapeze[i].accPath;
+//    	qDebug()<<"Controller[182"<< "  accel:"<<accel[i]<< "\taccPath:"<<trapeze[i].accPath;
     }
 
     //[13] Начальный счётчик
@@ -230,7 +230,7 @@ void Controller::buildBlock(Coordinatus* cord) {
     for(int i=0;i<M_AXIS;i++){
     	if(accel[i]!=0){
             start_counter[i] = sqrt(2*motor[i]->getAlfa(i)/accel[i])*frequency;
-    	    qDebug() << "buildBlock[180]"<< "  axis:"<< i << " counter:"<<start_counter[i]<< "acc:"<< trapeze[i].accPath;
+//    	    qDebug() << "buildBlock[180]"<< "  axis:"<< i << " counter:"<<start_counter[i]<< "acc:"<< trapeze[i].accPath;
 
     	}
     	else
@@ -262,6 +262,7 @@ void Controller::buildBlock(Coordinatus* cord) {
     AccelerationTable* accY = new AccelerationTable(trapeze[Y_AXIS].accPath+1);
     accY->buildTale(start_counter[Y_AXIS]);
 
+/*
     qDebug()<< "buildBlock[192]";
     qDebug()<< " acc:"<< trapeze[X_AXIS].accPath << " \t path:"<< trapeze[X_AXIS].length
     		<<"\tstart:"<<start_counter[X_AXIS]
@@ -275,6 +276,7 @@ void Controller::buildBlock(Coordinatus* cord) {
 
     qDebug()<< " acc:"<< trapeze[Z_AXIS].accPath << " \t path:"<< trapeze[Z_AXIS].length
     		<<"\t\tflat:"<<norm_counter[Z_AXIS];
+*/
 
     // Сборка============>>>>>>>>>>
 

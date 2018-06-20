@@ -12,12 +12,14 @@
 
 
 
-GConsole::GConsole(QObject *parent) : QObject(parent)//, req_builder(new ComData())
+GConsole::GConsole(QObject *parent) : QObject(parent), req_builder(new ComData())
 {
 //    QScopedPointer<ComData> this->req_builder(new ComData());
 //    this->req_builder = req_builder;
 //    this->req_builder = new ComData();
 //    this->req_builder = &_comdata;
+	oldBlockNumber = -1;
+	uia = NULL;
 }
 
 
@@ -100,9 +102,9 @@ GConsole::buildComData(sGcode* sgcode)
 // TODO send requst and wait signal
 
 
-
+ComDataReq_t* req = req_builder->getRequest();
     //===========
-    thread.setRequest(req_builder->getRequest());
+    thread.setRequest(req);
 
     thread.process();
 
@@ -120,7 +122,8 @@ GConsole::failedStatus()
 void
 GConsole::updateStatus(const Status_t* status)
 {
-
+	uint32_t rnumber = thread.getRequestNumber();
+	qDebug()<<"GConsole[125]:"<<status->frameNumber<<"\tsended:"<<rnumber;
 }
 
 /**

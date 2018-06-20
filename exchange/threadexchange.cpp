@@ -1,16 +1,19 @@
 #include "threadexchange.h"
 
 #include <QScopedPointer>
-
+#include <string.h>
 
 ThreadExchange::ThreadExchange()
 {
-    QScopedPointer<UsbExchange> exch(new UsbExchange()) ;
+// QScopedPointer<UsbExchange> exch(new UsbExchange()) ;
     abort = false;
     restart = false;
+    exch = new UsbExchange();
 //    start();
 
 }
+
+
 
 //TODO send/recieve status
 void
@@ -36,22 +39,20 @@ ThreadExchange ::process()
      forever {
 //         mutex.lock();
          thermo_gmutex.lock();
-//         MGlobal::M_mutex->lock();
+//         thermo_gmutex.try_lock();
 
-         // TODO frameIndex
-//         index++;
+         request.requestNumber = ++MyGlobal::requestIndex;
 
-//         exch->buildComData(&request,eoState);
-
-         result_exch = exch->sendRequest(request);
+         result_exch = exch->sendRequest(&request);
 
          if(!result_exch == EXIT_SUCCESS)
          {
-             status = 0;
+             status.frameNumber = 0;
              if (!restart)
                  emit sg_failed_status();
          }else{
-             status = exch->getStatus();
+//             status = exch->getStatus();
+             memcpy(&status,exch->getStatus(),sizeof(Status_t));
          }
 
 
@@ -64,13 +65,13 @@ ThreadExchange ::process()
 //         MGlobal::M_mutex->unlock();
 
          if (!restart && (result_exch == EXIT_SUCCESS ))
-             emit sg_status_updated(status);
+             emit sg_status_updated(&status);
 
          mutex.lock();
          if (!restart)
              condition.wait(&mutex);
          restart = false;
-         mutex.unlock();
+         mutex.unlock(); //Debug mode
 
      }// forever
  }
@@ -79,5 +80,11 @@ ThreadExchange ::process()
 void
 ThreadExchange::setRequest(const ComDataReq_t* request)
 {
-    this->request = (ComDataReq_t*)request;
+//    this->request = (ComDataReq_t*)request;
+	memcpy(&this->request,request,sizeof(ComDataReq_t));
+}
+
+ThreadExchange::~ThreadExchange()
+{
+	delete(exch);
 }

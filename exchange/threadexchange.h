@@ -21,9 +21,14 @@ class ThreadExchange : public QThread
 public:
     ThreadExchange();
 
+    ~ThreadExchange();
+
+
     void process();
 
     void setRequest(const ComDataReq_t* request);
+
+uint32_t getRequestNumber(){ return request.requestNumber; }
 
 
 signals:
@@ -40,9 +45,12 @@ private:
     bool restart;
 //    uint32_t index;
 
-    const Status_t* status;
+//    const Status_t* status;
+//    const Status_t status;
+    Status_t status;
 
-    ComDataReq_t* request;
+//    ComDataReq_t* request;
+    ComDataReq_t request;
 
 
     QMutex mutex;
