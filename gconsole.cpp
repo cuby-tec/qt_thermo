@@ -123,7 +123,8 @@ void
 GConsole::updateStatus(const Status_t* status)
 {
 	uint32_t rnumber = thread.getRequestNumber();
-	qDebug()<<"GConsole[125]:"<<status->frameNumber<<"\tsended:"<<rnumber;
+
+    qDebug()<<"GConsole[125]:"<<status->frameNumber<<"\tsended:"<<rnumber<<"\tquee:"<<status->freeSegments;
 }
 
 /**

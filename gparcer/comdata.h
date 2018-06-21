@@ -93,6 +93,8 @@ private:
 
     void setParam_coord(sGparam* param);
 
+    void setWorkValue(QString value, size_t axis_num);
+
     void initWorkAray();
 
     bool isPlaneHasSteps();

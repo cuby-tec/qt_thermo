@@ -30,6 +30,7 @@ public:
 
 uint32_t getRequestNumber(){ return request.requestNumber; }
 
+ComDataReq_t* getRequest(){ return &request; }
 
 signals:
     void sg_status_updated(const Status_t* status);

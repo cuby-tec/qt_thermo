@@ -27,43 +27,18 @@ ComData::ComData()
 
 }
 
-
 void
-ComData::setParam_coord(sGparam *param)
+ComData::setWorkValue(QString value, size_t axis_num)
 {
-    bool ok;
     int i;
-    size_t axis_num;
-
-    QString str_val = QString( param->value );
-
-    sSegment* segment = &request.payload.instrument1_parameter;
+    bool ok;
+	QString str_val = QString( value );
 
     i = str_val.indexOf(',');
-
-
     if(i>0)
     {
         str_val = str_val.replace(i,1,'.');
     }
-
-    switch (param->group) {
-    case 'X':
-       axis_num = X_AXIS;
-        break;
-    case 'Y':
-        axis_num = Y_AXIS;
-        break;
-    case 'Z':
-        axis_num = Z_AXIS;
-        break;
-    case 'E':
-        axis_num = E_AXIS;
-        break;
-    default:
-        break;
-    }
-
 
     float coord = str_val.toFloat(&ok);
 //    if(!ok)
@@ -82,25 +57,35 @@ ComData::setParam_coord(sGparam *param)
     }
 
 
-/*
-    QString steps = profile->getX_STEPS();
+}
 
-    i = steps.indexOf(',');
+void
+ComData::setParam_coord(sGparam *param)
+{
+    size_t axis_num = N_AXIS;
 
-    if(i>0)
-    {
-        steps.replace(i,1,'.');
+    switch (param->group) {
+    case 'X':
+       axis_num = X_AXIS;
+       setWorkValue(param->value,axis_num);
+        break;
+    case 'Y':
+        axis_num = Y_AXIS;
+        setWorkValue(param->value,axis_num);
+        break;
+    case 'Z':
+        axis_num = Z_AXIS;
+        setWorkValue(param->value,axis_num);
+        break;
+    case 'E':
+        axis_num = E_AXIS;
+        setWorkValue(param->value,axis_num);
+        break;
+    default:
+        break;
     }
 
-//    float_t steps_per_mm = QString( profile->getX_STEPS()).toFloat(&ok);
-    float_t steps_per_mm = steps.toFloat(&ok);
-    if(!(ok && steps_per_mm>0)){
-        qFatal(msg3 + msg4);
-    }
-    else{
-        segment->axis[X_AXIS].steps = coord/steps_per_mm;
-    }
-*/
+
 
 }
 
@@ -217,8 +202,11 @@ ComData::buildG0command()
 {
 
 //    float coord;
-//    bool ok;
+    bool ok;
+
     sGparam* gparam;
+
+    sSegment* segment = &request.payload.instrument1_parameter;
 
 
     for(int i=0;i<sgCode->param_number;i++)
@@ -227,16 +215,23 @@ ComData::buildG0command()
 
 //        coord = QString(gparam->value).toFloat(&ok);
 
-//        switch (gparam->group) {
-//        case 'X':
+        switch (gparam->group)
+        {
+        case 'X':
+        case 'Y':
+        case 'Z':
             setParam_coord(gparam);
-//            break;
-//        case 'Y':
+            break;
 
-//            break;
+        case 'N': // Номер строки
+            uint32_t number = QString(gparam->value).toInt(&ok);
+            Q_ASSERT(ok);
+            segment->head.linenumber = number;
+        	break;
+
 //        default:
 //            break;
-//        }
+        }
 
     }
 
