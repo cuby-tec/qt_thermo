@@ -328,6 +328,8 @@ ComData::buildComdata()
 		}
 
 		control->steps = bstate->steps;
+
+		control->axis = bstate->axis_mask;
 	}
 
 //TODOH build ComdataReq

@@ -296,21 +296,24 @@ void Controller::buildBlock(Coordinatus* cord) {
 //TODO build block
 
     for(int i=0;i<M_AXIS;++i){
-    	block_state_t block = blocks[i];
-    	block.steps = trapeze[i].length;
-    	block.speedLevel = trapeze[i].accPath;
-    	block.accelerate_until = trapeze[i].accPath;
-    	block.decelerate_after = block.steps-(word)trapeze[i].accPath;
-    	block.initial_rate = start_counter[i];
-    	block.nominal_rate = norm_counter[i];
-    	block.final_rate = start_counter[i];
-    	block.entry_speed = 0;
-    	block.nominal_speed = tSpeed[i];
-    	block.path = path[i];
-    	block.schem[0] = 0;	// Разгон
-    	block.schem[1] = 1;	// равномерно
-    	block.schem[2] = 2;	// торможение
-    	block.microstep = 0; //TODO Micro-step
+    	block_state_t* block = &blocks[i];
+    	block->steps = trapeze[i].length;
+    	block->speedLevel = (word)trapeze[i].accPath;
+    	block->accelerate_until = trapeze[i].accPath;
+    	block->decelerate_after = block->steps-(word)trapeze[i].accPath;
+    	block->initial_rate = start_counter[i];
+    	block->nominal_rate = norm_counter[i];
+    	block->final_rate = start_counter[i];
+    	block->entry_speed = 0;
+    	block->nominal_speed = tSpeed[i];
+    	block->path = path[i];
+        block->schem[0] = 1;	// Разгон
+        block->schem[1] = 2;	// равномерно
+        block->schem[2] = 3;	// торможение
+    	block->microstep = 0; //TODO Micro-step
+        block->axis_mask = 0;
+        if(block->steps > 0)
+    		block->axis_mask |= (1<<i);
 
     }
 
@@ -437,14 +440,16 @@ Controller::planner_recalculate(block_state* prev, block_state* curr)
 uint32_t
 Controller::calculateTrapeze() {
 	double_t lenline[M_AXIS];
-	uint32_t index; 			//Главная трапеция.
+	size_t index; 			//Главная трапеция.
 	double_t coeffic;
 
 	for(int i=0;i<M_AXIS;i++)
 		lenline[i] = trapeze[i].length;
     // Наибольшая длина линии						C26
     double_t* pmaxLenLine = std::max_element(lenline,lenline+M_AXIS);
-    index = (pmaxLenLine - lenline)/sizeof(uint32_t);
+
+//    index = (pmaxLenLine - lenline)/sizeof(double_t);
+    index = (pmaxLenLine - lenline);
 
     //Построение трапеции
 #ifdef TRAPEZE_V1

@@ -33,6 +33,8 @@ private slots:
     void openFileDo();
     void updateCoordinatus(const Status_t* status);
 
+//    void on_checkBox_immediately_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
 

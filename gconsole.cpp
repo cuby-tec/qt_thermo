@@ -62,6 +62,8 @@ GConsole::setupGconsole()
         uia->label_AbsRel->setToolTip(MyGlobal::msg_rel_title);
     }
 
+    connect(uia->checkBox_immediately,SIGNAL(stateChanged(int)),this,SLOT(on_checkBox_immediately_stateChanged(int)) );
+    checkBox_immediately = uia->checkBox_immediately->isChecked();
 }
 
 
@@ -99,12 +101,29 @@ GConsole::buildComData(sGcode* sgcode)
 
 
 
+//======================
+
+    ComDataReq_t* req = req_builder->getRequest();
+
+    // immediately execute
+    if(checkBox_immediately)
+    	req->command.reserved |= EXECUTE_IMMEDIATELY;
+    else
+    	req->command.reserved &= ~EXECUTE_IMMEDIATELY;
+
+// EXIT_CONTINUE
+//    if(segment->head.reserved == EXIT_CONTINUE)
+//    					ms_finBlock = continueBlock;
+//					else
+//    					ms_finBlock = exitBlock;
+    req->payload.instrument1_parameter.head.reserved &= ~EXIT_CONTINUE;
+
+    qDebug()<<"GConsole[121]: stepsX"<<req->payload.instrument1_parameter.axis[X_AXIS].steps;
+
+    //===========
 // TODO send requst and wait signal
 
-
-ComDataReq_t* req = req_builder->getRequest();
-    //===========
-    thread.setRequest(req);
+   thread.setRequest(req);
 
     thread.process();
 
@@ -218,6 +237,21 @@ GConsole::on_pushButton_linestep_clicked()
 
 //--------- parcer end
 
+}
+
+
+void
+GConsole::on_checkBox_immediately_stateChanged(int arg1)
+{
+    switch (arg1) {
+    case Qt::Unchecked:
+        checkBox_immediately = false;
+        break;
+    case Qt::Checked:
+        checkBox_immediately = true;
+        break;
+    }
+    qDebug()<<"GConsole[243]:"<<checkBox_immediately;
 }
 
 void

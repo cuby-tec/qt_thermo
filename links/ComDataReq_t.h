@@ -21,10 +21,14 @@ enum eOrder{
     eoSegment           // Семент движения.
 };
 
+/**
+ * if 1 - execute immediately, 0 - store only
+ */
+#define EXECUTE_IMMEDIATELY		1
 
 struct sControlCommand_t {
     uint16_t order;      // Команда инструменту.
-    uint8_t reserved:4;
+    uint8_t reserved; //  EXECUTE_IMMIDIATELY
     uint8_t instrument; // Тип инструмента в запросе.
 };
 

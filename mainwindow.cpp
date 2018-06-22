@@ -194,3 +194,8 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+//void MainWindow::on_checkBox_immediately_stateChanged(int arg1)
+//{
+
+//}

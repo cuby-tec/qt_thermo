@@ -33,6 +33,8 @@ private slots:
 public slots:
     void on_pushButton_linestep_clicked();
     void on_textEdit_command_cursorPositionChanged();
+    void on_checkBox_immediately_stateChanged(int arg1);
+
 
 
 private:
@@ -43,6 +45,8 @@ private:
 //    ComData _comdata;
      ComData* req_builder;
 
+     // type of execution commands Qt::Checked|Qt::Unchecked
+     bool checkBox_immediately;
     ThreadExchange thread;
 
     /**
