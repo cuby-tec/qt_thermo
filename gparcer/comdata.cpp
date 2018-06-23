@@ -321,6 +321,8 @@ ComData::buildComdata()
 		control->nominal_rate = bstate->nominal_rate;
 		control->final_speedLevel = bstate->final_speedLevel;
 
+		control->speedLevel = bstate->accelerate_until;// TODO Attention
+
 		control->microsteps = bstate->microstep;
 
 		for(int j=0;j<3;j++){
