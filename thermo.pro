@@ -53,10 +53,13 @@ HEADERS += mainwindow.h \
     step_motor/block_state_t.h \
     step_motor/countertime_t.h \
     step_motor/trapeze_t.h \
-    step_motor/accelerationtable.h
+    step_motor/accelerationtable.h \
+    aboutwindow.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
-    profiles/thermopiddialog.ui
+    profiles/thermopiddialog.ui \
+    aboutwindow.ui \
+    aboutwindow.ui
 SOURCES += main.cpp \
            mainwindow.cpp \
            qcustomplot.cpp \
@@ -83,7 +86,8 @@ SOURCES += main.cpp \
     coordinatuswindow.cpp \
     step_motor/stepmotor.cpp \
     step_motor/controller.cpp \
-    step_motor/accelerationtable.cpp
+    step_motor/accelerationtable.cpp \
+    aboutwindow.cpp
 RESOURCES += resources.qrc
 
 DISTFILES += \

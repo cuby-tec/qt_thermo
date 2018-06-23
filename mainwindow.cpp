@@ -12,7 +12,7 @@
 #include "profiles/profiledialog.h"
 #include "thermolog/thermologdialog.h"
 #include "profiles/thermopiddialog.h"
-
+#include "aboutwindow.h"
 
 #include <QDebug>
 
@@ -78,7 +78,7 @@ const QString actionName1(QObject::tr("&Thermo"));
 const QString actionName2(QObject::tr("&Config"));
 const QString actionName3(QObject::tr("PID params"));
 const QString actionName4(QObject::tr("&Open"));
-
+const QString actionName5(QObject::tr("About"));
 
 const QString statusToolTip1(QObject::tr("Open file with G-Code content."));
 
@@ -132,6 +132,26 @@ void MainWindow::createActions(MainWindow* w)
     pidParams->setStatusTip("setting up PID parameters in current session.");
     menuTools->addAction(pidParams);
     connect(pidParams,&QAction::triggered,w,&MainWindow::pidParamsDo);
+
+//------------------ ViewMenu
+    QDockWidget* doc = ui->dockWidget_Console;
+    menuView = ui->menuView;
+
+    menuView->addAction(doc->toggleViewAction());
+
+    doc = ui->dockWidget_thermo;
+    menuView->addAction(doc->toggleViewAction());
+
+    menuView->addAction(doc->toggleViewAction());
+
+    doc = ui->dockWidget_Coordinatus_2;
+    menuView->addAction(doc->toggleViewAction());
+
+//------------------- HelpMenu
+    menuHelp = ui->menuHelp;
+    QAction* aboutAction = new QAction(actionName5,w);
+    menuHelp->addAction(aboutAction);
+    connect(aboutAction,&QAction::triggered,w,&MainWindow::aboutWindowDo);
 
 }
 
@@ -188,6 +208,16 @@ MainWindow::editProfile()
     }
 }
 
+// About window modal
+void
+MainWindow::aboutWindowDo()
+{
+    Aboutwindow* about = new Aboutwindow(this);
+
+    if(about->exec()){
+        about->baseSize();
+    }
+}
 
 
 MainWindow::~MainWindow()

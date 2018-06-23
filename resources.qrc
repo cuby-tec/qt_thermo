@@ -7,5 +7,7 @@
         <file>log/gParcer.log</file>
         <file>images/goo_top.png</file>
         <file>images/linestep.png</file>
+        <file>images/cuby-logo-250-250t.png</file>
+        <file>profile/aboutcomment.txt</file>
     </qresource>
 </RCC>

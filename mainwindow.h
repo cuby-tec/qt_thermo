@@ -52,11 +52,17 @@ private:
 
     QMenu * menuTools;
 
+    QMenu * menuView;
+
+    QMenu * menuHelp;
+
     QAction* actThermo;
 
     QAction* pidParams;
 
     void pidParamsDo();
+
+    void aboutWindowDo();
 
     void actTermoDo();
 

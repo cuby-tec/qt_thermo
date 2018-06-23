@@ -62,7 +62,7 @@ ThermoPlot::setupPlot(QCustomPlot* customPlot)
 
     // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
     connect(&dataTimer, SIGNAL(timeout()), this, SLOT(realtimeDataSlot()));
-//    dataTimer.start(1001); // Interval 0 means to refresh as fast as possible // DEBUG
+    dataTimer.start(1001); // Interval 0 means to refresh as fast as possible // DEBUG
 }
 
 const QString message1("Can't open device. maybe module not loaded. Use: $sudo insmod ./eclipse-workspace/usbtest/test1.ko \n \t or device dosn't connected.");
