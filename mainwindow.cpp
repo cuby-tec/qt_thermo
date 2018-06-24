@@ -30,17 +30,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setupGconsole(ui);
 
-    setupCoordinatus(ui);
+    setupCoordinatusWindow(ui);
 
 }
 
 //==============
 
 void
-MainWindow::setupCoordinatus(Ui::MainWindow *ui)
+MainWindow::setupCoordinatusWindow(Ui::MainWindow *ui)
 {
-    coordinatus = new CoordinatusWindow(ui);
-
+    coordinatusWin = new CoordinatusWindow(ui);
 }
 
 

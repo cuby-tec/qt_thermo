@@ -48,7 +48,7 @@ private:
     StepMotor* motor[M_AXIS];
 
 
-    ProfileData_t profileData;
+    ProfileData_t* profileData;
 
     void setupProfileData();
 

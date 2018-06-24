@@ -20,16 +20,18 @@ Controller::Controller()
         pcountertime[i] = NULL;
     }
 
-    setupProfileData();
+//    setupProfileData();
+    Coordinatus* cord = Coordinatus::instance();
+    profileData = cord->getProfileData();
 
     motor[X_AXIS] = new StepMotor(e17HS4401_pulley);
-    motor[X_AXIS]->setAcceleration(profileData.acceleration[X_AXIS]);
+    motor[X_AXIS]->setAcceleration(profileData->acceleration[X_AXIS]);
 
     motor[Y_AXIS] = new StepMotor(e17HS4401_pulley);
-    motor[Y_AXIS]->setAcceleration(profileData.acceleration[Y_AXIS]);
+    motor[Y_AXIS]->setAcceleration(profileData->acceleration[Y_AXIS]);
 
     motor[Z_AXIS] = new StepMotor(e17HS4401_shuft);
-    motor[Z_AXIS]->setAcceleration(profileData.acceleration[Z_AXIS]);
+    motor[Z_AXIS]->setAcceleration(profileData->acceleration[Z_AXIS]);
 
 }
 
@@ -105,7 +107,7 @@ void Controller::buildBlock(Coordinatus* cord) {
 //        v[i] = fabs((motor->*pf)(profileData.speed_rpm[i]));
         StepMotor* m = motor[i];
         convert pm = m->getLineSpeed;
-        v[i] = fabs((m->*pm)(profileData.speed_rpm[i]));
+        v[i] = fabs((m->*pm)(profileData->speed_rpm[i]));
 
 
 //varant 2:     v[i] = (motor->*motor->m_struct[i])(profileData.speed_rpm[i]);
@@ -149,7 +151,7 @@ void Controller::buildBlock(Coordinatus* cord) {
 
     //[5] Максимальное Угловое ускорение			C28
     for(int i=0;i<M_AXIS;++i){
-    	cord->nextBlocks[i].acceleration = profileData.acceleration[i];// TODO в сборку блокаS
+        cord->nextBlocks[i].acceleration = profileData->acceleration[i];// TODO в сборку блокаS
     }
 
 
@@ -178,8 +180,8 @@ void Controller::buildBlock(Coordinatus* cord) {
     //[7] Число шагов разгона	34.11 0.79			C38
     double_t accelSteps[M_AXIS];
     for(int i=0;i<M_AXIS;i++){
-        accelSteps[i] = pow(tSpeed[i],2)/( 2 * motor[i]->getAlfa(i) * profileData.acceleration[i] );
-        trapeze[i].accPath = pow(tSpeed[i],2)/( 2 * motor[i]->getAlfa(i) * profileData.acceleration[i] );
+        accelSteps[i] = pow(tSpeed[i],2)/( 2 * motor[i]->getAlfa(i) * profileData->acceleration[i] );
+        trapeze[i].accPath = pow(tSpeed[i],2)/( 2 * motor[i]->getAlfa(i) * profileData->acceleration[i] );
     }
 
     //Максимальное число шагов разгона				D41
@@ -482,7 +484,7 @@ Controller::calculateTrapeze() {
 }
 
 
-
+#ifdef REMOVED
 /**
  * Загрузка данных из профиля.
  */
@@ -542,4 +544,9 @@ void Controller::setupProfileData() {
 
 	    }
 }
+#endif
+
+
+
+//============ EOF
 

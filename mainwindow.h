@@ -76,14 +76,14 @@ private:
 
     ThermoPlot* plotter;
 
-    CoordinatusWindow* coordinatus;
+    CoordinatusWindow* coordinatusWin;
 
 
     void setupPlot(QCustomPlot *customPlot);
 
     void setupGconsole(Ui::MainWindow *ui);
 
-    void setupCoordinatus(Ui::MainWindow *ui);
+    void setupCoordinatusWindow(Ui::MainWindow *ui);
 
 };
 

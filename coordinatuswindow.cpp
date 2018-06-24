@@ -21,12 +21,12 @@ void
 CoordinatusWindow::setupCoordinatus()
 {
     coordinatus = Coordinatus::instance();
-    connect(coordinatus,SIGNAL(sg_coordUpdated()),this, SLOT(update()) );
+//    connect(coordinatus,SIGNAL(sg_coordUpdated()),this, SLOT(update()) );
 
 }
 
 #define ui_pos(arg1) uic->c_label_pos##arg1##_value->setText(QString("%1").arg(coordinatus->getWorkvalue( arg1##_AXIS )))
-
+/*
 void
 CoordinatusWindow::update()
 {
@@ -45,3 +45,4 @@ CoordinatusWindow::update()
     ui_pos(E);
 
 }
+*/

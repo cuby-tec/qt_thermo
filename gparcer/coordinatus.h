@@ -5,12 +5,13 @@
 #include <QString>
 #include <QObject>
 #include "step_motor/block_state_t.h"
+#include "step_motor/ProfileData.h"
 #include <math.h>
 
 // Singleton
-class Coordinatus:public QObject
+class Coordinatus//:public QObject
 {
-    Q_OBJECT
+//    Q_OBJECT
 
 public:
     static Coordinatus* instance()
@@ -40,8 +41,15 @@ public:
 
     block_state_t nextBlocks[N_AXIS];
 
+    ProfileData_t* getProfileData(){ return &profileData; }
 
-signals:
+    /**
+     * Загрузка данных из профиля.
+     */
+    void setupProfileData();
+
+
+//signals:
     void sg_coordUpdated();
 
 
@@ -51,6 +59,8 @@ private:
     double_t next[N_AXIS];
 
     double_t work[N_AXIS];
+
+    ProfileData_t profileData;
 
     bool absrel;
 

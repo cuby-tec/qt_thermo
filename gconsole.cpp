@@ -20,6 +20,7 @@ GConsole::GConsole(QObject *parent) : QObject(parent), req_builder(new ComData()
 //    this->req_builder = &_comdata;
 	oldBlockNumber = -1;
 	uia = NULL;
+     coord = Coordinatus::instance();
 }
 
 
@@ -33,6 +34,10 @@ GConsole::GConsole(Ui::MainWindow* &ui):req_builder(new ComData())
     setupGconsole();
 
     setupThread();
+
+    coord = Coordinatus::instance();
+    coord->setupProfileData();
+
 }
 
 
@@ -224,6 +229,11 @@ GConsole::on_pushButton_linestep_clicked()
     uia->label_commandLine->setText(pbuffer);
 // -------- parcer
 
+//    Coordinatus* coord = Coordinatus::instance();
+
+    coord->setupProfileData();
+
+
     sgcode = parceString(pbuffer, &parce_error);
     if( sgcode != 0 && sgcode->group != ' ')
     {
@@ -303,3 +313,7 @@ GConsole::on_textEdit_command_cursorPositionChanged()
     oldBlockNumber = bnumber;
 
 }
+
+
+
+

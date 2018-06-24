@@ -5,6 +5,7 @@
 #include <QObject>
 
 #include "gparcer/coordinatus.h"
+#include "thermoplot.h"
 
 #include <ui_mainwindow.h>
 
@@ -24,7 +25,8 @@ public:
 signals:
 
 public slots:
-    void update();
+//    void update();
+//    void update(Status_t);
 
 
 private:

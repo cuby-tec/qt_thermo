@@ -66,6 +66,7 @@ private:
     void setupThread();
 
 //    Profile* profile;
+    Coordinatus* coord;
 
 };
 
