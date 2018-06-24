@@ -69,7 +69,7 @@ Controller::buildCounterValue(uint32_t steps,uint8_t axis)
 
 }
 
-double_t Controller::getPath_mm(uint8_t axis,size_t steps) {
+double_t Controller::getPath_mm(uint8_t axis,int32_t steps) {
 	double_t result;
 
 	StepMotor* m = motor[axis];

@@ -39,7 +39,7 @@ public:
      */
     void buildBlock(Coordinatus* cord);
 
-    double_t getPath_mm(uint8_t axis,size_t steps);
+    double_t getPath_mm(uint8_t axis,int32_t steps);
 
 
 private:
