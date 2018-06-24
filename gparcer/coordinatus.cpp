@@ -4,7 +4,7 @@
 */
 
 #include <QtGlobal>
-
+#include <QDebug>
 #include "coordinatus.h"
 #include <string.h>
 #include "profiles/profile.h"
@@ -20,13 +20,13 @@ Coordinatus::Coordinatus()
 void
 Coordinatus::initWork()
 {
-    memcpy(work,current,sizeof(work)*sizeof(double_t) );
+    memcpy(work,current,sizeof(work)); // *sizeof(double_t) );
 }
 
 void
 Coordinatus::moveWorkToNext()
 {
-    memcpy(next,work,sizeof(work)*sizeof(double_t));
+    memcpy(next,work,sizeof(work)); //*sizeof(double_t));
 
 }
 

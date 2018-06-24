@@ -39,6 +39,8 @@ public:
      */
     void buildBlock(Coordinatus* cord);
 
+    double_t getPath_mm(uint8_t axis,size_t steps);
+
 
 private:
     size_t frequency;
@@ -65,6 +67,10 @@ private:
     void planner_recalculate(block_state* prev, block_state* curr);
 
 
+    /**
+     * Загрузка данных(Угловое ускорение) из профиля.
+     */
+    void uploadMotorData();
 };
 
 #endif // CONTROLLER_H

@@ -24,6 +24,8 @@ public:
 
     GConsole(Ui::MainWindow *&ui);
 
+    double_t getPath_mm(uint8_t axis, size_t steps) { return (req_builder->getPath_mm(axis, steps))  ; }
+
 
 private slots:
     void updateStatus(const Status_t* status);

@@ -25,13 +25,10 @@ Controller::Controller()
     profileData = cord->getProfileData();
 
     motor[X_AXIS] = new StepMotor(e17HS4401_pulley);
-    motor[X_AXIS]->setAcceleration(profileData->acceleration[X_AXIS]);
 
     motor[Y_AXIS] = new StepMotor(e17HS4401_pulley);
-    motor[Y_AXIS]->setAcceleration(profileData->acceleration[Y_AXIS]);
 
     motor[Z_AXIS] = new StepMotor(e17HS4401_shuft);
-    motor[Z_AXIS]->setAcceleration(profileData->acceleration[Z_AXIS]);
 
 }
 
@@ -72,6 +69,34 @@ Controller::buildCounterValue(uint32_t steps,uint8_t axis)
 
 }
 
+double_t Controller::getPath_mm(uint8_t axis,size_t steps) {
+	double_t result;
+
+	StepMotor* m = motor[axis];
+
+	lines lm = m->getLineStep;
+
+	result = ( m->*lm)(axis);
+
+	result *= steps;
+/*
+        StepMotor* m = motor[i];
+        lines lm = m->getLineStep;
+//    	lines pstep = motor->getLineStep[i];
+//        cord->nextBlocks[i].steps = fabs(path[i])/( motor->*pstep)(i);
+        cord->nextBlocks[i].steps = fabs(path[i])/( m->*lm)(i);//TODO в сборку блока
+*/
+	return (result);
+}
+
+void Controller::uploadMotorData() {
+    motor[X_AXIS]->setAcceleration(profileData->acceleration[X_AXIS]);
+    motor[Y_AXIS]->setAcceleration(profileData->acceleration[Y_AXIS]);
+    motor[Z_AXIS]->setAcceleration(profileData->acceleration[Z_AXIS]);
+
+}
+
+
 /**
  * Заполнение полей разгона, торможения, и т.д.
  */
@@ -81,6 +106,8 @@ void Controller::buildBlock(Coordinatus* cord) {
 	//	Путь по Y
 	//	Путь по Z
 	double_t path[M_AXIS];						//	B2
+
+	uploadMotorData();
 
 	for(int i=0;i<M_AXIS;i++){
 		path[i] = cord->getNextValue(i) - cord->getCurrentValue(i);
@@ -202,7 +229,7 @@ void Controller::buildBlock(Coordinatus* cord) {
 
     // motor[X_AXIS]
     double_t maxLineAccel = motor[index]->getLinearAcceleration();
-
+Q_ASSERT(maxLineAccel != 0);
     // Время разгона для оси X
     double_t minimeAccelerationTime = velocity[index]/maxLineAccel;
 

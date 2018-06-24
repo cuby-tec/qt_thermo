@@ -15,6 +15,8 @@ StepMotor::StepMotor(eMotorType type)
 
     stepsPerRound = 360/ANGLE;
 
+   this->acceleration = 1250;	//NULL;
+
 #endif
 
     for(int i=0;i<N_AXIS;i++)
@@ -26,7 +28,6 @@ StepMotor::StepMotor(eMotorType type)
 
    pulley_diameter = PULLEY_DIAMETER;
    
-   this->acceleration = NULL;
 
    switch(type){
    case e17HS4401_pulley:

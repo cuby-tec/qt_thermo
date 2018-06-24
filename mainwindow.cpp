@@ -56,9 +56,9 @@ void
 MainWindow::updateCoordinatus(const Status_t* status)
 {
 //    ui->label_posX;
-    ui->c_label_posX_value->setText(QString("%1").arg(status->coordinatus[X_AXIS]));
-    ui->c_label_posY_value->setText(QString("%1").arg(status->coordinatus[Y_AXIS]));
-    ui->c_label_posY_value->setText(QString("%1").arg(status->coordinatus[Z_AXIS]));
+    ui->c_label_posX_value->setText(QString("%1 (%2)").arg(gconsole->getPath_mm(X_AXIS,status->coordinatus[X_AXIS])).arg(status->coordinatus[X_AXIS]));
+    ui->c_label_posY_value->setText(QString("%1 (%2)").arg(gconsole->getPath_mm(Y_AXIS,status->coordinatus[Y_AXIS])).arg(status->coordinatus[Y_AXIS]));
+    ui->c_label_posZ_value->setText(QString("%1 (%2)").arg(gconsole->getPath_mm(Z_AXIS,status->coordinatus[Z_AXIS])).arg(status->coordinatus[Z_AXIS]));
     ui->c_label_posE_value->setText(QString("%1").arg(status->coordinatus[E_AXIS]));
 }
 
