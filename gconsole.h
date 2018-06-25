@@ -10,6 +10,8 @@
 #include "gparcer/comdata.h"
 #include "profiles/profile.h"
 
+#include "coordinatuswindow.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -25,6 +27,9 @@ public:
     GConsole(Ui::MainWindow *&ui);
 
     double_t getPath_mm(uint8_t axis, int32_t steps) { return (req_builder->getPath_mm(axis, steps))  ; }
+
+
+    void setCoordinatusWindow(CoordinatusWindow* cwd){ this->coordinatuswindow = cwd; }
 
 
 private slots:
@@ -46,6 +51,8 @@ private:
 
 //    ComData _comdata;
      ComData* req_builder;
+
+     CoordinatusWindow* coordinatuswindow;
 
      // type of execution commands Qt::Checked|Qt::Unchecked
      bool checkBox_immediately;
@@ -69,6 +76,10 @@ private:
 
 //    Profile* profile;
     Coordinatus* coord;
+
+    void setDisabledCursor();
+
+    void setEnabledCursor();
 
 };
 

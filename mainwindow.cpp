@@ -32,6 +32,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setupCoordinatusWindow(ui);
 
+//    coordinatusWin->setGconsole(*gconsole);
+    gconsole->setCoordinatusWindow(coordinatusWin);
+
 }
 
 //==============
@@ -49,6 +52,8 @@ void
     gconsole = new GConsole(ui);
     connect(ui->pushButton_linestep,SIGNAL(clicked(bool)),gconsole,SLOT(on_pushButton_linestep_clicked()) );
     connect(ui->textEdit_command,SIGNAL(cursorPositionChanged()),gconsole,SLOT(on_textEdit_command_cursorPositionChanged()) );
+    // Status
+    connect(plotter,SIGNAL(sg_statusChanged(const Status_t*)),gconsole,SLOT(updateStatus(const Status_t*)) );
 }
 
 
@@ -67,7 +72,7 @@ MainWindow::setupPlot(QCustomPlot *customPlot)
 {
 
     plotter = new ThermoPlot(customPlot);
-    connect(plotter,SIGNAL(sg_statusChanged(const Status_t*)),this,SLOT(updateCoordinatus(const Status_t* )));
+//    connect(plotter,SIGNAL(sg_statusChanged(const Status_t*)),this,SLOT(updateCoordinatus(const Status_t* )));
 
 }
 

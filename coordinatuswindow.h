@@ -6,6 +6,7 @@
 
 #include "gparcer/coordinatus.h"
 #include "thermoplot.h"
+//#include "gconsole.h"
 
 #include <ui_mainwindow.h>
 
@@ -21,6 +22,9 @@ public:
 
     CoordinatusWindow(Ui::MainWindow* ui);
 
+//    void setGconsole(GConsole& g){this->gconsole = &g; }
+
+    void update(const Status_t *status, QObject *pgconsole);
 
 signals:
 
@@ -34,6 +38,8 @@ private:
 
     Coordinatus* coordinatus;
     void setupCoordinatus();
+
+//    GConsole* gconsole;
 
 };
 

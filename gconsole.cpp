@@ -135,6 +135,20 @@ GConsole::buildComData(sGcode* sgcode)
     return result;
 }
 
+
+void GConsole::setDisabledCursor() {
+    uia->pushButton_linestep->setDisabled(true);
+    uia->dockWidget_Console->setCursor(Qt::BusyCursor);
+
+}
+
+void GConsole::setEnabledCursor() {
+    uia->pushButton_linestep->setDisabled(false);
+    uia->dockWidget_Console->setCursor(Qt::ArrowCursor);
+}
+
+
+
 //TODO
 void
 GConsole::failedStatus()
@@ -148,7 +162,11 @@ GConsole::updateStatus(const Status_t* status)
 {
 	uint32_t rnumber = thread.getRequestNumber();
 
-    qDebug()<<"GConsole[125]:"<<status->frameNumber<<"\tsended:"<<rnumber<<"\tquee:"<<status->freeSegments;
+//    qDebug()<<"GConsole[125]:"<<status->frameNumber<<"\tsended:"<<rnumber<<"\tquee:"<<status->freeSegments;
+
+    coordinatuswindow->update(status,this);
+
+    setEnabledCursor();
 }
 
 /**
@@ -206,8 +224,9 @@ GConsole::on_pushButton_linestep_clicked()
     sGcode* sgcode;
 
      QColor bkgColor(170, 255, 255);
-    int bnumber = uia->textEdit_command->textCursor().block().blockNumber();
+//    int bnumber = uia->textEdit_command->textCursor().block().blockNumber();
 
+    setDisabledCursor();
 
 //    qDebug()<<"GConsole[60] Clicked line:"<<bnumber ;
 
