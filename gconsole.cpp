@@ -9,7 +9,7 @@
 //#include "links/Status_t.h"
 //#include "usbexchange.h"
 
-
+#include "links/exchange/eModelstate.h"
 
 
 GConsole::GConsole(QObject *parent) : QObject(parent), req_builder(new ComData())
@@ -165,8 +165,8 @@ GConsole::updateStatus(const Status_t* status)
 //    qDebug()<<"GConsole[125]:"<<status->frameNumber<<"\tsended:"<<rnumber<<"\tquee:"<<status->freeSegments;
 
     coordinatuswindow->update(status,this);
-
-    setEnabledCursor();
+    if(status->modelState.modelState == ehIdle)
+        setEnabledCursor();
 }
 
 /**

@@ -7,6 +7,8 @@
 #include "gparcer/coordinatus.h"
 #include "thermoplot.h"
 //#include "gconsole.h"
+#include "step_motor/controller.h"
+
 
 #include <ui_mainwindow.h>
 
@@ -26,6 +28,8 @@ public:
 
     void update(const Status_t *status, QObject *pgconsole);
 
+    void setController(Controller* contr) { this->controller = contr; }
+
 signals:
 
 public slots:
@@ -38,6 +42,8 @@ private:
 
     Coordinatus* coordinatus;
     void setupCoordinatus();
+
+    Controller* controller;
 
 //    GConsole* gconsole;
 

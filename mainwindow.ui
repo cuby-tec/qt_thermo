@@ -405,17 +405,68 @@ border-color: rgb(255, 4, 44);
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item row="7" column="1">
+       <widget class="QLabel" name="c_label_positioning_value">
+        <property name="text">
+         <string>Abs</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
        <widget class="QLabel" name="label_positioning">
         <property name="text">
          <string>Positioning</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLabel" name="c_label_positioning_value">
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_modelState">
         <property name="text">
-         <string>Abs</string>
+         <string>modelState</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLabel" name="c_label_modelState">
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_queueState">
+        <property name="text">
+         <string>queueState</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLabel" name="c_label_queueState">
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_temperature">
+        <property name="text">
+         <string>temperature</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLabel" name="c_label_temperature">
+        <property name="text">
+         <string>20</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

@@ -2,6 +2,7 @@
 #include "coordinatuswindow.h"
 #include "myglobal.h"
 #include "gconsole.h"
+#include "links/exchange/eModelstate.h"
 
 
 CoordinatusWindow::CoordinatusWindow(QObject *parent) : QObject(parent)
@@ -32,7 +33,7 @@ void
 CoordinatusWindow::update(const Status_t* status, QObject *pgconsole)
 {
     GConsole* gconsole = (GConsole*) pgconsole;
-
+    uint8_t ms_state;
 
     if(coordinatus->isAbsolute())
     {
@@ -54,6 +55,39 @@ CoordinatusWindow::update(const Status_t* status, QObject *pgconsole)
     uic->c_label_posZ_value->setText(QString("%1 (%2)").arg(gconsole->getPath_mm(Z_AXIS,status->coordinatus[Z_AXIS])).arg(status->coordinatus[Z_AXIS]));
     uic->c_label_posE_value->setText(QString("%1").arg(status->coordinatus[E_AXIS]));
 
+     uic->c_label_queueState->setText(QString("%1").arg(status->modelState.queueState)) ;
+
+     /*
+      * enum eModelstate{
+      *     ehIdle = 1, ehIwork, ehWait_instrument1, ehWait_instrument2,
+      *     ehException, ehEnder1, ehEnder2, ehEnder3, ehEnder4, ehEnder5, ehEnder6
+      * };
+      */
+
+
+     const QString state1("ehIdle");
+     const QString state2("ehIwork");
+
+     QString t_state;
+
+     ms_state = status->modelState.modelState;
+
+     switch (ms_state) {
+     case ehIdle:
+         t_state = state1;
+         break;
+
+     case ehIwork:
+         t_state = state2;
+         break;
+
+     default:
+         break;
+     }
+//     uic->c_label_modelState->setText(QString("%1").arg(status->modelState.modelState));
+     uic->c_label_modelState->setText(QString(t_state));
+
+     uic->c_label_temperature->setText(QString("%1 C").arg(status->temperature,0,'g',4) );//&deg;
 
 }
 
