@@ -42,6 +42,13 @@ public:
     double_t getPath_mm(uint8_t axis,int32_t steps);
 
 
+    /**
+     * Вчисляется минимальное значение шага.
+     * !! Выполняется установка микрошага для данного двигателя.
+     */
+    double_t getPrecicion(uint8_t axis, uint8_t microstep);
+
+
 private:
     size_t frequency;
 

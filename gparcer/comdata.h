@@ -112,7 +112,7 @@ private:
 
     void buildComdata();
 
-
+    void buildG2Command();
 
 
 };

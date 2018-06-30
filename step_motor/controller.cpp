@@ -511,6 +511,18 @@ Controller::calculateTrapeze() {
 }
 
 
+//TODOH Precicion
+double_t Controller::getPrecicion(uint8_t axis, uint8_t microstep) {
+
+	double_t result;
+
+	motor[axis]->setMicrostep(axis,microstep);
+    StepMotor* m = motor[axis];
+    lines lm = m->getLineStep;
+    result = (m->*lm)(axis);	//( m->*lm)(i)
+	return result;
+}
+
 #ifdef REMOVED
 /**
  * Загрузка данных из профиля.

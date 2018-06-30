@@ -5,6 +5,8 @@
 #include <QtGlobal>
 #include "myglobal.h"
 
+#include "geometry/Arc.h"
+
 #include <cmath>
 
 //const QString msg3 = "Conversion error.";
@@ -340,6 +342,96 @@ ComData::buildComdata()
 
 }
 
+//TODOH Circle G2 G3 (Clockwise Arc)
+void
+ComData::buildG2Command()
+{
+    bool ok;
+
+    sGparam* gparam;
+
+    Arc* arc = new Arc();
+
+    QString xstr,ystr,istr,jstr,rstr;
+
+
+    sSegment* segment = &request.payload.instrument1_parameter;
+
+
+    for(int i=0;i<sgCode->param_number;i++)
+    {
+        gparam = &sgCode->param[i];
+
+//        coord = QString(gparam->value).toFloat(&ok);
+
+        switch (gparam->group)
+        {
+        case 'X':
+        	xstr = gparam->value;
+        	break;
+        case 'Y':
+//            setParam_coord(gparam);
+        	ystr = gparam->value;
+            break;
+
+        case 'I':
+        	istr = gparam->value;
+        	break;
+
+        case 'J':
+        	jstr = gparam->value;
+        	break;
+
+        case 'R':
+        	rstr = gparam->value;
+        	break;
+
+        case 'E':
+        	// TODOH Extruder
+        	break;
+
+        case 'N': // Номер строки
+            uint32_t number = QString(gparam->value).toInt(&ok);
+            Q_ASSERT(ok);
+            segment->head.linenumber = number;
+        	break;
+
+
+//        default:
+//            break;
+        }
+
+    }
+
+    // G2 X90.6 Y13.8 I5 J10 E22.4
+    //77,2317745639	56,0908965345
+
+    QString startX("77,2317745639");
+    QString startY("56,0908965345");
+
+//    arc->setStart(Point(cord->getCurrentValue(X_AXIS),cord->getCurrentValue(Y_AXIS))); // TODO current value
+    arc->setStart(startX,startY);
+
+    Q_ASSERT(xstr.count()>0 && ystr.count()>0);
+
+    arc->setEnd(xstr,ystr);
+
+    Q_ASSERT(istr.count()>0 && jstr.count()>0);// TODO set radious
+
+    arc->setCenter(istr,jstr);
+
+    QString tstr = profile->getARC_TOLERANCE();
+
+    Q_ASSERT(tstr.count()>0);
+
+    double_t precicion = controller->getPrecicion(X_AXIS,1);
+
+    //TODO correct precicion from Controller.
+    arc->setPrecicion(precicion);
+
+
+}
+
 
 void
 ComData::buildGgroup()
@@ -357,9 +449,11 @@ ComData::buildGgroup()
         break;
 
     case 2:
+    case 3:
+    	buildG2Command();
         break;
 
-    case 3:
+    case 4:
         break;
 
 

@@ -54,7 +54,10 @@ HEADERS += mainwindow.h \
     step_motor/countertime_t.h \
     step_motor/trapeze_t.h \
     step_motor/accelerationtable.h \
-    aboutwindow.h
+    aboutwindow.h \
+    geometry/Arc.h \
+    geometry/Point.h \
+    geometry/mLine.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui \
@@ -87,7 +90,10 @@ SOURCES += main.cpp \
     step_motor/stepmotor.cpp \
     step_motor/controller.cpp \
     step_motor/accelerationtable.cpp \
-    aboutwindow.cpp
+    aboutwindow.cpp \
+    geometry/Arc.cpp \
+    geometry/Point.cpp \
+    geometry/mLine.cpp
 RESOURCES += resources.qrc
 
 DISTFILES += \

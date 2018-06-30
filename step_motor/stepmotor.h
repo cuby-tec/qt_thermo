@@ -14,7 +14,7 @@
 #include <math.h>
 #include "links/msmotor/msport.h"
 #include "myglobal.h"
-
+#include <assert.h>     /* assert */
 
 // "Крутящий момент(Н. см)" 40
 //"Фиксированный крутящий момент(Н. см)" 2.2
@@ -121,6 +121,7 @@ public:
 
 
     void setMicrostep(uint32_t axis, uint32_t _microstep){
+    	assert(_microstep==1 || _microstep==2 || _microstep==4||_microstep==8||_microstep==16);
         microstep[axis] = _microstep;
 	}
 
