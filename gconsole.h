@@ -59,7 +59,7 @@ private:
 
      // type of execution commands Qt::Checked|Qt::Unchecked
      bool checkBox_immediately;
-    ThreadExchange thread;
+//    ThreadExchange thread;
 
     /**
      * Разбор одной строки.

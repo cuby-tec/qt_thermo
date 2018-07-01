@@ -35,7 +35,13 @@ public:
 
     void setAbsolute(bool value){absrel = value;}
 
-    void moveWorkToNext();
+    void moveWorkToNext(){
+    	memcpy(next,work,sizeof(work)); //*sizeof(double_t));
+    }
+
+    void moveNextToCurrent(){
+        memcpy(current,next,sizeof(current)); //*sizeof(double_t));
+    }
 
     block_state_t currentBlocks[N_AXIS];
 
@@ -52,13 +58,14 @@ public:
 //signals:
     void sg_coordUpdated();
 
-
 private:
+
     double_t current[N_AXIS];
 
     double_t next[N_AXIS];
 
-    double_t work[N_AXIS];
+
+   double_t work[N_AXIS];
 
     ProfileData_t profileData;
 

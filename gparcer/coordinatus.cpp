@@ -23,12 +23,12 @@ Coordinatus::initWork()
     memcpy(work,current,sizeof(work)); // *sizeof(double_t) );
 }
 
-void
-Coordinatus::moveWorkToNext()
-{
-    memcpy(next,work,sizeof(work)); //*sizeof(double_t));
-
-}
+//void
+//Coordinatus::moveWorkToNext()
+//{
+//    memcpy(next,work,sizeof(work)); //*sizeof(double_t));
+//
+//}
 
 void
 Coordinatus::setWorkValue(size_t axis,double_t value)

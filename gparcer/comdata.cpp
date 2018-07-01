@@ -20,6 +20,8 @@ ComData::ComData(QObject *parent) : QObject(parent)
     memset(&request,'\0',sizeof(ComDataReq_t));
 //    request.requestNumber = 22;
 
+    state = ecdOne;// отправка одного Сегмента.
+
     profile = Profile::instance();
 
     cord = Coordinatus::instance();
@@ -248,6 +250,7 @@ ComData::buildG0command()
 
     }
 
+    cord->moveNextToCurrent();
     cord->moveWorkToNext();
     if(!isPlaneHasSteps())
     {
@@ -361,7 +364,8 @@ ComData::buildG2Command()
 
     sGparam* gparam;
 
-    Arc* arc = new Arc();
+//    Arc* arc = new Arc();
+    arc = new Arc();
 
     QString xstr,ystr,istr,jstr,rstr;
 
@@ -456,11 +460,13 @@ ComData::buildGgroup()
 
     case 0:
     case 1:
+    	state = ecdOne;
         buildG0command();
         break;
 
     case 2:
     case 3:
+    	state = ecdCircle;
     	buildG2Command();
         break;
 
@@ -531,27 +537,54 @@ ComData::build(sGcode *sgcode)
     return(&request);
 }
 
+// from GConsole
 void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 {
-    setRequestNumber(++MyGlobal::commandIndex);
+	setRequestNumber(++MyGlobal::commandIndex);
 
-    build(sgcode);
+	//    ComDataReq_t* req = getRequest();
+	ComDataReq_t* req = build(sgcode);
+	switch(state){
 
-    //================
+	case ecdOne:
+		// immediately execute
+		if(checkBox_immediately)
+			req->command.reserved |= EXECUTE_IMMEDIATELY;
+		else
+			req->command.reserved &= ~EXECUTE_IMMEDIATELY;
 
-    ComDataReq_t* req = getRequest();
-    //TODOH immediately execute
+		req->payload.instrument1_parameter.head.reserved &= ~EXIT_CONTINUE;
 
-     // immediately execute
-     if(checkBox_immediately)
-        req->command.reserved |= EXECUTE_IMMEDIATELY;
-     else
-        req->command.reserved &= ~EXECUTE_IMMEDIATELY;
+		thread.setRequest(req);
+		thread.process();
+		break;
 
-     req->payload.instrument1_parameter.head.reserved &= ~EXIT_CONTINUE;
+	case ecdCircle:
 
-     thread.setRequest(req);
-     thread.process();
+		for(int i = 1; i<arc->getPointsNumber();i++)
+		{
+			Point p = arc->getPoint(i);
+
+			cord->moveNextToCurrent();
+			cord->initWork();
+			cord->setWorkValue(X_AXIS,p.x);
+			cord->setWorkValue(Y_AXIS,p.y);
+
+		    cord->moveWorkToNext();
+		    if(!isPlaneHasSteps())
+		    {
+		        continue;
+		    }
+
+		    controller->buildBlock(cord);
+
+			buildComdata();
+
+		}
+
+		break;
+	}
+
 
 }
 

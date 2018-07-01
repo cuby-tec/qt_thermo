@@ -6,6 +6,7 @@
 
 #include "links/ComDataReq_t.h"
 #include "gparcer/sgcode.h"
+#include "geometry/Arc.h"
 
 #include "profiles/profile.h"
 #include "coordinatus.h"
@@ -46,7 +47,9 @@
 #define E_DIRECTION_MASK 		(1<<Y_DIRECTION_BIT) // All direction bits
 #define E_STEP_MASK 			(1<<Y_STEP_BIT) // All step bits
 
-
+enum eCDstate{
+	ecdOne = 1, ecdCircle
+};
 
 
 class ComData : public QObject
@@ -104,10 +107,14 @@ private:
 
     Coordinatus* cord;
 
+    Arc* arc;
+
 //    block_state blocks[N_AXIS];
 
 //    StepMotor* motor;
 
+    // Указатель типа отправки.
+    eCDstate state;
 
     void calculateAccel();
 

@@ -127,11 +127,11 @@ GConsole::buildComData(sGcode* sgcode)
 
     //===========
 
-   thread.setRequest(req);
+//   thread.setRequest(req);
 
-    thread.process();
+//    thread.process();
 
-    return result;
+//    return result;
 }
 
 
