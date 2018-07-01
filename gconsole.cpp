@@ -75,8 +75,11 @@ GConsole::setupGconsole()
 void
 GConsole::setupThread()
 {
-    connect(&thread,SIGNAL(sg_status_updated(const Status_t*)),this,SLOT(updateStatus(const Status_t*)) );
-    connect(&thread,SIGNAL(sg_failed_status()),this, SLOT(failedStatus()) );
+//    connect(&thread,SIGNAL(sg_status_updated(const Status_t*)),this,SLOT(updateStatus(const Status_t*)) );
+//    connect(&thread,SIGNAL(sg_failed_status()),this, SLOT(failedStatus()) );
+
+    connect(req_builder,SIGNAL(sg_updateStatus(const Status_t*)),this,SLOT(updateStatus(const Status_t*)) );
+
 }
 
 
@@ -103,9 +106,6 @@ GConsole::buildComData(sGcode* sgcode)
 
 
 //    r->requestNumber= ++MyGlobal::commandIndex;
-
-
-
 //======================
 
     ComDataReq_t* req = req_builder->getRequest();
@@ -126,7 +126,6 @@ GConsole::buildComData(sGcode* sgcode)
     qDebug()<<"GConsole[121]: stepsX"<<req->payload.instrument1_parameter.axis[X_AXIS].steps;
 
     //===========
-// TODO send requst and wait signal
 
    thread.setRequest(req);
 
@@ -160,7 +159,7 @@ GConsole::failedStatus()
 void
 GConsole::updateStatus(const Status_t* status)
 {
-	uint32_t rnumber = thread.getRequestNumber();
+//	uint32_t rnumber = thread.getRequestNumber();
 
 //    qDebug()<<"GConsole[125]:"<<status->frameNumber<<"\tsended:"<<rnumber<<"\tquee:"<<status->freeSegments;
 
@@ -258,10 +257,12 @@ GConsole::on_pushButton_linestep_clicked()
     {
 //        uia->label_commandLine->setText(QString(error2)+QString("%1").arg(parce_error) );
         uia->label_commandLine->setText(msg1+ QString(sgcode->group)+QString(sgcode->value) );
-        buildComData(sgcode); // sGcode* sgcode
+//        buildComData(sgcode); // sGcode* sgcode
+        req_builder->buildComData(sgcode,checkBox_immediately);
 
     }else{
         uia->label_commandLine->setText(QString(error1)+QString("%1").arg(parce_error) );
+        setEnabledCursor();
     }
 
 //--------- parcer end

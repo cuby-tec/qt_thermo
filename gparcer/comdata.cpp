@@ -14,20 +14,31 @@
 const char* msg3 = "Conversion error.";
 const char* msg4 = "Profile should be selected.";
 
-ComData::ComData()
+ComData::ComData(QObject *parent) : QObject(parent)
 {
 
     memset(&request,'\0',sizeof(ComDataReq_t));
 //    request.requestNumber = 22;
 
     profile = Profile::instance();
+
     cord = Coordinatus::instance();
+    cord->setupProfileData();
+
 //    motor = new StepMotor();
 
     controller = new Controller();
 
+    setupThread();
 
 }
+
+void
+ComData::setupThread()
+{
+    connect(&thread,SIGNAL(sg_status_updated(const Status_t*)),this,SLOT(updateStatus(const Status_t*)) );
+}
+
 
 void
 ComData::setWorkValue(QString value, size_t axis_num)
@@ -495,6 +506,7 @@ ComData::buildMgroup()
 //}
 
 
+
 ComDataReq_t*
 ComData::build(sGcode *sgcode)
 {
@@ -517,6 +529,40 @@ ComData::build(sGcode *sgcode)
         break;
     }
     return(&request);
+}
+
+void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
+{
+    setRequestNumber(++MyGlobal::commandIndex);
+
+    build(sgcode);
+
+    //================
+
+    ComDataReq_t* req = getRequest();
+    //TODOH immediately execute
+
+     // immediately execute
+     if(checkBox_immediately)
+        req->command.reserved |= EXECUTE_IMMEDIATELY;
+     else
+        req->command.reserved &= ~EXECUTE_IMMEDIATELY;
+
+     req->payload.instrument1_parameter.head.reserved &= ~EXIT_CONTINUE;
+
+     thread.setRequest(req);
+     thread.process();
+
+}
+
+void ComData::updateStatus(const Status_t *status)
+{
+    emit sg_updateStatus(status);
+}
+
+void ComData::failedStatus()
+{
+ //TODO failed Status
 }
 
 void

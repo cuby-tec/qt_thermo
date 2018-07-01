@@ -1,6 +1,9 @@
 #ifndef COMDATA_H
 #define COMDATA_H
 
+#include <QObject>
+#include <QChar>
+
 #include "links/ComDataReq_t.h"
 #include "gparcer/sgcode.h"
 
@@ -10,7 +13,9 @@
 #include "step_motor/controller.h"
 #include "step_motor/block_state_t.h"
 
-#include <QChar>
+#include "exchange/threadexchange.h"
+
+
 
 #define DIRECTION_BIT    	1  // Port X Pin X
 #define STEP_BIT         	2  // Port X pin X
@@ -44,10 +49,13 @@
 
 
 
-class ComData
+class ComData : public QObject
 {
+
+    Q_OBJECT
+
 public:
-    ComData();
+    explicit ComData(QObject *parent = 0);
 
     ComDataReq_t* getRequest()
     {
@@ -67,10 +75,23 @@ public:
     Controller* getController(){ return controller; }
 
 
+    void buildComData(sGcode* sgcode, bool checkBox_immediately);
+
+
+signals:
+    void sg_updateStatus(const Status_t* status);
+
+private slots:
+    void updateStatus(const Status_t* status);
+    void failedStatus();
+
+
 private:
 
-    ComDataReq_t request;
 
+    ThreadExchange thread;
+
+    ComDataReq_t request;
 
     Controller* controller;
 
@@ -114,6 +135,7 @@ private:
 
     void buildG2Command();
 
+    void setupThread();
 
 };
 

@@ -57,7 +57,8 @@ HEADERS += mainwindow.h \
     aboutwindow.h \
     geometry/Arc.h \
     geometry/Point.h \
-    geometry/mLine.h
+    geometry/mLine.h \
+    gparcer/comdata.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui \

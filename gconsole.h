@@ -54,6 +54,9 @@ private:
 
      CoordinatusWindow* coordinatuswindow;
 
+//    Profile* profile;
+    Coordinatus* coord;
+
      // type of execution commands Qt::Checked|Qt::Unchecked
      bool checkBox_immediately;
     ThreadExchange thread;
@@ -69,13 +72,10 @@ private:
 //bool    GConsole::buildComData(sGcode* sgcode)
     bool buildComData(sGcode* sgcode);
 
-
     void setupGconsole();
 
     void setupThread();
 
-//    Profile* profile;
-    Coordinatus* coord;
 
     void setDisabledCursor();
 
