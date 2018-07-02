@@ -444,6 +444,7 @@ ComData::buildG2Command()
     //TODO correct precicion from Controller.
     arc->setPrecicion(precicion);
 
+    arc->calculate();
 
 }
 

@@ -8,7 +8,10 @@
 
 #include "Arc.h"
 #include <QtGlobal>
+#include <QDebug>
 #include "mLine.h"
+#include <cmath>
+#include "myglobal.h"
 
 Arc::Arc() {
 	// TODO Auto-generated constructor stub
@@ -74,9 +77,9 @@ void Arc::setRadious(QString r) {
 
 void Arc::calculateRadious() {
 
-	radious = sqrt(pow((start.x-end.x),2.0)+pow((start.y - end.y),2.0));
+	radious = sqrt(pow((start.x-center.x),2.0)+pow((start.y - center.y),2.0));
 
-	calculateAngle();
+	calculateAlfa();
 
 }
 
@@ -106,7 +109,72 @@ Arc::setPrecicion(double_t precicion) {
 
 }
 
-void Arc::calculateAngle() {
+//TODO calculate
+void Arc::calculate() {
+
+    if((std::isnan(radious)) || (radious == 0)){
+		calculateRadious();
+	}
+
+	Q_ASSERT((radious != qQNaN()) && (radious != 0) );
+
+
+
+	// start point angle
+	Point startdistance = start - center;
+	double_t beta_startX = acos(startdistance.x/radious);
+//	double_t beta_startY = asin(startdistance.y/radious);
+
+
+	double_t beta_start, beta_end;
+
+	uint8_t vector = 0;
+	if(startdistance.x < 0)
+		vector |= 0x01;
+	if(startdistance.y < 0)
+		vector |= 0x02;
+
+	switch(vector)
+	{
+	case 0:
+	case 1:
+		beta_start = beta_startX;
+		break;
+
+	case 2:
+	case 3:
+		beta_start = 2.0*MyGlobal::PI - beta_startX;
+		break;
+	}
+
+	Point enddistance = end - center;
+	double_t beta_endX = acos(enddistance.x/radious);
+	if(enddistance.x < 0)
+		vector |= 0x01;
+	if(enddistance.y < 0)
+		vector |= 0x02;
+	switch(vector)
+	{
+	case 0:
+	case 1:
+		beta_end = beta_endX;
+		break;
+
+	case 2:
+	case 3:
+		beta_end = 2.0*MyGlobal::PI - beta_endX;
+		break;
+	}
+
+	angle = std::abs(beta_start - beta_end);
+
+	qDebug()<<"Arc[164] beta_start:"<<MyGlobal::DEGREES(beta_start)<< "\tbeta_end:"<<MyGlobal::DEGREES(beta_end)<<"\tangle:"<<MyGlobal::DEGREES(angle) ;
+
+
+
+}
+
+void Arc::calculateAlfa() {
 
     Q_ASSERT((radious != qQNaN()) && (radious != 0) );
 
@@ -114,9 +182,9 @@ void Arc::calculateAngle() {
 	alfa = 2.0 * asin(precicion/(radious*2.0));
 
 	//=SQRT(SUMSQ(B3-B4;C3-C4))
-	double_t chorda = 0;
-	mLine* dl = new mLine(start,end);
-	chorda = dl->getLength();
+//	double_t chorda = 0;
+//	mLine* dl = new mLine(start,end);
+//	chorda = dl->getLength();
 
-	angle = 2.0 * asin(chorda/(radious*2.0));//TODOH angle +180
+//	angle = 2.0 * asin(chorda/(radious*2.0));//TODOH angle +180
 }

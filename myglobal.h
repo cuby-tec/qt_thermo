@@ -52,6 +52,8 @@ public:
 
     static QString formatFloat(QString fl);
 
+    static double_t DEGREES(double_t angle);
+
 };
 
 #endif // MYGLOBAL_H

@@ -79,3 +79,11 @@ MyGlobal::formatFloat(QString fl)
     }
     return fl;
 }
+
+double_t
+MyGlobal::DEGREES(double_t angle)
+{
+	return (angle*180/PI);
+}
+
+

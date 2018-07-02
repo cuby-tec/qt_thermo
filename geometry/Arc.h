@@ -67,6 +67,12 @@ public:
 		this->clockWise = clockWise;
 	}
 
+
+	/*
+	 * Построить массив точек траектории
+	 */
+	void calculate();
+
 private:
 	Point start;
 	Point end;
@@ -85,7 +91,7 @@ private:
 
 	bool clockWise;// clockWise
 
-	void calculateAngle();
+	void calculateAlfa();
 
 };
 
