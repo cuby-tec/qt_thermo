@@ -2,12 +2,18 @@
 #include <string.h>
 #include <QString>
 #include <QDebug>
+
 #include <QtGlobal>
+#include <QWaitCondition>
+#include <QVarLengthArray>
+
 #include "myglobal.h"
 
 #include "geometry/Arc.h"
 
 #include <cmath>
+//#include <thread>
+
 
 //const QString msg3 = "Conversion error.";
 //const QString msg4 = "Profile should be selected.";
@@ -38,6 +44,7 @@ ComData::ComData(QObject *parent) : QObject(parent)
 void
 ComData::setupThread()
 {
+	acknowledge_flag = false;
     connect(&thread,SIGNAL(sg_status_updated(const Status_t*)),this,SLOT(updateStatus(const Status_t*)) );
 }
 
@@ -419,9 +426,14 @@ ComData::buildG2Command()
     }
 
     // G2 X90.6 Y13.8 I5 J10 E22.4
-    //77,2317745639	56,0908965345
+    //77,2317745639	56,0908965345 30 grad
+
+    // G2 X90.6 Y13.8 I15 J10 E22.4
+    //52,8477211996	-55,5541760683 300 grad
+    //56,0908965344	-53,5715205261 302,88°
 
     QString startX("77,2317745639");
+
     QString startY("56,0908965345");
 
 //    arc->setStart(Point(cord->getCurrentValue(X_AXIS),cord->getCurrentValue(Y_AXIS))); // TODO current value
@@ -445,6 +457,87 @@ ComData::buildG2Command()
     arc->setPrecicion(precicion);
 
     arc->calculate();
+
+    cord->moveNextToCurrent();
+    cord->initWork();
+
+//  QVarLengthArray<int, 1024> array(n + 1);
+
+    size_t num = arc->getPointsNumber();
+
+//    QVarLengthArray<ComDataReq_t,1024> array(num);
+    ThreadArc *pthreadarc = &threadarc;
+//    QVarLengthArray<ComDataReq_t> array = threadarc->getArray();
+
+    bool send = false;
+    Point p0 = arc->getPoint(0);
+    for(int i=1;i<arc->getPointsNumber();i++){
+        Point p = arc->getPoint(i);
+
+//        cord->initWork();
+        Point dp = p-p0;
+        if(abs(dp.x/precicion)>=1){
+        	cord->setWorkValue(X_AXIS,p.x);
+        	send = true;
+        	p0.x = p.x;
+
+        }
+        if(abs(dp.y/precicion) >= 1){
+        	cord->setWorkValue(Y_AXIS,p.y);
+        	send = true;
+        	p0.y = p.y;
+        }
+
+
+        if(send == false)
+        	continue;
+
+        cord->moveWorkToNext();
+
+        controller->buildBlock(cord);
+
+        buildComdata();
+
+
+//        ComDataReq_t* dst = &array[i];
+//        memcpy(dst,&request,sizeof(ComDataReq_t));
+
+        int s = pthreadarc->putInArray(&request);
+        qDebug()<<"ComData[507] array size:"<<s;
+        //TODOH send comdata
+        bool ACK = true;
+        while(ACK)
+        {
+
+            sSegment* segment = &request.payload.instrument1_parameter;
+            sControl* control = &segment->axis[X_AXIS];
+            sControl* controly= &segment->axis[Y_AXIS];
+
+            qDebug()<<"ComData[517] ";
+            qDebug()<<"i:"<<i<<"\tpoint.x:"<<dp.x<<"\tpoint.y:"<<dp.y;
+//            qDebug()<<"current_x:"<< cord->getCurrentValue(X_AXIS)<<"\tnext:"<<cord->getNextValue(X_AXIS)<<"\tdx:"<<(cord->getCurrentValue(X_AXIS)-cord->getNextValue(X_AXIS));
+//            qDebug()<<"current y:"<<cord->getCurrentValue(Y_AXIS)<<"\tnext y:"<<cord->getNextValue(Y_AXIS)<<"\tdy:"<<(cord->getCurrentValue(Y_AXIS)-cord->getNextValue(Y_AXIS));
+
+            qDebug()<<"stepsX:"<<control->steps<<"\tinitial rate:"<<control->initial_rate<<"\tstepsY:"<<controly->steps;
+
+
+//            thread.setRequest(&request);
+
+//                thread.process();
+
+            //    return result;
+//                while(ACK){
+//                    sleep(1);
+//                }
+
+
+
+        	ACK = false;
+        }
+        send = false;
+        cord->moveNextToCurrent();
+
+    }
 
 }
 
@@ -591,6 +684,7 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 
 void ComData::updateStatus(const Status_t *status)
 {
+	acknowledge_flag = true;
     emit sg_updateStatus(status);
 }
 

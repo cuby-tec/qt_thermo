@@ -67,6 +67,11 @@ public:
 		this->clockWise = clockWise;
 	}
 
+	// Вычисление угла между вектором и осью X.
+	double_t calcAngleX(Point &start, Point &center);
+
+	//Вычисление угла междду вектором и осью Y
+	double_t calcAngleY(Point &start, Point &center);
 
 	/*
 	 * Построить массив точек траектории
@@ -80,6 +85,9 @@ private:
 	// Минимальная длина дуги.
 	double_t precicion;
 	double_t radious;
+
+	// Начальный угол дуги.
+	double_t beta_start;
 
 	//Раствор дуги
 	double_t angle; // radian

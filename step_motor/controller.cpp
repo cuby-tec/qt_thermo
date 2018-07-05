@@ -258,8 +258,14 @@ Q_ASSERT(maxLineAccel != 0);
     uint32_t start_counter[M_AXIS];
     for(int i=0;i<M_AXIS;i++){
     	if(accel[i]!=0){
-            start_counter[i] = sqrt(2*motor[i]->getAlfa(i)/accel[i])*frequency;
+            double_t cnt = sqrt(2*motor[i]->getAlfa(i)/accel[i])*frequency;
 //    	    qDebug() << "buildBlock[180]"<< "  axis:"<< i << " counter:"<<start_counter[i]<< "acc:"<< trapeze[i].accPath;
+
+            //MAX_COUNTER_VALUE
+            if(cnt>= MAX_COUNTER_VALUE)
+            	start_counter[i] = MAX_COUNTER_VALUE;
+            else
+            	start_counter[i] = cnt;
 
     	}
     	else

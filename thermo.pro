@@ -58,7 +58,8 @@ HEADERS += mainwindow.h \
     geometry/Arc.h \
     geometry/Point.h \
     geometry/mLine.h \
-    gparcer/comdata.h
+    gparcer/comdata.h \
+    exchange/threadarc.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui \
@@ -94,7 +95,8 @@ SOURCES += main.cpp \
     aboutwindow.cpp \
     geometry/Arc.cpp \
     geometry/Point.cpp \
-    geometry/mLine.cpp
+    geometry/mLine.cpp \
+    exchange/threadarc.cpp
 RESOURCES += resources.qrc
 
 DISTFILES += \

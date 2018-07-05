@@ -24,11 +24,13 @@ enum eOrder{
 /**
  * if 1 - execute immediately, 0 - store only
  */
-#define EXECUTE_IMMEDIATELY		1
+#define EXECUTE_IMMEDIATELY		(1<<0)
+//Command acknowledged
+#define COMMAND_ACKNOWLEDGED	(1<<1)
 
 struct sControlCommand_t {
     uint16_t order;      // Команда инструменту.
-    uint8_t reserved; //  EXECUTE_IMMIDIATELY
+    uint8_t reserved; //  EXECUTE_IMMIDIATELY | COMMAND_ACKNOWLEDGED
     uint8_t instrument; // Тип инструмента в запросе.
 };
 

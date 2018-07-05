@@ -13,10 +13,13 @@
 #include <stdbool.h>
 
 
+//Command acknowledged
+#define COMMAND_ACKNOWLEDGED	(1<<0)
+
 struct sModelCompState{
     uint8_t modelState;
     uint8_t queueState;
-    uint8_t reserved1;
+    uint8_t reserved1;	//COMMAND_ACKNOWLEDGED
     uint8_t reserved2;
 };
 

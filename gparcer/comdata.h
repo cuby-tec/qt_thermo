@@ -15,6 +15,7 @@
 #include "step_motor/block_state_t.h"
 
 #include "exchange/threadexchange.h"
+#include "exchange/threadarc.h"
 
 
 
@@ -91,8 +92,12 @@ private slots:
 
 private:
 
+    bool acknowledge_flag;
 
     ThreadExchange thread;
+
+    ThreadArc threadarc;
+
 
     ComDataReq_t request;
 

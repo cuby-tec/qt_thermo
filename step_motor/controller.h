@@ -13,7 +13,8 @@
 #include "accelerationtable.h"
 
 #define FREQUENCY  50000000 //;frequency = 50000000;
-
+// 0xFFFFFE
+#define MAX_COUNTER_VALUE	16777214
 
 class Controller
 {

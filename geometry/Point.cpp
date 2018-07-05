@@ -12,7 +12,6 @@
 
 Point::Point(double_t x, double_t y):x(x),y(y)
 {
-	// TODO Auto-generated constructor stub
 
 }
 

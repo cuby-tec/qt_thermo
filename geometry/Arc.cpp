@@ -85,8 +85,18 @@ void Arc::calculateRadious() {
 
 Point Arc::getPoint(size_t number) {
 // TODOH Arc::getPoint
+	Point result;
 
-
+/*
+	//= D$5-ACOS((B$5-$B$3+B$7*A11)/B$4)
+//	double_t alfa1 = beta_start - acos((start.x-center.x+precicion*number)/radious);
+	Point alphaP = new Point(start.x + precicion*number,start.y);
+	double_t alfa1 = beta_start - calcAngleX(alphaP,center);
+	double_t beta1 = beta_start - asin((start.y - center.y+precicion*number)/radious);
+*/
+	result.x = center.x + radious*cos(beta_start - number*alfa);
+	result.y = center.y + radious*sin(beta_start - number*alfa);
+	return (result);
 }
 
 void
@@ -126,7 +136,7 @@ void Arc::calculate() {
 //	double_t beta_startY = asin(startdistance.y/radious);
 
 
-	double_t beta_start, beta_end;
+	double_t beta_end;//, beta_end;
 
 	uint8_t vector = 0;
 	if(startdistance.x < 0)
@@ -148,7 +158,12 @@ void Arc::calculate() {
 	}
 
 	Point enddistance = end - center;
+
+//	assert(enddistance.x <= radious);
+	Q_ASSERT(enddistance.x <= radious);
+
 	double_t beta_endX = acos(enddistance.x/radious);
+	vector = 0;
 	if(enddistance.x < 0)
 		vector |= 0x01;
 	if(enddistance.y < 0)
@@ -168,9 +183,72 @@ void Arc::calculate() {
 
 	angle = std::abs(beta_start - beta_end);
 
-	qDebug()<<"Arc[164] beta_start:"<<MyGlobal::DEGREES(beta_start)<< "\tbeta_end:"<<MyGlobal::DEGREES(beta_end)<<"\tangle:"<<MyGlobal::DEGREES(angle) ;
 
+	points_number = std::floor( angle/alfa);
 
+	qDebug()<<"Arc[164] beta_start:"<<MyGlobal::DEGREES(beta_start)<< "\tbeta_end:"<<MyGlobal::DEGREES(beta_end)<<"\tangle:"
+			<<MyGlobal::DEGREES(angle)<<"\tpoints_number:"<<points_number ;
+
+}
+
+double_t Arc::calcAngleX(Point &start, Point &center) {
+	double_t angle;
+
+	Q_ASSERT((radious != qQNaN()) && (radious != 0) );
+
+    Point startdistance = start - center;
+	angle = acos(startdistance.x/radious);
+
+	uint8_t vector = 0;
+	if(startdistance.x < 0)
+		vector |= 0x01;
+	if(startdistance.y < 0)
+		vector |= 0x02;
+
+	switch(vector)
+	{
+	case 0:
+	case 1:
+		beta_start = angle;
+		break;
+
+	case 2:
+	case 3:
+		beta_start = 2.0*MyGlobal::PI - angle;
+		break;
+	}
+
+	return angle;
+}
+
+double_t Arc::calcAngleY(Point &start, Point &center) {
+	double_t angle;
+
+	Q_ASSERT((radious != qQNaN()) && (radious != 0) );
+
+    Point startdistance = start - center;
+	angle = asin(startdistance.y/radious);
+
+	uint8_t vector = 0;
+	if(startdistance.x < 0)
+		vector |= 0x01;
+	if(startdistance.y < 0)
+		vector |= 0x02;
+
+	switch(vector)
+	{
+	case 0:
+	case 1:
+		beta_start = angle;
+		break;
+
+	case 2:
+	case 3:
+		beta_start = 2.0*MyGlobal::PI - angle;
+		break;
+	}
+
+	return angle;
 
 }
 
