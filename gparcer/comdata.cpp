@@ -303,7 +303,7 @@ ComData::buildComdata()
 
     memset(req,0,sizeof(ComDataReq_t));
 
-	req->requestNumber = 0;//++MyGlobal::requestIndex;// TODO get request number
+//	req->requestNumber = 0;//++MyGlobal::requestIndex;// TODO get request number
 	req->instruments = 1;
 
 	req->command.order = eoSegment;
@@ -469,85 +469,7 @@ ComData::buildG2Command()
 //  QVarLengthArray<int, 1024> array(n + 1);
 
     size_t num = arc->getPointsNumber();
-
-//    QVarLengthArray<ComDataReq_t,1024> array(num);
-    ThreadArc *pthreadarc = &threadarc;
-//    QVarLengthArray<ComDataReq_t> array = threadarc->getArray();
-
-    bool send = false;
-    Point p0 = arc->getPoint(0);
-    for(int i=1;i<arc->getPointsNumber();i++){
-        Point p = arc->getPoint(i);
-
-//        cord->initWork();
-        Point dp = p-p0;
-        if(abs(dp.x/precicion)>=1){
-        	cord->setWorkValue(X_AXIS,p.x);
-        	send = true;
-        	p0.x = p.x;
-
-        }
-        if(abs(dp.y/precicion) >= 1){
-        	cord->setWorkValue(Y_AXIS,p.y);
-        	send = true;
-        	p0.y = p.y;
-        }
-
-
-        if(send == false)
-        	continue;
-
-        cord->moveWorkToNext();
-
-        controller->buildBlock(cord);
-
-        buildComdata();
-
-
-//        ComDataReq_t* dst = &array[i];
-//        memcpy(dst,&request,sizeof(ComDataReq_t));
-
-        int s = pthreadarc->putInArray(&request);
-//        qDebug()<<"ComData[507] array size:"<<s;
-        //TODOH send comdata
-        bool ACK = true;
-        while(ACK)
-        {
-
-            sSegment* segment = &request.payload.instrument1_parameter;
-            sControl* control = &segment->axis[X_AXIS];
-            sControl* controly= &segment->axis[Y_AXIS];
-
-//            qDebug()<<"ComData[517] ";
-//            qDebug()<<"i:"<<i<<"\tpoint.x:"<<dp.x<<"\tpoint.y:"<<dp.y;
-//            qDebug()<<"current_x:"<< cord->getCurrentValue(X_AXIS)<<"\tnext:"<<cord->getNextValue(X_AXIS)<<"\tdx:"<<(cord->getCurrentValue(X_AXIS)-cord->getNextValue(X_AXIS));
-//            qDebug()<<"current y:"<<cord->getCurrentValue(Y_AXIS)<<"\tnext y:"<<cord->getNextValue(Y_AXIS)<<"\tdy:"<<(cord->getCurrentValue(Y_AXIS)-cord->getNextValue(Y_AXIS));
-
-//            qDebug()<<"stepsX:"<<control->steps<<"\tinitial rate:"<<control->initial_rate<<"\tstepsY:"<<controly->steps;
-
-
-//            thread.setRequest(&request);
-
-//                thread.process();
-
-            //    return result;
-//                while(ACK){
-//                    sleep(1);
-//                }
-
-
-
-        	ACK = false;
-        }
-        send = false;
-        cord->moveNextToCurrent();
-
-    }
-
-    // sending
-
-    threadarc.process();
-
+//===>>>
 }
 
 
@@ -643,10 +565,11 @@ ComData::build(sGcode *sgcode)
 // from GConsole
 void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 {
-	setRequestNumber(++MyGlobal::commandIndex);
+	setRequestNumber(++MyGlobal::requestIndex);//MyGlobal::requestIndex MyGlobal::commandIndex
 
 	//    ComDataReq_t* req = getRequest();
 	ComDataReq_t* req = build(sgcode);
+
 	switch(state){
 
 	case ecdOne:
@@ -657,33 +580,95 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 			req->command.reserved &= ~EXECUTE_IMMEDIATELY;
 
 		req->payload.instrument1_parameter.head.reserved &= ~EXIT_CONTINUE;
-
+qDebug()<<"ComData[650] from GConsole";
 		thread.setRequest(req);
 		thread.process();
 		break;
 
 	case ecdCircle:
+		//================
+		//    QVarLengthArray<ComDataReq_t,1024> array(num);
+		    ThreadArc *pthreadarc = &threadarc;
+		//    QVarLengthArray<ComDataReq_t> array = threadarc->getArray();
+		    threadarc.setMdelay(500);
+		    bool send = false;
+		    Point p0 = arc->getPoint(0);
+		    for(int i=1;i<arc->getPointsNumber();i++){
+		    	send = false;
+		        Point p = arc->getPoint(i);
 
-		for(int i = 1; i<arc->getPointsNumber();i++)
-		{
-			Point p = arc->getPoint(i);
+		//        cord->initWork();
+		        Point dp = p-p0;
+		        if(abs(dp.x/arc->getPrecicion())>=1){
+		        	cord->setWorkValue(X_AXIS,p.x);
+		        	send = true;
+		        	p0.x = p.x;
 
-			cord->moveNextToCurrent();
-			cord->initWork();
-			cord->setWorkValue(X_AXIS,p.x);
-			cord->setWorkValue(Y_AXIS,p.y);
+		        }
+		        if(abs(dp.y/arc->getPrecicion()) >= 1){
+		        	cord->setWorkValue(Y_AXIS,p.y);
+		        	send = true;
+		        	p0.y = p.y;
+		        }
 
-		    cord->moveWorkToNext();
-		    if(!isPlaneHasSteps())
-		    {
-		        continue;
+
+		        if(send == false)
+		        	continue;
+
+		        cord->moveWorkToNext();
+
+		        controller->buildBlock(cord);
+
+		        buildComdata();
+				request.requestNumber = ++MyGlobal::requestIndex;
+		        request.command.reserved &= ~EXECUTE_IMMEDIATELY;
+		        if(request.requestNumber == 8){
+		        	if(checkBox_immediately)
+		        		request.command.reserved |= EXECUTE_IMMEDIATELY;
+		        	else
+		        		request.command.reserved &= ~EXECUTE_IMMEDIATELY;
+		        }
+		        //TODO continue
+
+				request.payload.instrument1_parameter.head.reserved |= EXIT_CONTINUE;
+
+
+		        sSegment* segment = &request.payload.instrument1_parameter;
+		        sControl* controlx = &segment->axis[X_AXIS];
+		        sControl* controly= &segment->axis[Y_AXIS];
+		        double_t dtx = controller->getTimeOfCounter(controlx->initial_rate);
+		        double_t dty = controller->getTimeOfCounter(controly->initial_rate);
+		        qDebug()<<"ComData[627] dtx:"<<dtx
+		        		<<"\tcount:"<<controlx->initial_rate
+//		        		<<"\tdty:"<<dty
+//		        		<<"\tcount:"<<controly->initial_rate
+						<<"\tnum:"<<request.requestNumber
+						<<"\treserv:"<<request.command.reserved;
+
+		//        ComDataReq_t* dst = &array[i];
+		//        memcpy(dst,&request,sizeof(ComDataReq_t));
+
+		        int s = pthreadarc->putInArray(&request);
+		//        qDebug()<<"ComData[507] array size:"<<s;
+		        //TODOH send comdata
+
+
+		//            qDebug()<<"ComData[517] ";
+		//            qDebug()<<"i:"<<i<<"\tpoint.x:"<<dp.x<<"\tpoint.y:"<<dp.y;
+		//            qDebug()<<"current_x:"<< cord->getCurrentValue(X_AXIS)<<"\tnext:"<<cord->getNextValue(X_AXIS)<<"\tdx:"<<(cord->getCurrentValue(X_AXIS)-cord->getNextValue(X_AXIS));
+		//            qDebug()<<"current y:"<<cord->getCurrentValue(Y_AXIS)<<"\tnext y:"<<cord->getNextValue(Y_AXIS)<<"\tdy:"<<(cord->getCurrentValue(Y_AXIS)-cord->getNextValue(Y_AXIS));
+
+		//            qDebug()<<"stepsX:"<<control->steps<<"\tinitial rate:"<<control->initial_rate<<"\tstepsY:"<<controly->steps;
+
+		        send = false;
+		        cord->moveNextToCurrent();
+
 		    }
 
-		    controller->buildBlock(cord);
+		    // sending
 
-			buildComdata();
-
-		}
+		    threadarc.process();
+		//================
 
 		break;
 	}

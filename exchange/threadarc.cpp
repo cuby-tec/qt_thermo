@@ -52,7 +52,7 @@ void ThreadArc::run()
 
             ComDataReq_t* request = &array[index];
 
-            request->requestNumber = ++MyGlobal::requestIndex;
+//            request->requestNumber = ++MyGlobal::requestIndex;
             try_counter = 0;
             //
             do{
@@ -74,7 +74,12 @@ void ThreadArc::run()
 
                 thermo_gmutex.unlock();
 
-                qDebug()<<"ThreadArc[77]: free segments:"<<status.freeSegments<<"\t busy:"<<status.modelState.reserved1<<"requestNumber:"<<status.frameNumber;
+                qDebug()<<"ThreadArc[77]: free segments:"<<status.freeSegments
+                        <<"\t ready:"<<status.modelState.reserved1
+						<<"requestNumber:"<<status.frameNumber
+                        <<"\tcoun:"<<try_counter
+                       <<"\trequest:"<<request->command.reserved
+                      <<"\t number:"<<request->requestNumber;
                 // check flag, and wait and resend if needed
                 if(!status.modelState.reserved1&COMMAND_ACKNOWLEDGED)
                 {

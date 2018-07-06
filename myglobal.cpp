@@ -8,7 +8,7 @@
 
 int MyGlobal::mglobal = 0;
 
-uint MyGlobal::requestIndex = 0;
+uint32_t MyGlobal::requestIndex = 0;
 
 QMutex MyGlobal::mutex;
 

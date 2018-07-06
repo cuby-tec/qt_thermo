@@ -44,7 +44,7 @@ ThreadExchange ::process()
 
          qDebug()<<"ThreadExchange[41]";
 
-         request.requestNumber = ++MyGlobal::requestIndex;
+//         request.requestNumber = ++MyGlobal::requestIndex;
 
          result_exch = exch->sendRequest(&request);
 

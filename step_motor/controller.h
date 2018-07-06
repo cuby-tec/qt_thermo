@@ -49,6 +49,10 @@ public:
      */
     double_t getPrecicion(uint8_t axis, uint8_t microstep);
 
+    //  Длительность работы счётчика.
+    double_t getTimeOfCounter(uint32_t counter){
+    	return ((double_t)counter/(double_t)frequency);
+    }
 
 private:
     size_t frequency;

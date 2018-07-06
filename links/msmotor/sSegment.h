@@ -11,6 +11,7 @@
 #include "sControl.h"
 #include "msport.h"
 
+//0 - exit(one command), 1-continue(group of commands).
 #define EXIT_CONTINUE   1
 
 /**

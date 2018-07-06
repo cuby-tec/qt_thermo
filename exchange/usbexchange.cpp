@@ -533,7 +533,7 @@ UsbExchange::buildComData(ComDataReq_t *comdata, eOrder order)
     case eoState:
         //TODO request Status only
         comdata->size = sizeof(struct ComDataReq_t);
-        comdata->requestNumber = ++MyGlobal::requestIndex;
+//        comdata->requestNumber = ++MyGlobal::requestIndex;
         comdata->command.order = eoState;
 //        sendRequest(comdata);
         break;
@@ -541,7 +541,7 @@ UsbExchange::buildComData(ComDataReq_t *comdata, eOrder order)
     case eoProfile:
         buildProfile(&comdata->payload.profile);
         comdata->size = sizeof(struct ComDataReq_t);
-        comdata->requestNumber = ++MyGlobal::requestIndex;
+//        comdata->requestNumber = ++MyGlobal::requestIndex;
         comdata->instruments = N_AXIS;
 
         comdata->command.order = eoProfile;

@@ -16,7 +16,7 @@ public:
 
     static int mglobal;
 
-    static uint requestIndex;
+    static uint32_t requestIndex;
 
     static QMutex mutex;
 
