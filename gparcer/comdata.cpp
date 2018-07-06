@@ -46,6 +46,11 @@ ComData::setupThread()
 {
 	acknowledge_flag = false;
     connect(&thread,SIGNAL(sg_status_updated(const Status_t*)),this,SLOT(updateStatus(const Status_t*)) );
+    connect(&thread,SIGNAL(sg_failed_status()),this,SLOT(failedStatus())  );
+
+    connect(&threadarc,SIGNAL(sg_status_updated(const Status_t*)),this,SLOT(updateStatus(const Status_t*)));
+    connect(&threadarc,SIGNAL(sg_failed_status()),this,SLOT(failedStatus()) );
+
 }
 
 
@@ -697,6 +702,8 @@ void ComData::updateStatus(const Status_t *status)
 void ComData::failedStatus()
 {
  //TODO failed Status
+	qDebug()<<"ComData::failedStatus[700].";
+
 }
 
 void

@@ -12,7 +12,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-
 //Command acknowledged
 #define COMMAND_ACKNOWLEDGED	(1<<0)
 

@@ -11,6 +11,9 @@
 #include "myglobal.h"
 #include "links/ComDataReq_t.h"
 
+#define MAX_TRY_COUNTER     20
+#define DEFAULT_DELAY       100
+
 
 extern QMutex thermo_gmutex;
 
@@ -28,6 +31,12 @@ public:
 
     void clear() { array.clear();}
 
+    size_t getMax_tryCounter() const;
+    void setMax_tryCounter(const size_t &value);
+
+    size_t getMdelay() const;
+    void setMdelay(const size_t &value);
+
 signals:
     void sg_status_updated(const Status_t* status);
     void sg_failed_status();
@@ -39,6 +48,10 @@ protected:
 private:
     bool abort;
     bool restart;
+
+    size_t max_tryCounter;
+
+    size_t mdelay;// milliseconds delay
 
     Status_t status;
     QVarLengthArray<ComDataReq_t,1024> array;

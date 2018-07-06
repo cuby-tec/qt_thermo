@@ -7,6 +7,8 @@ ThreadArc::ThreadArc()
     restart = false;
     exch = new UsbExchange();
     array.clear();
+    max_tryCounter = MAX_TRY_COUNTER;
+    mdelay = DEFAULT_DELAY;
 }
 
 void ThreadArc::process()
@@ -28,10 +30,8 @@ int ThreadArc::putInArray(ComDataReq_t *src)
 
 
 //    const ComDataReq_t* req = array.constData();
-    const ComDataReq_t* req = &array.at(0);
-
-    const ComDataReq_t* reqsz = &array.at(sz-1);
-
+//    const ComDataReq_t* req = &array.at(0);
+//    const ComDataReq_t* reqsz = &array.at(sz-1);
 //    qDebug()<<"ThreadArc[27]:x:"<<req->payload.instrument1_parameter.axis[0].steps<<"\ty:"<<req->payload.instrument1_parameter.axis[1].steps;
 //    qDebug()<<"ThreadArc[28]:x:"<<reqsz->payload.instrument1_parameter.axis[0].steps<<"\ty:"<<reqsz->payload.instrument1_parameter.axis[1].steps;
 
@@ -42,39 +42,64 @@ void ThreadArc::run()
 {
     int result_exch;
     int index;
+    size_t try_counter;
     forever{
         index = 0;
         for(index=0;index<array.size();index++){
-//==============
-        thermo_gmutex.lock();
+            //==============
 
-        qDebug()<<"ThreadArc[17]";
+            qDebug()<<"ThreadArc[51]";
 
-        ComDataReq_t* request = &array[index];
+            ComDataReq_t* request = &array[index];
 
-        request->requestNumber = ++MyGlobal::requestIndex;
+            request->requestNumber = ++MyGlobal::requestIndex;
+            try_counter = 0;
+            //
+            do{
 
-        result_exch = exch->sendRequest(request);
+                thermo_gmutex.lock();
 
-        if(result_exch != EXIT_SUCCESS)
-        {
-            status.frameNumber = 0;
-            if (!restart)
-                emit sg_failed_status();
-            qDebug()<<"ThreadExchange[38]"<<" failed.";
+                result_exch = exch->sendRequest(request);
+
+                if(result_exch != EXIT_SUCCESS)
+                {
+                    status.frameNumber = 0;
+                    if (!restart)
+                        emit sg_failed_status();
+                    qDebug()<<"ThreadExchange[38]"<<" failed.";
+                }else{
+                    //             status = exch->getStatus();
+                    memcpy(&status,exch->getStatus(),sizeof(Status_t));
+                }
+
+                thermo_gmutex.unlock();
+
+                qDebug()<<"ThreadArc[77]: free segments:"<<status.freeSegments<<"\t busy:"<<status.modelState.reserved1<<"requestNumber:"<<status.frameNumber;
+                // check flag, and wait and resend if needed
+                if(!status.modelState.reserved1&COMMAND_ACKNOWLEDGED)
+                {
+                    try_counter++;
+                    msleep(mdelay);
+                    qDebug()<<"ThreadArc[83] try_counter:"<<try_counter;
+                }
+                if(try_counter>=max_tryCounter){
+                    break;
+                }
+
+            }while(!status.modelState.reserved1&COMMAND_ACKNOWLEDGED);
+
+            if(try_counter>=max_tryCounter){
+                break;
+            }
+            //=================
+        }
+
+        if(try_counter<max_tryCounter){
+            if (!restart && (result_exch == EXIT_SUCCESS ))
+                emit sg_status_updated(&status);
         }else{
-            //             status = exch->getStatus();
-            memcpy(&status,exch->getStatus(),sizeof(Status_t));
+            emit sg_failed_status();
         }
-
-        thermo_gmutex.unlock();
-        qDebug()<<"ThreadArc[42]: free segments:"<<status.freeSegments<<"\t busy:"<<status.modelState.reserved1;
-
-//=================
-        }
-
-        if (!restart && (result_exch == EXIT_SUCCESS ))
-            emit sg_status_updated(&status);
 
         mutex.lock();
         if (!restart)
@@ -83,4 +108,24 @@ void ThreadArc::run()
         mutex.unlock(); //Debug mode
 
     }// forever
+}
+
+size_t ThreadArc::getMdelay() const
+{
+    return mdelay;
+}
+
+void ThreadArc::setMdelay(const size_t &value)
+{
+    mdelay = value;
+}
+
+size_t ThreadArc::getMax_tryCounter() const
+{
+    return max_tryCounter;
+}
+
+void ThreadArc::setMax_tryCounter(const size_t &value)
+{
+    max_tryCounter = value;
 }

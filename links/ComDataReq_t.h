@@ -25,8 +25,7 @@ enum eOrder{
  * if 1 - execute immediately, 0 - store only
  */
 #define EXECUTE_IMMEDIATELY		(1<<0)
-//Command acknowledged
-#define COMMAND_ACKNOWLEDGED	(1<<1)
+
 
 struct sControlCommand_t {
     uint16_t order;      // Команда инструменту.
