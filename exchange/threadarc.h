@@ -49,9 +49,9 @@ private:
     bool abort;
     bool restart;
 
-    size_t max_tryCounter;
+    uint max_tryCounter;
 
-    size_t mdelay;// milliseconds delay
+    uint mdelay;// milliseconds delay
 
     Status_t status;
     QVarLengthArray<ComDataReq_t,1024> array;
