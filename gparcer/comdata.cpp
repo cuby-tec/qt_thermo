@@ -503,7 +503,7 @@ ComData::buildG2Command()
 //        memcpy(dst,&request,sizeof(ComDataReq_t));
 
         int s = pthreadarc->putInArray(&request);
-        qDebug()<<"ComData[507] array size:"<<s;
+//        qDebug()<<"ComData[507] array size:"<<s;
         //TODOH send comdata
         bool ACK = true;
         while(ACK)
@@ -513,12 +513,12 @@ ComData::buildG2Command()
             sControl* control = &segment->axis[X_AXIS];
             sControl* controly= &segment->axis[Y_AXIS];
 
-            qDebug()<<"ComData[517] ";
-            qDebug()<<"i:"<<i<<"\tpoint.x:"<<dp.x<<"\tpoint.y:"<<dp.y;
+//            qDebug()<<"ComData[517] ";
+//            qDebug()<<"i:"<<i<<"\tpoint.x:"<<dp.x<<"\tpoint.y:"<<dp.y;
 //            qDebug()<<"current_x:"<< cord->getCurrentValue(X_AXIS)<<"\tnext:"<<cord->getNextValue(X_AXIS)<<"\tdx:"<<(cord->getCurrentValue(X_AXIS)-cord->getNextValue(X_AXIS));
 //            qDebug()<<"current y:"<<cord->getCurrentValue(Y_AXIS)<<"\tnext y:"<<cord->getNextValue(Y_AXIS)<<"\tdy:"<<(cord->getCurrentValue(Y_AXIS)-cord->getNextValue(Y_AXIS));
 
-            qDebug()<<"stepsX:"<<control->steps<<"\tinitial rate:"<<control->initial_rate<<"\tstepsY:"<<controly->steps;
+//            qDebug()<<"stepsX:"<<control->steps<<"\tinitial rate:"<<control->initial_rate<<"\tstepsY:"<<controly->steps;
 
 
 //            thread.setRequest(&request);
@@ -538,6 +538,10 @@ ComData::buildG2Command()
         cord->moveNextToCurrent();
 
     }
+
+    // sending
+
+    threadarc.process();
 
 }
 
@@ -686,6 +690,8 @@ void ComData::updateStatus(const Status_t *status)
 {
 	acknowledge_flag = true;
     emit sg_updateStatus(status);
+
+    qDebug()<<"ComData[694] updateStatus";
 }
 
 void ComData::failedStatus()
