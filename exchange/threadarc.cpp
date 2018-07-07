@@ -76,10 +76,13 @@ void ThreadArc::run()
 
                 qDebug()<<"ThreadArc[77]: free segments:"<<status.freeSegments
                         <<"\t ready:"<<status.modelState.reserved1
-						<<"requestNumber:"<<status.frameNumber
+//                        <<"frameNumber:"<<status.frameNumber
                         <<"\tcoun:"<<try_counter
-                       <<"\trequest:"<<request->command.reserved
-                      <<"\t number:"<<request->requestNumber;
+                       <<"\treqCmd:"<<request->command.reserved
+                       <<"\tContCnt:"<<status.instrument2_parameter //счётчик входов continue
+//                      <<"\t number:"<<request->requestNumber
+                     <<"\tPMS:"<<status.modelState.modelState;
+
                 // check flag, and wait and resend if needed
                 if(!status.modelState.reserved1&COMMAND_ACKNOWLEDGED)
                 {

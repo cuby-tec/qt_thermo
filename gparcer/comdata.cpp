@@ -590,7 +590,7 @@ qDebug()<<"ComData[650] from GConsole";
 		//    QVarLengthArray<ComDataReq_t,1024> array(num);
 		    ThreadArc *pthreadarc = &threadarc;
 		//    QVarLengthArray<ComDataReq_t> array = threadarc->getArray();
-		    threadarc.setMdelay(500);
+		    threadarc.setMdelay(900);
 		    bool send = false;
 		    Point p0 = arc->getPoint(0);
 		    for(int i=1;i<arc->getPointsNumber();i++){
@@ -622,7 +622,7 @@ qDebug()<<"ComData[650] from GConsole";
 		        buildComdata();
 				request.requestNumber = ++MyGlobal::requestIndex;
 		        request.command.reserved &= ~EXECUTE_IMMEDIATELY;
-		        if(request.requestNumber == 8){
+                if(request.requestNumber == 9){
 		        	if(checkBox_immediately)
 		        		request.command.reserved |= EXECUTE_IMMEDIATELY;
 		        	else
@@ -687,7 +687,7 @@ void ComData::updateStatus(const Status_t *status)
 void ComData::failedStatus()
 {
  //TODO failed Status
-	qDebug()<<"ComData::failedStatus[700].";
+	qDebug()<<"ComData[690]::failedStatus[700].";
 
 }
 
