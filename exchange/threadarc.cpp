@@ -48,7 +48,7 @@ void ThreadArc::run()
         for(index=0;index<array.size();index++){
             //==============
 
-            qDebug()<<"ThreadArc[51]";
+//            qDebug()<<"ThreadArc[51]";
 
             ComDataReq_t* request = &array[index];
 
@@ -78,9 +78,10 @@ void ThreadArc::run()
                         <<"\t ready:"<<status.modelState.reserved1
 //                        <<"frameNumber:"<<status.frameNumber
                         <<"\tcoun:"<<try_counter
-                       <<"\treqCmd:"<<request->command.reserved
                        <<"\tContCnt:"<<status.instrument2_parameter //счётчик входов continue
 //                      <<"\t number:"<<request->requestNumber
+                      <<"\treqCmd:"<<request->command.reserved
+                     <<"\trateX:Y:"<<request->payload.instrument1_parameter.axis[X_AXIS].initial_rate<<":"<<request->payload.instrument1_parameter.axis[Y_AXIS].initial_rate
                      <<"\tPMS:"<<status.modelState.modelState;
 
                 // check flag, and wait and resend if needed
@@ -88,7 +89,7 @@ void ThreadArc::run()
                 {
                     try_counter++;
                     msleep(mdelay);
-                    qDebug()<<"ThreadArc[83] try_counter:"<<try_counter;
+//                    qDebug()<<"ThreadArc[83] try_counter:"<<try_counter;
                 }
                 if(try_counter>=max_tryCounter){
                     break;

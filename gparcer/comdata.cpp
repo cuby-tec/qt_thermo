@@ -590,8 +590,10 @@ qDebug()<<"ComData[650] from GConsole";
 		//    QVarLengthArray<ComDataReq_t,1024> array(num);
 		    ThreadArc *pthreadarc = &threadarc;
 		//    QVarLengthArray<ComDataReq_t> array = threadarc->getArray();
-		    threadarc.setMdelay(900);
+		    double_t delay = 1000*controller->getTimeOfCounter(2500420);
+		    threadarc.setMdelay(delay);//50 100 900
 		    bool send = false;
+		    uint send_counter = 0;
 		    Point p0 = arc->getPoint(0);
 		    for(int i=1;i<arc->getPointsNumber();i++){
 		    	send = false;
@@ -622,7 +624,9 @@ qDebug()<<"ComData[650] from GConsole";
 		        buildComdata();
 				request.requestNumber = ++MyGlobal::requestIndex;
 		        request.command.reserved &= ~EXECUTE_IMMEDIATELY;
-                if(request.requestNumber == 9){
+//                if(request.requestNumber == 1)
+		        if(++send_counter==1)
+		        {
 		        	if(checkBox_immediately)
 		        		request.command.reserved |= EXECUTE_IMMEDIATELY;
 		        	else
