@@ -561,7 +561,9 @@ ComData::build(sGcode *sgcode)
     }
     return(&request);
 }
-
+#define HOT67
+#define QUANTING 1
+#define cout	qDebug()
 // from GConsole
 void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 {
@@ -592,30 +594,173 @@ qDebug()<<"ComData[650] from GConsole";
 		//    QVarLengthArray<ComDataReq_t> array = threadarc->getArray();
 		    double_t delay = 1000*controller->getTimeOfCounter(2500420);
 		    threadarc.setMdelay(delay);//50 100 900
-		    bool send = false;
+//		    bool send = false;
 		    uint send_counter = 0;
-		    Point p0 = arc->getPoint(0);
+//		    Point p0 = arc->getPoint(0);
+
+		    double_t precicion = arc->getPrecicion();
+#ifdef HOT67
+		    double_t precicionY = arc->getPrecicion();
+
+			int32_t d20[2][2] = {{0,0},{0,0}};
+
+			Point pStart = arc->getStart();
+
+		    cout<<"Start X:"<<pStart.x<<"\tY:"<<pStart.y <<endl;
+
+			Point pCurrent = pStart;
+
+			//set Start as current
+			cord->setWorkValue(X_AXIS,pStart.x);
+			cord->setWorkValue(Y_AXIS,pStart.y);
+			cord->moveWorkToNext();
+			cord->moveNextToCurrent();
+
+			uint32_t i_points = 0;
+
+			for(uint32_t i=1;i<arc->getPointsNumber();i++){
+		#if QUANTING == 2
+				//
+				double_t dx = ((pStart.x-arc->getCenter().x)-)
+
+		#endif
+		#if QUANTING == 1
+
+				Point p = arc->getPoint(i); // Line 611
+				Point dp = p-pStart;
+
+				d20[1][0] = trunc(dp.x/precicion);
+				d20[1][1] = trunc(dp.y/precicionY);
+
+				bool h20 = d20[0][0] ^ d20[1][0];
+				bool i20 = d20[0][1] ^ d20[1][1];
+
+				d20[0][0] = d20[1][0];
+				d20[0][1] = d20[1][1];
+
+				if((!h20)&&(!i20))
+					continue;
+				if(h20){
+		//			double_t precicion_d = round(precicion*pow(10,10))/pow(10,10);
+					pCurrent.x = pStart.x + d20[1][0]*precicion;
+					double_t d = pCurrent.x;
+					d -= pStart.x;
+					d /= precicion;
+					d = fabs(d);
+					d = round(d*pow(10,10))/pow(10,10);
+					uint32_t dd = (uint32_t)d;
+		//			dd <<=1;
+				}
+				if(i20){
+					pCurrent.y = pStart.y + d20[1][1]*precicionY;
+				}
+
+				cord->setWorkValue(X_AXIS,pCurrent.x);//pCurrent.x
+				cord->setWorkValue(Y_AXIS,pCurrent.y);//pCurrent.y
+				cord->moveWorkToNext();
+				i_points++;
+				controller->buildBlock(cord);
+
+		        cout
+					<<"i:"<<i_points
+		//			<<"\tstepX:"<<h20<<"\tstepY:"<<i20
+					<<"\tstepx:"<<cord->nextBlocks[X_AXIS].steps
+					<<"\tstepsy:"<<cord->nextBlocks[Y_AXIS].steps
+		    		<<"\tX:"<<cord->getNextValue(X_AXIS)
+		    		<<"\tY:"<<cord->getNextValue(Y_AXIS);
+//		        	<<endl;
+
+		        buildComdata();
+//				request.requestNumber = ++MyGlobal::requestIndex;
+//		        request.command.reserved &= ~EXECUTE_IMMEDIATELY;
+//                if(request.requestNumber == 1)
+		        if(++send_counter==1)
+		        {
+		        	if(checkBox_immediately)
+		        		request.command.reserved |= EXECUTE_IMMEDIATELY;
+		        	else
+		        		request.command.reserved &= ~EXECUTE_IMMEDIATELY;
+		        }
+		        //TODO continue
+
+				request.payload.instrument1_parameter.head.reserved |= EXIT_CONTINUE;
+
+
+
+
+
+		        int s = pthreadarc->putInArray(&request);
+		        cord->moveNextToCurrent();
+
+		#endif
+		#if QUANTING == 0
+
+		        double_t tmpgreedX = floor(p.x/precicion);	//Line 614
+		        double_t tmpgreedY = floor(p.y/precicion);	//Line 615
+
+		        cord->setWorkValue(X_AXIS,tmpgreedX*precicion);	//Line 620
+		        cord->setWorkValue(Y_AXIS,tmpgreedY*precicion);	//Line 626
+
+		        cord->moveWorkToNext();	//Line 636
+
+		        controller->buildBlock(cord);	//Line 638
+
+		        //in comdata
+		//        buildComdata();	//Line 640
+
+		        block_state_t* bstates = cord->nextBlocks;
+
+		        for(int i =0;i<M_AXIS;i++){	//Line 335
+		        	block_state_t* bstate = &bstates[i];	//Line 337
+
+		        	uint32_t steps = bstate->steps;
+
+		        }
+		        cout<<"i:"<<i<<"\tstepX:"<<h20<<"\tstepY:"<<i20<<endl;
+		#endif
+			}
+
+			cout<<"X:"<<cord->getNextValue(X_AXIS)<<"\tY:"<<cord->getNextValue(Y_AXIS)
+					<<"\tX:"<<cord->getNextValue(X_AXIS)
+					<<"\tY:"<<cord->getNextValue(Y_AXIS)
+					<< endl;
+
+
+#endif
+#ifdef HOT66
+//		    double_t greedX = floor(p0.x/precicion);
+//		    double_t greedY = floor(p0.y/precicion);
+
+//		    p0.x = greedX*precicion;
+//		    p0.y = greedY*precicion;
+
+
 		    for(int i=1;i<arc->getPointsNumber();i++){
-		    	send = false;
+//		    	send = false;
 		        Point p = arc->getPoint(i);
 
+
+		        double_t tmpgreedX = floor(p.x/precicion);
+		        double_t tmpgreedY = floor(p.y/precicion);
+
 		//        cord->initWork();
-		        Point dp = p-p0;
-		        if(abs(dp.x/arc->getPrecicion())>=1){
-		        	cord->setWorkValue(X_AXIS,p.x);
-		        	send = true;
-		        	p0.x = p.x;
+//		        Point dp = p-p0;
+//		        if(abs(dp.x/arc->getPrecicion())>=1){
+		        	cord->setWorkValue(X_AXIS,tmpgreedX*precicion);
+//		        	send = true;
+//		        	p0.x = p.x;
 
-		        }
-		        if(abs(dp.y/arc->getPrecicion()) >= 1){
-		        	cord->setWorkValue(Y_AXIS,p.y);
-		        	send = true;
-		        	p0.y = p.y;
-		        }
+//		        }
+//		        if(abs(dp.y/arc->getPrecicion()) >= 1){
+		        	cord->setWorkValue(Y_AXIS,tmpgreedY*precicion);
+//		        	send = true;
+//		        	p0.y = p.y;
+//		        }
 
-
-		        if(send == false)
-		        	continue;
+qDebug()<<"ComData[631]:"<<"tmpX:"<<tmpgreedX<<"\ttmpY:"<<tmpgreedY<<"currentX:"<<cord->getCurrentValue(X_AXIS)
+		<<"\tcurrentY:"<<cord->getCurrentValue(Y_AXIS);
+//		        if(send == false)
+//		        	continue;
 
 		        cord->moveWorkToNext();
 
@@ -637,16 +782,23 @@ qDebug()<<"ComData[650] from GConsole";
 				request.payload.instrument1_parameter.head.reserved |= EXIT_CONTINUE;
 
 
+
+
 		        sSegment* segment = &request.payload.instrument1_parameter;
 		        sControl* controlx = &segment->axis[X_AXIS];
 		        sControl* controly= &segment->axis[Y_AXIS];
 		        double_t dtx = controller->getTimeOfCounter(controlx->initial_rate);
 		        double_t dty = controller->getTimeOfCounter(controly->initial_rate);
-		        qDebug()<<"ComData[627] dtx:"<<dtx
-		        		<<"\tcount:"<<controlx->initial_rate
+		        qDebug()<<"ComData[660]:"
+//		        		<<" dtx:"<<dtx
+//		        		<<"\tcount:"<<controlx->initial_rate
+		        		<<"\tmX:"<<(tmpgreedX*precicion-cord->getCurrentValue(X_AXIS))/precicion
+						<<"\tmY:"<<(tmpgreedY*precicion-cord->getCurrentValue(Y_AXIS))/precicion
 //		        		<<"\tdty:"<<dty
 //		        		<<"\tcount:"<<controly->initial_rate
-						<<"\tnum:"<<request.requestNumber
+						<<"stepsX:"<<request.payload.instrument1_parameter.axis[X_AXIS].steps
+						<<"stepsY:"<<request.payload.instrument1_parameter.axis[Y_AXIS].steps
+//						<<"\tnum:"<<request.requestNumber
 						<<"\treserv:"<<request.command.reserved;
 
 		//        ComDataReq_t* dst = &array[i];
@@ -664,11 +816,11 @@ qDebug()<<"ComData[650] from GConsole";
 
 		//            qDebug()<<"stepsX:"<<control->steps<<"\tinitial rate:"<<control->initial_rate<<"\tstepsY:"<<controly->steps;
 
-		        send = false;
+//		        send = false;
 		        cord->moveNextToCurrent();
 
 		    }
-
+#endif
 		    // sending
 
 		    threadarc.process();

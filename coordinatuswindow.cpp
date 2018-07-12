@@ -89,5 +89,6 @@ CoordinatusWindow::update(const Status_t* status, QObject *pgconsole)
 
      uic->c_label_temperature->setText(QString("%1 C").arg(status->temperature,0,'g',4) );//&deg;
 
+     uic->label_contiCnt->setText(QString("%1").arg(status->instrument2_parameter) );
 }
 

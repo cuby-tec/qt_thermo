@@ -19,6 +19,9 @@ Arc::Arc() {
 	this->precicion = qQNaN();
 	this->points_number = NULL;
 	clockWise = true;
+	alfa = 0.0;
+	angle = 0.0;
+	beta_start = 0.0;
 }
 
 Arc::~Arc() {
@@ -116,6 +119,7 @@ void
 Arc::setPrecicion(double_t precicion) {
 
 	this->precicion = precicion;
+	alfa = 2.0*asin(precicion/(2.0*radious));
 
 }
 
@@ -129,65 +133,93 @@ void Arc::calculate() {
 	Q_ASSERT((radious != qQNaN()) && (radious != 0) );
 
 
+#define I9 		beta_startAbs
+#define I10 	beta_endAbs
+//#define H3 vector
 
 	// start point angle
 	Point startdistance = start - center;
-	double_t beta_startX = acos(startdistance.x/radious);
-//	double_t beta_startY = asin(startdistance.y/radious);
+	double_t beta_startAbs = atan(startdistance.y/startdistance.x);// I9
+	double_t beta_startY = asin(startdistance.y/radious);
 
-
-	double_t beta_end;//, beta_end;
-
-	uint8_t vector = 0;
-	if(startdistance.x < 0)
-		vector |= 0x01;
-	if(startdistance.y < 0)
-		vector |= 0x02;
-
-	switch(vector)
-	{
-	case 0:
-	case 1:
-		beta_start = beta_startX;
-		break;
-
-	case 2:
-	case 3:
-		beta_start = 2.0*MyGlobal::PI - beta_startX;
-		break;
-	}
+//		assert(enddistance.x <= radious);
+//	Q_ASSERT(enddistance.x <= radious);
 
 	Point enddistance = end - center;
+	double_t beta_endAbs = atan(enddistance.y/enddistance.x);
+	double_t beta_endY = acos(enddistance.y/radious);	//, beta_end;
 
-//	assert(enddistance.x <= radious);
-	Q_ASSERT(enddistance.x <= radious);
+	double_t K9;
+	double_t K10;
 
-	double_t beta_endX = acos(enddistance.x/radious);
-	vector = 0;
+	//Start
+	uint8_t H3 = 0;
+	if(startdistance.x < 0)
+		H3 |= 0x01;
+	if(startdistance.y < 0)
+		H3 |= 0x02;
+	//=IF(H3=1;180+I9;IF(H3=0 AND(G3=0);I9;IF(H3=0 AND(G3=1);360+I9;0)))
+
+	// End
+	uint8_t H4 = 0;
 	if(enddistance.x < 0)
-		vector |= 0x01;
+		H4 |= 0x01;
 	if(enddistance.y < 0)
-		vector |= 0x02;
-	switch(vector)
-	{
-	case 0:
-	case 1:
-		beta_end = beta_endX;
-		break;
+		H4 |= 0x02;
+	//=IF(H5=1;180+I10;IF(H5=0 AND(G5=0);I10;IF(H5=0 AND(G5=1);360+I10;0)))
 
-	case 2:
-	case 3:
-		beta_end = 2.0*MyGlobal::PI - beta_endX;
-		break;
+
+	if(H3 & 0x01){
+		K9 = MyGlobal::PI + I9;
+	}else if(H3 == 0){
+		K9 = I9;
+	}else if(H3 == 2){
+		K9 = 2.0*MyGlobal::PI + I9;
+	}
+	beta_start = K9;
+
+	if(H4 & 0x01){
+		K10 = MyGlobal::PI + I10;
+	}else if(H4 == 0){
+		K10 = I10;
+	}else if(H4 == 2){
+		K10 = 2.0*MyGlobal::PI + I10;
 	}
 
-	angle = std::abs(beta_start - beta_end);
+	beta_end = K10;
+
+	double_t L10 = beta_start-beta_end;
+	if(clockWise){
+		//=IF((K9-K10)<0;360+(K9-K10);(K9-K10))
+		if(L10 < 0){
+			angle = 2.0*MyGlobal::PI + L10;
+		}else{
+			angle = L10;
+		}
 
 
+	}else{
+
+		//=IF(L30>0;360-L30;L30)
+		if(L10>0){
+			angle = 2.0*MyGlobal::PI - L10;
+		}else{
+			angle = L10;
+		}
+
+	}
+
+	angle = fabs(angle);
+
+	//	angle = std::abs(beta_start - beta_end);
+
+	assert(alfa!=0);
 	points_number = std::floor( angle/alfa);
 
+	/*
 	qDebug()<<"Arc[164] beta_start:"<<MyGlobal::DEGREES(beta_start)<< "\tbeta_end:"<<MyGlobal::DEGREES(beta_end)<<"\tangle:"
 			<<MyGlobal::DEGREES(angle)<<"\tpoints_number:"<<points_number ;
+	 */
 
 }
 

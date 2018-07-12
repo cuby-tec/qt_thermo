@@ -473,6 +473,26 @@ border-color: rgb(255, 4, 44);
         </property>
        </widget>
       </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="c_label_contiCnt">
+        <property name="toolTip">
+         <string>countinue counter</string>
+        </property>
+        <property name="text">
+         <string>contiCnt</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLabel" name="label_contiCnt">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </widget>

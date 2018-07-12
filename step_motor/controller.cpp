@@ -1,3 +1,9 @@
+/*
+ * Controller.cpp
+ *
+ *  Created on: 09.07.2018
+ *      Author: walery
+ */
 
 #include "controller.h"
 
@@ -159,18 +165,23 @@ void Controller::buildBlock(Coordinatus* cord) {
         lines lm = m->getLineStep;
 //    	lines pstep = motor->getLineStep[i];
 //        cord->nextBlocks[i].steps = fabs(path[i])/( motor->*pstep)(i);
-        cord->nextBlocks[i].steps = fabs(path[i])/( m->*lm)(i);//TODO в сборку блока
+        double_t ds = ( m->*lm)(i);
+        double_t dstep = fabs(path[i]/ds);
+        dstep = round(dstep*pow(10,10))/pow(10,10);
+//        cord->nextBlocks[i].steps = fabs(path[i])/( m->*lm)(i);//TODO в сборку блока
+        cord->nextBlocks[i].steps = dstep;
 
 //    	lenline[i] = cord->nextBlocks[i].steps;
 //    	double_t ps = (motor->*pstep)(i);
         double_t ps = (m->*lm)(i);
 
 //        trapeze[i].length = abs(path[i])/( motor->*pstep)(i);
-    	double_t pa = path[i];
-    	if(pa<0){
-            pa = fabs(path[i]);
-    	}
-    	trapeze[i].length = pa/ps;
+//    	double_t pa = path[i];
+//    	if(pa<0){
+//            pa = fabs(path[i]);
+//    	}
+//    	trapeze[i].length = pa/ps;
+        trapeze[i].length = (dstep<0?fabs(dstep):dstep);
     }
 
     // Наибольшая длина линии						C26

@@ -24,10 +24,24 @@ public:
 
 	void setStart(Point start) {this->start = start; }
 
+	Point getStart() const {return (this->start);}
+
 	void setEnd(QString x, QString y);
+
+	Point getEnd() const {return this->end;}
+
+	void setEnd(Point point){this->end = point; }
 
 	// I,J parameters
 	void setCenter(QString x, QString y);
+
+	void setCenter(Point point){ this->center = point; }
+
+	Point getCenter() const {return (this->center);}
+
+	double_t getStartAngle() const {return beta_start;}
+
+	double_t getAlfa(){return alfa;}
 
 	double_t getRadious() const {
 		return radious;
@@ -88,6 +102,8 @@ private:
 
 	// Начальный угол дуги.
 	double_t beta_start;
+
+	double_t beta_end;//, beta_end;
 
 	//Раствор дуги
 	double_t angle; // radian
