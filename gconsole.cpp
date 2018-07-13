@@ -12,7 +12,7 @@
 #include "links/exchange/eModelstate.h"
 
 
-GConsole::GConsole(QObject *parent) : QObject(parent), req_builder(new ComData())
+GConsole::GConsole(QObject *parent) : QObject(parent)
 {
 //    QScopedPointer<ComData> this->req_builder(new ComData());
 //    this->req_builder = req_builder;
@@ -21,22 +21,24 @@ GConsole::GConsole(QObject *parent) : QObject(parent), req_builder(new ComData()
 	oldBlockNumber = -1;
 	uia = NULL;
      coord = Coordinatus::instance();
+     req_builder = new ComData();
 }
 
 
 
 
-GConsole::GConsole(Ui::MainWindow* &ui):req_builder(new ComData())
+GConsole::GConsole(Ui::MainWindow* &ui)
 {
     this->uia = ui;
     oldBlockNumber = -1;
 //    this->req_builder = &_comdata;
     setupGconsole();
 
-    setupThread();
-
     coord = Coordinatus::instance();
     coord->setupProfileData();
+    req_builder = new ComData();
+
+    setupThread();
 
 }
 
@@ -163,7 +165,7 @@ GConsole::updateStatus(const Status_t* status)
 
 //    qDebug()<<"GConsole[125]:"<<status->frameNumber<<"\tsended:"<<rnumber<<"\tquee:"<<status->freeSegments;
 
-    coordinatuswindow->update(status,this);
+//    coordinatuswindow->update(status,req_builder);
     if(status->modelState.modelState == ehIdle)
         setEnabledCursor();
 }

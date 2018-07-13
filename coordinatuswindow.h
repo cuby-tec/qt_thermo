@@ -7,6 +7,7 @@
 #include "gparcer/coordinatus.h"
 #include "thermoplot.h"
 //#include "gconsole.h"
+#include "gparcer/comdata.h"
 #include "step_motor/controller.h"
 
 
@@ -26,15 +27,18 @@ public:
 
 //    void setGconsole(GConsole& g){this->gconsole = &g; }
 
-    void update(const Status_t *status, QObject *pgconsole);
+//    void update(const Status_t *status, QObject *pgconsole);
+    void update(const Status_t *status, ComData *pgconsole);
 
-    void setController(Controller* contr) { this->controller = contr; }
+//    void setController(Controller* contr) { this->controller = contr; }
+
+    void setComdata(ComData *value) { this->comdata = value; }
 
 signals:
 
 public slots:
-//    void update();
-//    void update(Status_t);
+    //    void update();
+    void update(const Status_t *status);
 
 
 private:
@@ -43,7 +47,8 @@ private:
     Coordinatus* coordinatus;
     void setupCoordinatus();
 
-    Controller* controller;
+//    Controller* controller;
+    ComData* comdata;
 
 //    GConsole* gconsole;
 

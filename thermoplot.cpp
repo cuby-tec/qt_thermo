@@ -287,7 +287,7 @@ ThermoPlot::updateStatus(const Status_t *status)
 
     this->status = status;
     writeLog();
-
+//TODOH ERROR memory
     emit sg_statusChanged(status);
 
     static QTime time(QTime::currentTime());

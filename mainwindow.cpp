@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setupCoordinatusWindow(ui);
 
 //    coordinatusWin->setGconsole(*gconsole);
-    gconsole->setCoordinatusWindow(coordinatusWin);
+//    gconsole->setCoordinatusWindow(coordinatusWin);
 
 }
 
@@ -43,6 +43,8 @@ void
 MainWindow::setupCoordinatusWindow(Ui::MainWindow *ui)
 {
     coordinatusWin = new CoordinatusWindow(ui);
+    connect(plotter,SIGNAL(sg_statusChanged(const Status_t*)),coordinatusWin, SLOT(update(const Status_t*)) );
+    coordinatusWin->setComdata(gconsole->getComData());
 }
 
 

@@ -31,6 +31,7 @@ public:
 
     void setCoordinatusWindow(CoordinatusWindow* cwd){ this->coordinatuswindow = cwd; }
 
+    ComData* getComData(){ return this->req_builder; }
 
 private slots:
     void updateStatus(const Status_t* status);
