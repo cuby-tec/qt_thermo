@@ -588,8 +588,10 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 		req->payload.instrument1_parameter.head.reserved &= ~EXIT_CONTINUE;
 //		qDebug()<<"ComData[584] from GConsole";
 		setRequestNumber(++MyGlobal::requestIndex);//MyGlobal::requestIndex MyGlobal::commandIndex
-		thread.setRequest(req);
-		thread.process();
+//		thread.setRequest(req);
+//		thread.process();
+		threadarc.putInArray(&request);
+		threadarc.process();
 		break;
 
 	case ecdCircle:
@@ -685,6 +687,7 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 				request.payload.instrument1_parameter.head.reserved |= EXIT_CONTINUE;
 
 		        int s = pthreadarc->putInArray(&request);
+                qDebug()<<"ComData[690] s:"<<s;
 		        cord->moveNextToCurrent();
 
 			}
@@ -716,7 +719,7 @@ void ComData::updateStatus(const Status_t *status)
 void ComData::failedStatus()
 {
  //TODO failed Status
-	qDebug()<<"ComData[690]::failedStatus[700].";
+	qDebug()<<"ComData[722]::failedStatus[700].";
 
 }
 

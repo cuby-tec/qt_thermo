@@ -4,7 +4,6 @@
 #include <QMutex>
 #include <QThread>
 #include <QWaitCondition>
-#include <QVarLengthArray>
 #include <QQueue>
 
 
@@ -28,7 +27,6 @@ public:
 
     void process();
 
-//    QVarLengthArray<ComDataReq_t> getArray(){return array; }
     int putInArray(ComDataReq_t *src);
 
     void clear() { array.clear();}
@@ -61,9 +59,6 @@ private:
     QQueue<ComDataReq_t> queue;
 
     ComDataReq_t buffer;
-
-//    ComDataReq_t* request;
-//    ComDataReq_t request;
 
     QMutex mutex;
     QWaitCondition condition;
