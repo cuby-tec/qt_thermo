@@ -75,7 +75,7 @@ private:
 
     Coordinatus()
     {
-        absrel = false;
+        absrel = true; // true - absolute, false - relative
     }
 
     ~Coordinatus() {}

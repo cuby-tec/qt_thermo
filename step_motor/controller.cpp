@@ -119,7 +119,7 @@ void Controller::buildBlock(Coordinatus* cord) {
 		path[i] = cord->getNextValue(i) - cord->getCurrentValue(i);
 //		qDebug()<<"Controller[74]"<<" path:"<< path[i];
 	}
-
+qDebug()<<"Controller[122] pathX:"<<path[X_AXIS]<<"\tY:"<<path[Y_AXIS];
 
 // Длина вектора.
   double_t s = 0;

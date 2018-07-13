@@ -39,6 +39,8 @@ ComData::ComData(QObject *parent) : QObject(parent)
 
     setupThread();
 
+
+
 }
 
 void
@@ -567,13 +569,16 @@ ComData::build(sGcode *sgcode)
 // from GConsole
 void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 {
-
 	//    ComDataReq_t* req = getRequest();
 	ComDataReq_t* req = build(sgcode);
-
 	switch(state){
 
 	case ecdOne:
+		if(!isPlaneHasSteps())
+		{
+			break;
+		}
+
 		// immediately execute
 		if(checkBox_immediately)
 			req->command.reserved |= EXECUTE_IMMEDIATELY;
@@ -581,7 +586,7 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 			req->command.reserved &= ~EXECUTE_IMMEDIATELY;
 
 		req->payload.instrument1_parameter.head.reserved &= ~EXIT_CONTINUE;
-		qDebug()<<"ComData[584] from GConsole";
+//		qDebug()<<"ComData[584] from GConsole";
 		setRequestNumber(++MyGlobal::requestIndex);//MyGlobal::requestIndex MyGlobal::commandIndex
 		thread.setRequest(req);
 		thread.process();
@@ -599,7 +604,7 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 //		    Point p0 = arc->getPoint(0);
 
 		    double_t precicion = arc->getPrecicion();
-#ifdef HOT67
+
 		    double_t precicionY = arc->getPrecicion();
 
 			int32_t d20[2][2] = {{0,0},{0,0}};
@@ -611,20 +616,14 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 			Point pCurrent = pStart;
 
 			//set Start as current
-			cord->setWorkValue(X_AXIS,pStart.x);
-			cord->setWorkValue(Y_AXIS,pStart.y);
-			cord->moveWorkToNext();
-			cord->moveNextToCurrent();
+//			cord->setWorkValue(X_AXIS,pStart.x);
+//			cord->setWorkValue(Y_AXIS,pStart.y);
+//			cord->moveWorkToNext();
+//			cord->moveNextToCurrent();
 
 			uint32_t i_points = 0;
 
 			for(uint32_t i=1;i<arc->getPointsNumber();i++){
-		#if QUANTING == 2
-				//
-				double_t dx = ((pStart.x-arc->getCenter().x)-)
-
-		#endif
-		#if QUANTING == 1
 
 				Point p = arc->getPoint(i); // Line 611
 				Point dp = p-pStart;
@@ -660,16 +659,16 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 				cord->moveWorkToNext();
 				i_points++;
 				controller->buildBlock(cord);
-
+/*
 		        cout
-					<<"i:"<<i_points
+					<<"ComData[664] i:"<<i_points
 		//			<<"\tstepX:"<<h20<<"\tstepY:"<<i20
 					<<"\tstepx:"<<cord->nextBlocks[X_AXIS].steps
 					<<"\tstepsy:"<<cord->nextBlocks[Y_AXIS].steps
 		    		<<"\tX:"<<cord->getNextValue(X_AXIS)
 		    		<<"\tY:"<<cord->getNextValue(Y_AXIS);
 //		        	<<endl;
-
+*/
 		        buildComdata();
 				request.requestNumber = ++MyGlobal::requestIndex;
 //		        request.command.reserved &= ~EXECUTE_IMMEDIATELY;
@@ -688,135 +687,13 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 		        int s = pthreadarc->putInArray(&request);
 		        cord->moveNextToCurrent();
 
-		#endif
-		#if QUANTING == 0
-
-		        double_t tmpgreedX = floor(p.x/precicion);	//Line 614
-		        double_t tmpgreedY = floor(p.y/precicion);	//Line 615
-
-		        cord->setWorkValue(X_AXIS,tmpgreedX*precicion);	//Line 620
-		        cord->setWorkValue(Y_AXIS,tmpgreedY*precicion);	//Line 626
-
-		        cord->moveWorkToNext();	//Line 636
-
-		        controller->buildBlock(cord);	//Line 638
-
-		        //in comdata
-		//        buildComdata();	//Line 640
-
-		        block_state_t* bstates = cord->nextBlocks;
-
-		        for(int i =0;i<M_AXIS;i++){	//Line 335
-		        	block_state_t* bstate = &bstates[i];	//Line 337
-
-		        	uint32_t steps = bstate->steps;
-
-		        }
-		        cout<<"i:"<<i<<"\tstepX:"<<h20<<"\tstepY:"<<i20<<endl;
-		#endif
 			}
 
-			cout<<"X:"<<cord->getNextValue(X_AXIS)<<"\tY:"<<cord->getNextValue(Y_AXIS)
+			cout<<"ComData[692]  X:"<<cord->getNextValue(X_AXIS)<<"\tY:"<<cord->getNextValue(Y_AXIS)
 					<<"\tX:"<<cord->getNextValue(X_AXIS)
 					<<"\tY:"<<cord->getNextValue(Y_AXIS)
 					<< endl;
 
-
-#endif
-#ifdef HOT66
-//		    double_t greedX = floor(p0.x/precicion);
-//		    double_t greedY = floor(p0.y/precicion);
-
-//		    p0.x = greedX*precicion;
-//		    p0.y = greedY*precicion;
-
-
-		    for(int i=1;i<arc->getPointsNumber();i++){
-//		    	send = false;
-		        Point p = arc->getPoint(i);
-
-
-		        double_t tmpgreedX = floor(p.x/precicion);
-		        double_t tmpgreedY = floor(p.y/precicion);
-
-		//        cord->initWork();
-//		        Point dp = p-p0;
-//		        if(abs(dp.x/arc->getPrecicion())>=1){
-		        	cord->setWorkValue(X_AXIS,tmpgreedX*precicion);
-//		        	send = true;
-//		        	p0.x = p.x;
-
-//		        }
-//		        if(abs(dp.y/arc->getPrecicion()) >= 1){
-		        	cord->setWorkValue(Y_AXIS,tmpgreedY*precicion);
-//		        	send = true;
-//		        	p0.y = p.y;
-//		        }
-
-qDebug()<<"ComData[631]:"<<"tmpX:"<<tmpgreedX<<"\ttmpY:"<<tmpgreedY<<"currentX:"<<cord->getCurrentValue(X_AXIS)
-		<<"\tcurrentY:"<<cord->getCurrentValue(Y_AXIS);
-//		        if(send == false)
-//		        	continue;
-
-		        cord->moveWorkToNext();
-
-		        controller->buildBlock(cord);
-
-		        buildComdata();
-				request.requestNumber = ++MyGlobal::requestIndex;
-		        request.command.reserved &= ~EXECUTE_IMMEDIATELY;
-//                if(request.requestNumber == 1)
-		        if(++send_counter==1)
-		        {
-		        	if(checkBox_immediately)
-		        		request.command.reserved |= EXECUTE_IMMEDIATELY;
-		        	else
-		        		request.command.reserved &= ~EXECUTE_IMMEDIATELY;
-		        }
-		        //TODO continue
-
-				request.payload.instrument1_parameter.head.reserved |= EXIT_CONTINUE;
-
-
-
-
-		        sSegment* segment = &request.payload.instrument1_parameter;
-		        sControl* controlx = &segment->axis[X_AXIS];
-		        sControl* controly= &segment->axis[Y_AXIS];
-		        double_t dtx = controller->getTimeOfCounter(controlx->initial_rate);
-		        double_t dty = controller->getTimeOfCounter(controly->initial_rate);
-		        qDebug()<<"ComData[660]:"
-//		        		<<" dtx:"<<dtx
-//		        		<<"\tcount:"<<controlx->initial_rate
-		        		<<"\tmX:"<<(tmpgreedX*precicion-cord->getCurrentValue(X_AXIS))/precicion
-						<<"\tmY:"<<(tmpgreedY*precicion-cord->getCurrentValue(Y_AXIS))/precicion
-//		        		<<"\tdty:"<<dty
-//		        		<<"\tcount:"<<controly->initial_rate
-						<<"stepsX:"<<request.payload.instrument1_parameter.axis[X_AXIS].steps
-						<<"stepsY:"<<request.payload.instrument1_parameter.axis[Y_AXIS].steps
-//						<<"\tnum:"<<request.requestNumber
-						<<"\treserv:"<<request.command.reserved;
-
-		//        ComDataReq_t* dst = &array[i];
-		//        memcpy(dst,&request,sizeof(ComDataReq_t));
-
-		        int s = pthreadarc->putInArray(&request);
-		//        qDebug()<<"ComData[507] array size:"<<s;
-		        //TODOH send comdata
-
-
-		//            qDebug()<<"ComData[517] ";
-		//            qDebug()<<"i:"<<i<<"\tpoint.x:"<<dp.x<<"\tpoint.y:"<<dp.y;
-		//            qDebug()<<"current_x:"<< cord->getCurrentValue(X_AXIS)<<"\tnext:"<<cord->getNextValue(X_AXIS)<<"\tdx:"<<(cord->getCurrentValue(X_AXIS)-cord->getNextValue(X_AXIS));
-		//            qDebug()<<"current y:"<<cord->getCurrentValue(Y_AXIS)<<"\tnext y:"<<cord->getNextValue(Y_AXIS)<<"\tdy:"<<(cord->getCurrentValue(Y_AXIS)-cord->getNextValue(Y_AXIS));
-
-		//            qDebug()<<"stepsX:"<<control->steps<<"\tinitial rate:"<<control->initial_rate<<"\tstepsY:"<<controly->steps;
-
-//		        send = false;
-		        cord->moveNextToCurrent();
-
-		    }
-#endif
 		    // sending
 
 		    threadarc.process();
@@ -833,7 +710,7 @@ void ComData::updateStatus(const Status_t *status)
 	acknowledge_flag = true;
     emit sg_updateStatus(status);
 
-    qDebug()<<"ComData[694] updateStatus";
+//    qDebug()<<"ComData[694] updateStatus";
 }
 
 void ComData::failedStatus()

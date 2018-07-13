@@ -20,7 +20,7 @@ void ThreadArc::process()
         restart = true;
         condition.wakeOne();
     }
-    qDebug()<<"ThreadArc[21]";
+//    qDebug()<<"ThreadArc[21]";
 }
 
 int ThreadArc::putInArray(ComDataReq_t *src)
@@ -53,8 +53,8 @@ void ThreadArc::run()
 
             if(!queue.isEmpty()){
                 buffer = queue.dequeue();
-                qDebug()<<"ThreadArc[56]:"<<" reqNumber:"<<buffer.requestNumber
-                       <<"\tqueue:"<<queue.count();
+//                qDebug()<<"ThreadArc[56]:"<<" reqNumber:"<<buffer.requestNumber
+//                       <<"\tqueue:"<<queue.count();
             }
 
             ComDataReq_t* request = &array[index];
