@@ -95,7 +95,7 @@ private:
 
     bool acknowledge_flag;
 
-    ThreadExchange thread;
+//    ThreadExchange thread;
 
     ThreadArc threadarc;
 

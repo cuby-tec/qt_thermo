@@ -12,13 +12,12 @@
 #include "geometry/Arc.h"
 
 #include <cmath>
-//#include <thread>
 
 
 //const QString msg3 = "Conversion error.";
 //const QString msg4 = "Profile should be selected.";
-const char* msg3 = "Conversion error.";
-const char* msg4 = "Profile should be selected.";
+//const char* msg3 = "Conversion error.";
+//const char* msg4 = "Profile should be selected.";
 
 ComData::ComData(QObject *parent) : QObject(parent)
 {
@@ -47,8 +46,6 @@ void
 ComData::setupThread()
 {
 	acknowledge_flag = false;
-    connect(&thread,SIGNAL(sg_status_updated(const Status_t*)),this,SLOT(updateStatus(const Status_t*)) );
-    connect(&thread,SIGNAL(sg_failed_status()),this,SLOT(failedStatus())  );
 
     connect(&threadarc,SIGNAL(sg_status_updated(const Status_t*)),this,SLOT(updateStatus(const Status_t*)));
     connect(&threadarc,SIGNAL(sg_failed_status()),this,SLOT(failedStatus()) );
@@ -70,10 +67,7 @@ ComData::setWorkValue(QString value, size_t axis_num)
     }
 
     float coord = str_val.toFloat(&ok);
-//    if(!ok)
-//    {
-//        qFatal(msg3);
-//    }
+
     Q_ASSERT(ok);
 
     if(cord->isAbsolute())
@@ -136,8 +130,6 @@ ComData::isPlaneHasSteps()
 void
 ComData::setProfileValue()
 {
-//setSpeedLevel(block, psettings->seekSpeed);
-//    float seekspeed;
     bool ok;
 
     QString fspeed; // rpm unit
@@ -146,14 +138,9 @@ ComData::setProfileValue()
     QString facceleration;
     float acceleration;
 
-//QString fseek = MyGlobal::formatFloat(profile->getHOMING_SEEK_RATE());
-//    seekspeed = fseek.toFloat(&ok);
-//    Q_ASSERT(ok);
-
 
     for(int i=0;i<N_AXIS;i++)
     {
-//        block_state* block = &blocks[i];
         block_state* block = &cord->nextBlocks[i];
 
         switch(i)
@@ -198,7 +185,6 @@ ComData::setDirection_bits()
 {
     for(int i=0;i<N_AXIS;i++)
     {
-//        block_state* block = &blocks[i];
         block_state* block = &cord->nextBlocks[i];
         float_t ds = cord->getNextValue(i) - cord->getCurrentValue(i);
 
@@ -229,20 +215,15 @@ ComData::planner_recalculate()
 void
 ComData::buildG0command()
 {
-
-//    float coord;
     bool ok;
 
     sGparam* gparam;
 
     sSegment* segment = &request.payload.instrument1_parameter;
 
-
     for(int i=0;i<sgCode->param_number;i++)
     {
         gparam = &sgCode->param[i];
-
-//        coord = QString(gparam->value).toFloat(&ok);
 
         switch (gparam->group)
         {
@@ -257,9 +238,6 @@ ComData::buildG0command()
             Q_ASSERT(ok);
             segment->head.linenumber = number;
         	break;
-
-//        default:
-//            break;
         }
 
     }
@@ -271,9 +249,6 @@ ComData::buildG0command()
         return;
     }
 
-//    setProfileValue();
-
-//in controller build model acceleration/deceleration
     Recalculate_flag* flag;
 
     for(int i=0;i<M_AXIS;i++){
@@ -281,16 +256,9 @@ ComData::buildG0command()
     	*fl |= true; // Одиночная команда.
     }
 
-
     controller->buildBlock(cord);
-        // ступень скорости
-//        block->speedLevel = motor->steps_rpm(speed,block->acceleration);
 
-// build ComDataReq_t
     buildComdata();
-
-    //TODO Send Data
-
 }
 
 
@@ -326,7 +294,6 @@ ComData::buildComdata()
 
 	for(int i=0;i<M_AXIS;i++)
 	{
-//		segment->head.axis_mask = 0;
 		if(bstates[i].steps>0)
 			segment->head.axis_mask |= (1<<i);
 		else
@@ -363,11 +330,6 @@ ComData::buildComdata()
 
 		control->axis = bstate->axis_mask;
 	}
-
-//TODOH build ComdataReq
-
-
-
 }
 
 //TODOH Circle G2 G3 (Clockwise Arc)
@@ -378,20 +340,15 @@ ComData::buildG2Command()
 
     sGparam* gparam;
 
-//    Arc* arc = new Arc();
     arc = new Arc();
 
     QString xstr,ystr,istr,jstr,rstr;
 
-
     sSegment* segment = &request.payload.instrument1_parameter;
-
 
     for(int i=0;i<sgCode->param_number;i++)
     {
         gparam = &sgCode->param[i];
-
-//        coord = QString(gparam->value).toFloat(&ok);
 
         switch (gparam->group)
         {
@@ -399,7 +356,6 @@ ComData::buildG2Command()
         	xstr = gparam->value;
         	break;
         case 'Y':
-//            setParam_coord(gparam);
         	ystr = gparam->value;
             break;
 
@@ -424,12 +380,7 @@ ComData::buildG2Command()
             Q_ASSERT(ok);
             segment->head.linenumber = number;
         	break;
-
-
-//        default:
-//            break;
         }
-
     }
 
     // G2 X90.6 Y13.8 I5 J10 E22.4
@@ -439,12 +390,16 @@ ComData::buildG2Command()
     //52,8477211996	-55,5541760683 300 grad
     //56,0908965344	-53,5715205261 302,88°
 
-    QString startX("77,2317745639");
+//    QString startX("77,2317745639");
 
-    QString startY("56,0908965345");
+//    QString startY("56,0908965345");
 
 //    arc->setStart(Point(cord->getCurrentValue(X_AXIS),cord->getCurrentValue(Y_AXIS))); // TODO current value
-    arc->setStart(startX,startY);
+//    arc->setStart(startX,startY);
+
+    Point* start = new Point(cord->getNextValue(X_AXIS),cord->getNextValue(Y_AXIS));
+
+    arc->setStart(*start);
 
     Q_ASSERT(xstr.count()>0 && ystr.count()>0);
 
@@ -468,10 +423,6 @@ ComData::buildG2Command()
     cord->moveNextToCurrent();
     cord->initWork();
 
-//  QVarLengthArray<int, 1024> array(n + 1);
-
-    size_t num = arc->getPointsNumber();
-//===>>>
 }
 
 
@@ -529,23 +480,12 @@ ComData::buildMgroup()
 
 }
 
-//void
-//ComData::buildMgroup()
-//{
-//    int groupnumber;
-//    bool ok;
-
-//    groupnumber = 2;
-//}
-
-
 
 ComDataReq_t*
 ComData::build(sGcode *sgcode)
 {
     this->sgCode = sgcode;
 
-//    initWorkAray();
     cord->initWork();
 
     switch (sgCode->group) {
@@ -563,8 +503,7 @@ ComData::build(sGcode *sgcode)
     }
     return(&request);
 }
-#define HOT67
-#define QUANTING 1
+
 #define cout	qDebug()
 // from GConsole
 void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
@@ -588,8 +527,6 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 		req->payload.instrument1_parameter.head.reserved &= ~EXIT_CONTINUE;
 //		qDebug()<<"ComData[584] from GConsole";
 		setRequestNumber(++MyGlobal::requestIndex);//MyGlobal::requestIndex MyGlobal::commandIndex
-//		thread.setRequest(req);
-//		thread.process();
 		threadarc.putInArray(&request);
 		threadarc.process();
 		break;
@@ -601,9 +538,8 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 		//    QVarLengthArray<ComDataReq_t> array = threadarc->getArray();
 		    double_t delay = 1000*controller->getTimeOfCounter(2500420);
 		    threadarc.setMdelay(delay);//50 100 900
-//		    bool send = false;
+
 		    uint send_counter = 0;
-//		    Point p0 = arc->getPoint(0);
 
 		    double_t precicion = arc->getPrecicion();
 
@@ -616,12 +552,6 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 		    cout<<"Start X:"<<pStart.x<<"\tY:"<<pStart.y <<endl;
 
 			Point pCurrent = pStart;
-
-			//set Start as current
-//			cord->setWorkValue(X_AXIS,pStart.x);
-//			cord->setWorkValue(Y_AXIS,pStart.y);
-//			cord->moveWorkToNext();
-//			cord->moveNextToCurrent();
 
 			uint32_t i_points = 0;
 
@@ -642,15 +572,7 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 				if((!h20)&&(!i20))
 					continue;
 				if(h20){
-		//			double_t precicion_d = round(precicion*pow(10,10))/pow(10,10);
 					pCurrent.x = pStart.x + d20[1][0]*precicion;
-					double_t d = pCurrent.x;
-					d -= pStart.x;
-					d /= precicion;
-					d = fabs(d);
-					d = round(d*pow(10,10))/pow(10,10);
-					uint32_t dd = (uint32_t)d;
-		//			dd <<=1;
 				}
 				if(i20){
 					pCurrent.y = pStart.y + d20[1][1]*precicionY;
@@ -674,7 +596,6 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 		        buildComdata();
 				request.requestNumber = ++MyGlobal::requestIndex;
 //		        request.command.reserved &= ~EXECUTE_IMMEDIATELY;
-//                if(request.requestNumber == 1)
 		        if(++send_counter==1)
 		        {
 		        	if(checkBox_immediately)
@@ -682,7 +603,6 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 		        	else
 		        		request.command.reserved &= ~EXECUTE_IMMEDIATELY;
 		        }
-		        //TODO continue
 
 				request.payload.instrument1_parameter.head.reserved |= EXIT_CONTINUE;
 
@@ -691,14 +611,13 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 		        cord->moveNextToCurrent();
 
 			}
-
+/*
 			cout<<"ComData[692]  X:"<<cord->getNextValue(X_AXIS)<<"\tY:"<<cord->getNextValue(Y_AXIS)
 					<<"\tX:"<<cord->getNextValue(X_AXIS)
 					<<"\tY:"<<cord->getNextValue(Y_AXIS)
 					<< endl;
-
+*/
 		    // sending
-
 		    threadarc.process();
 		//================
 
@@ -726,6 +645,5 @@ void ComData::failedStatus()
 void
 ComData::initWorkAray()
 {
-//    cord = Coordinatus::instance();
     cord->initWork();
 }
