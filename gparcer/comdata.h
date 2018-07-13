@@ -67,8 +67,9 @@ public:
     }
 
     void setRequestNumber(uint32_t num){
-//        a = 5;
         request.requestNumber = num;
+        if(request.requestNumber == 0)
+            request.requestNumber++;
     }
 
 

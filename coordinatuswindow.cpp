@@ -33,7 +33,6 @@ CoordinatusWindow::setupCoordinatus()
 void CoordinatusWindow::update(const Status_t *status)
 {
     uint8_t ms_state;
-qDebug()<<"CoordinatusWindow[35]";
     if(coordinatus->isAbsolute())
     {
         uic->c_label_positioning_value->setText(MyGlobal::msg_absolute);

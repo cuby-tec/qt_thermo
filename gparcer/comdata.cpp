@@ -567,7 +567,6 @@ ComData::build(sGcode *sgcode)
 // from GConsole
 void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 {
-	setRequestNumber(++MyGlobal::requestIndex);//MyGlobal::requestIndex MyGlobal::commandIndex
 
 	//    ComDataReq_t* req = getRequest();
 	ComDataReq_t* req = build(sgcode);
@@ -582,7 +581,8 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 			req->command.reserved &= ~EXECUTE_IMMEDIATELY;
 
 		req->payload.instrument1_parameter.head.reserved &= ~EXIT_CONTINUE;
-qDebug()<<"ComData[650] from GConsole";
+		qDebug()<<"ComData[584] from GConsole";
+		setRequestNumber(++MyGlobal::requestIndex);//MyGlobal::requestIndex MyGlobal::commandIndex
 		thread.setRequest(req);
 		thread.process();
 		break;
@@ -671,7 +671,7 @@ qDebug()<<"ComData[650] from GConsole";
 //		        	<<endl;
 
 		        buildComdata();
-//				request.requestNumber = ++MyGlobal::requestIndex;
+				request.requestNumber = ++MyGlobal::requestIndex;
 //		        request.command.reserved &= ~EXECUTE_IMMEDIATELY;
 //                if(request.requestNumber == 1)
 		        if(++send_counter==1)
@@ -684,10 +684,6 @@ qDebug()<<"ComData[650] from GConsole";
 		        //TODO continue
 
 				request.payload.instrument1_parameter.head.reserved |= EXIT_CONTINUE;
-
-
-
-
 
 		        int s = pthreadarc->putInArray(&request);
 		        cord->moveNextToCurrent();
