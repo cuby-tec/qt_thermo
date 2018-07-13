@@ -28,6 +28,7 @@ int ThreadArc::putInArray(ComDataReq_t *src)
     array.append(*src);
     int sz = array.size();
 
+    queue.enqueue(*src);
 
 //    const ComDataReq_t* req = array.constData();
 //    const ComDataReq_t* req = &array.at(0);
@@ -49,6 +50,12 @@ void ThreadArc::run()
             //==============
 
 //            qDebug()<<"ThreadArc[51]";
+
+            if(!queue.isEmpty()){
+                buffer = queue.dequeue();
+                qDebug()<<"ThreadArc[56]:"<<" reqNumber:"<<buffer.requestNumber
+                       <<"\tqueue:"<<queue.count();
+            }
 
             ComDataReq_t* request = &array[index];
 
@@ -73,7 +80,7 @@ void ThreadArc::run()
                 }
 
                 thermo_gmutex.unlock();
-
+/*
                 qDebug()<<"ThreadArc[77]: free segments:"<<status.freeSegments
                         <<"\t ready:"<<status.modelState.reserved1
 //                        <<"frameNumber:"<<status.frameNumber
@@ -83,7 +90,7 @@ void ThreadArc::run()
                       <<"\treqCmd:"<<request->command.reserved
                      <<"\trateX:Y:"<<request->payload.instrument1_parameter.axis[X_AXIS].initial_rate<<":"<<request->payload.instrument1_parameter.axis[Y_AXIS].initial_rate
                      <<"\tPMS:"<<status.modelState.modelState;
-
+*/
                 // check flag, and wait and resend if needed
                 if(!status.modelState.reserved1&COMMAND_ACKNOWLEDGED)
                 {

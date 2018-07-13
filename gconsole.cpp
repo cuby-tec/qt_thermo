@@ -100,7 +100,7 @@ GConsole::buildComData(sGcode* sgcode)
 
 //    ComDataReq_t* r = req_builder->getRequest();
 
-    req_builder->setRequestNumber(++MyGlobal::commandIndex);
+//    req_builder->setRequestNumber(++MyGlobal::commandIndex);
 
     req_builder->build(sgcode);
 

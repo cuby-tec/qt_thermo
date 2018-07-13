@@ -487,7 +487,7 @@ UsbExchange::buildComData(ComDataReq_t* comdata)
     build_segment_default(psc, index);
 
     comdata->size = sizeof(struct ComDataReq_t);
-    comdata->requestNumber = ++ MyGlobal::mglobal;
+//    comdata->requestNumber = ++ MyGlobal::mglobal;
     comdata->instruments = N_AXIS;
 
     comdata->command.order = eoSegment;

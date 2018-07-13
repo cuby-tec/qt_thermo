@@ -437,7 +437,7 @@ Exchange::buildComData(ComDataReq_t* comdata)
     build_segment_default(psc, index);
 
     comdata->size = sizeof(struct ComDataReq_t);
-    comdata->requestNumber = ++requestIndex;
+//    comdata->requestNumber = ++requestIndex;
     comdata->instruments = N_AXIS;
 
     comdata->command.order = eoSegment;
@@ -482,7 +482,7 @@ Exchange::buildComData(ComDataReq_t *comdata, eOrder order)
     case eoProfile:
         buildProfile(&comdata->payload.profile);
         comdata->size = sizeof(struct ComDataReq_t);
-        comdata->requestNumber = ++requestIndex;
+//        comdata->requestNumber = ++requestIndex;
         comdata->instruments = N_AXIS;
 
         comdata->command.order = eoProfile;

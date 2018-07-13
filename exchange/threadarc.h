@@ -5,6 +5,8 @@
 #include <QThread>
 #include <QWaitCondition>
 #include <QVarLengthArray>
+#include <QQueue>
+
 
 #include "links/Status_t.h"
 #include "usbexchange.h"
@@ -56,6 +58,9 @@ private:
     Status_t status;
     QVarLengthArray<ComDataReq_t,1024> array;
 
+    QQueue<ComDataReq_t> queue;
+
+    ComDataReq_t buffer;
 
 //    ComDataReq_t* request;
 //    ComDataReq_t request;
