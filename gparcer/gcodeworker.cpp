@@ -14,7 +14,7 @@
 
 
 #include "gcodeworker.h"
-#include "gParcer.h"
+//#include "gParcer.h"
 
 #include <QByteArray>
 //#include <QFile>
@@ -49,7 +49,7 @@ GcodeWorker::fileOpen(QString filename)
     QString __log = QString("/home/walery/tmp/gParcer.log");
     std::string _log = __log.toStdString();
 #endif
-
+/*
     initGparcer();
 
     fp.setFileName(filename);
@@ -92,7 +92,7 @@ GcodeWorker::fileOpen(QString filename)
         }// switch
     }
 //----------------- end parcing
-
+*/
 
 //    fp.close();
 //     qDebug() << "File closed.";

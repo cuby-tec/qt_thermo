@@ -5,7 +5,8 @@
 #include <QScopedPointer>
 
 #include <ui_mainwindow.h>
-#include "gparcer/sgcode.h"
+//#include "gparcer/sgcode.h"
+#include <sgcode.h>
 #include "exchange/threadexchange.h"
 #include "gparcer/comdata.h"
 #include "profiles/profile.h"
@@ -68,7 +69,7 @@ private:
      * @param src
      * @return
      */
-    sGcode* parceString(char *src, int *error);
+    int parceString(char *src, sGcode *dst);
 
 //bool    GConsole::buildComData(sGcode* sgcode)
     bool buildComData(sGcode* sgcode);

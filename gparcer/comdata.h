@@ -4,8 +4,10 @@
 #include <QObject>
 #include <QChar>
 
+#include <sgcode.h>
+
 #include "links/ComDataReq_t.h"
-#include "gparcer/sgcode.h"
+//#include "gparcer/sgcode.h"
 #include "geometry/Arc.h"
 
 #include "profiles/profile.h"

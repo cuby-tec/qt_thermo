@@ -36,10 +36,6 @@ HEADERS += mainwindow.h \
     thermolog/thermologview.h \
     thermolog/thermologdialog.h \
     profiles/thermopiddialog.h \
-    gparcer/gParcer.h \
-    gparcer/ghelper.h \
-    gparcer/sgcode.h \
-    gparcer/sgparam.h \
     gparcer/gcodeworker.h \
     links/sModelCompState.h \
     links/eModelstate.h \
@@ -59,7 +55,8 @@ HEADERS += mainwindow.h \
     geometry/Point.h \
     geometry/mLine.h \
     gparcer/comdata.h \
-    exchange/threadarc.h
+    exchange/threadarc.h \
+    gparcer/lexer.h
 FORMS += mainwindow.ui profiles/profiledialog.ui \
     thermolog/thermologdialog.ui \
     profiles/thermopiddialog.ui \
@@ -81,8 +78,6 @@ SOURCES += main.cpp \
     thermolog/thermologview.cpp \
     thermolog/thermologdialog.cpp \
     profiles/thermopiddialog.cpp \
-    gparcer/gParcer.c \
-    gparcer/ghelper.c \
     gparcer/gcodeworker.cpp \
     gconsole.cpp \
     exchange/threadexchange.cpp \
@@ -96,8 +91,14 @@ SOURCES += main.cpp \
     geometry/Arc.cpp \
     geometry/Point.cpp \
     geometry/mLine.cpp \
-    exchange/threadarc.cpp
+    exchange/threadarc.cpp \
+    gparcer/lexer.cpp
 RESOURCES += resources.qrc
 
 DISTFILES += \
     readme.txt
+
+unix:!macx: LIBS += -L/usr/lib/mito -lgcode-lexer
+
+INCLUDEPATH += /usr/include/mito
+DEPENDPATH += /usr/lib/mito

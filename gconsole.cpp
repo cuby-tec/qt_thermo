@@ -10,7 +10,9 @@
 //#include "usbexchange.h"
 
 #include "links/exchange/eModelstate.h"
+#include <gcode-lexer.h>
 
+#include "gparcer/lexer.h"
 
 GConsole::GConsole(QObject *parent) : QObject(parent)
 {
@@ -176,34 +178,36 @@ GConsole::updateStatus(const Status_t* status)
  * @param src
  * @return
  */
-sGcode*
-GConsole::parceString(char* src,int* error)
+int
+GConsole::parceString(char* src,sGcode* dst )
 {
-    sGcode* result = NULL;
+    int result = 0;
 
-    int state;
-//    int error;
-    initGparcer();
-    clear_sgcode();
-    //------------------------- begen parcing
+//    struct sGcode mdst;
+//    struct sGcode* pmdst = &mdst;
 
-    state = scanner();
-    if(state == 4){
-        strcpy(fsm.buf+fsm.have,src);
+    size_t len = strlen(src);
 
-        fsm.lenfile = strlen(src);
+    Lexer* le = new Lexer(dst);
 
-        state = scanner();
+    result = le->parcer(src,len);
 
-        if(sgcode.line != 0){
-//            clear_sgcode();
+//    pmdst = le->getDst();
 
-            result = &sgcode;
-        }
-
-        *error = fsm.cs;
-
+//===============
+/*    qDebug()<<__FILE__<<src;
+    qDebug()<<"=======  %s  ==========\n"<<__FILE__<<"\tresult:"<<result;
+//    printf("_h_report: line number:%i  \tgroup:%c \tindex:%s \tcomment:%s \n",dst->line,dst->group,dst->value , dst->comment);
+    qDebug()<<"_h_report: line number:"<<dst->line<<"\tgroup:"<<dst->group<<"\tindex:"<<dst->value<<"\tcomment:"<<dst->comment;
+    for(int i=0;i<dst->param_number;i++)
+    {
+        struct sGparam *param = &dst->param[i];
+//        printf("\t_h_param: group:%c \tvalue:%s\n",param->group,param->value);
+        qDebug()<<"\t_h_param: group:"<<param->group<<"\tvalue:"<<param->value;
     }
+
+    qDebug()<<"=================";
+*/
     return result;
 }
 
@@ -222,7 +226,7 @@ GConsole::on_pushButton_linestep_clicked()
     const QString msg1("accepted:");
 
     int parce_error;
-    sGcode* sgcode;
+    sGcode sgcode;
 
      QColor bkgColor(170, 255, 255);
 //    int bnumber = uia->textEdit_command->textCursor().block().blockNumber();
@@ -253,14 +257,17 @@ GConsole::on_pushButton_linestep_clicked()
 
     coord->setupProfileData();
 
+    memset(&sgcode,0,sizeof(struct sGcode));
+//    sgcode = parceString(pbuffer, &parce_error);
+    parce_error = parceString(pbuffer,&sgcode);
 
-    sgcode = parceString(pbuffer, &parce_error);
-    if( sgcode != 0 && sgcode->group != ' ')
+    if( parce_error > 0 )
     {
 //        uia->label_commandLine->setText(QString(error2)+QString("%1").arg(parce_error) );
-        uia->label_commandLine->setText(msg1+ QString(sgcode->group)+QString(sgcode->value) );
+        uia->label_commandLine->setText(msg1+ QString(sgcode.group)+QString(sgcode.value) );
 //        buildComData(sgcode); // sGcode* sgcode
-        req_builder->buildComData(sgcode,checkBox_immediately);
+        if( sgcode.group & 0x50)
+            req_builder->buildComData(&sgcode,checkBox_immediately);
 
     }else{
         uia->label_commandLine->setText(QString(error1)+QString("%1").arg(parce_error) );
