@@ -165,14 +165,14 @@ void MainWindow::createActions(MainWindow* w)
 void MainWindow::openFileDo()
 {
 QString folder("/home/walery/Документы/3d-printer/ragel"); //home/walery/Документы/3d-printer/ragel/exmple.gcode
-    QString filename = QFileDialog::getOpenFileName(this, tr("Open G-Code file"),folder,tr("Gcode (*.gcode );; All (*.*)"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open G-Code file"),folder,tr("Gcode (*.gcode *.ngx);; All (*.*)"));
 
     if(filename.isNull())
     {
         qDebug() << "File don't selected.";
     }else{
 
-        qDebug()<< "Open faile with G-code file:"<<filename;
+        qDebug()<< "Open file with G-code file:"<<filename;
 
         gcodeworker = new GcodeWorker();
         gcodeworker->fileOpen(filename);

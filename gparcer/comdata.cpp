@@ -510,14 +510,15 @@ void ComData::buildComData(sGcode *sgcode, bool checkBox_immediately)
 {
 	//    ComDataReq_t* req = getRequest();
 	ComDataReq_t* req = build(sgcode);
-	switch(state){
+
+    switch(state){
 
 	case ecdOne:
-		if(!isPlaneHasSteps())
+        if(!isPlaneHasSteps())
 		{
-			break;
+            qDebug()<<__FILE__<<":"<<__LINE__<<": group:"<<sgcode->group;
+            break;
 		}
-
 		// immediately execute
 		if(checkBox_immediately)
 			req->command.reserved |= EXECUTE_IMMEDIATELY;

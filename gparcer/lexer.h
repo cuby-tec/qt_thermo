@@ -3,12 +3,16 @@
 
 #include <gcode-lexer.h>
 
+#include <QString>
+
 class Lexer
 {
 public:
     Lexer(sGcode* dst);
 
     int parcer(char* buf, int len );
+
+    int parcer(QString line);
 
     sGcode *getDst() const;
 
