@@ -1,0 +1,38 @@
+{
+    "generic": {
+        "DEFAULT_ARC_TOLERANCE": "0,0020",
+        "DEFAULT_DIRECTION_INVERT_MASK": "0",
+        "DEFAULT_E_MAX_RATE": "30,00",
+        "DEFAULT_FLAGS": "0",
+        "DEFAULT_HOMING_DEBOUNCE_DELAY": "250",
+        "DEFAULT_HOMING_DIR_MASK": "",
+        "DEFAULT_HOMING_FEED_RATE": "25,00",
+        "DEFAULT_HOMING_PULLOFF": "1,00",
+        "DEFAULT_HOMING_SEEK_RATE": "500,00",
+        "DEFAULT_JUNCTION_DEVIATION": "0,01",
+        "DEFAULT_STATUS_REPORT_MASK": "3",
+        "DEFAULT_STEPPER_IDLE_LOCK_TIME": "25",
+        "DEFAULT_STEPPING_INVERT_MASK": "0",
+        "DEFAULT_STEP_PULSE_MICROSECONDS": "10",
+        "DEFAULT_X_ACCELERATION": "1250.0",
+        "DEFAULT_X_MAX_RATE": "500,00",
+        "DEFAULT_X_MAX_TRAVEL": "200,00",
+        "DEFAULT_X_STEPS_PER_MM": "250,00",
+        "DEFAULT_Y_ACCELERATION": "1250.0",
+        "DEFAULT_Y_MAX_RATE": "500,00",
+        "DEFAULT_Y_MAX_TRAVEL": "200,00",
+        "DEFAULT_Y_STEPS_PER_MM": "250,00",
+        "DEFAULT_Z_ACCELERATION": "1250.0",
+        "DEFAULT_Z_MAX_RATE": "500,00",
+        "DEFAULT_Z_MAX_TRAVEL": "200,00",
+        "DEFAULT_Z_STEPS_PER_MM": "250,00",
+        "DERIVATIVE": "0.12",
+        "E_ACCELERATION": "1250",
+        "INTEGRAL": "0.18",
+        "PROPTIONAL": "0.7",
+        "TEMPERATURE": "40"
+    },
+    "version": {
+        "VERSION": "1.2"
+    }
+}
